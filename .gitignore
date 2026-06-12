@@ -23,3 +23,14 @@ out/
 # Temporary files
 *.log
 *.tmp
+
+# Paper server runtime
+cache/
+libraries/
+logs/
+versions/
+eula.txt
+server.properties
+world/
+world_nether/
+world_the_end/
