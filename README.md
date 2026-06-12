@@ -56,7 +56,7 @@ This is the Lite version. It inspects state and reports issues. It does not:
 
 1. Drop `LaunchGuard-0.1.0.jar` into your server's `plugins/` directory.
 2. Restart the server.
-3. Grant `launchguard.use` to staff who need to run checks (OPs have it by default).
+3. Grant `launchguard.use` and `launchguard.run` to staff who need to run checks. OPs have all LaunchGuard permissions by default.
 4. Edit `plugins/LaunchGuard/checks.yml` to match your server's requirements.
 5. Run `/launchguard run` to check your server.
 
@@ -99,9 +99,9 @@ All permissions default to op-only.
 | launchguard.use | op | Access to help and version subcommands |
 | launchguard.run | op | Required for /launchguard run |
 | launchguard.reload | op | Required for /launchguard reload |
-| launchguard.admin | op | Full access; includes run and reload as child permissions |
+| launchguard.admin | op | Full access; includes use, run, and reload as child permissions |
 
-Note: `launchguard.use` alone does not permit `/launchguard run`. The `run` and `reload` subcommands each require their own permission or `launchguard.admin`.
+Note: `launchguard.use` alone does not permit `/launchguard run`. The `run` and `reload` subcommands each require their own permission. `launchguard.admin` grants `use`, `run`, and `reload` as child permissions.
 
 ## Configuration
 

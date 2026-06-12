@@ -26,5 +26,6 @@ permissions:
     description: Full administrative access to LaunchGuard.
     default: op
     children:
+      launchguard.use: true
       launchguard.run: true
       launchguard.reload: true
