@@ -248,4 +248,4 @@ The plugin JAR will be in `build/libs/LaunchGuard-0.1.0.jar`.
 - **Configuration help:** Use the "Configuration Help" issue template.
 - Include your LaunchGuard version, server version, Java version, relevant checks.yml sections, and report output.
 - Remove any secrets, passwords, or private webhook URLs before posting.
-- Security-sensitive reports: Contact the repository owner through available channels. If no private contact method is listed, open a regular issue and mark it as sensitive in the description.
+- Security-sensitive reports: Do not post secrets, exploit details, private server information, webhook URLs, or tokens in a public issue. If no private contact method is listed, open a minimal issue asking for a private contact method.
