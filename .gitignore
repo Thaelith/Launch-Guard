@@ -37,3 +37,4 @@ world_the_end/
 
 # Release artifacts (do not commit binary JARs)
 release/LaunchGuard-*.jar
+release/**/*.jar
