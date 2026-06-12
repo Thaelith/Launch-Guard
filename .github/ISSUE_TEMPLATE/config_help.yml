@@ -1,0 +1,42 @@
+name: Configuration Help
+description: Get help configuring LaunchGuard checks
+title: "[Config] "
+labels: ["config-help"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe what you are trying to check and what is not working as expected.
+  - type: textarea
+    id: goal
+    attributes:
+      label: What are you trying to check?
+      description: Describe the plugin, command, world, location, or permission you want LaunchGuard to verify.
+    validations:
+      required: true
+  - type: textarea
+    id: checks_config
+    attributes:
+      label: Your checks.yml
+      description: Paste the relevant section of your checks.yml. Remove any sensitive values.
+      render: yaml
+    validations:
+      required: true
+  - type: textarea
+    id: report_output
+    attributes:
+      label: Report output
+      description: Paste the output of /launchguard run.
+      render: text
+  - type: input
+    id: server_version
+    attributes:
+      label: Server version
+      placeholder: "Paper 1.20.4"
+    validations:
+      required: true
+  - type: textarea
+    id: plugins
+    attributes:
+      label: Related plugins installed
+      description: List the plugins relevant to your configuration (e.g., Essentials, LuckPerms).

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: README
+    url: https://github.com/Thaelith/Launch-Guard/blob/main/README.md
+    about: Read the README for installation, configuration, and troubleshooting.
+  - name: Documentation
+    url: https://github.com/Thaelith/Launch-Guard/tree/main/docs
+    about: Detailed documentation for commands, permissions, configuration, and checks.

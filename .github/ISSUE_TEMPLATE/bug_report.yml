@@ -1,0 +1,64 @@
+name: Bug Report
+description: Report a problem with LaunchGuard
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please provide the following information. Incomplete reports may be closed.
+  - type: input
+    id: lg_version
+    attributes:
+      label: LaunchGuard version
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: input
+    id: server_software
+    attributes:
+      label: Server software and version
+      placeholder: "Paper 1.20.4 (git-Paper-496)"
+    validations:
+      required: true
+  - type: input
+    id: java_version
+    attributes:
+      label: Java version
+      placeholder: "OpenJDK 17.0.16"
+    validations:
+      required: true
+  - type: textarea
+    id: error_log
+    attributes:
+      label: Full error log
+      description: Paste the complete error from your server console or latest.log. Use a paste service for long logs.
+      render: text
+  - type: textarea
+    id: checks_config
+    attributes:
+      label: checks.yml
+      description: Paste your checks.yml with any sensitive values removed.
+      render: yaml
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Start the server with these plugins installed: ...
+        2. Run /launchguard run
+        3. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true

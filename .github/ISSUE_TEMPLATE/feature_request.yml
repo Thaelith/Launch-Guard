@@ -1,0 +1,38 @@
+name: Feature Request
+description: Suggest a new feature or improvement
+title: "[Feature] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Feature requests are welcome for both Lite and planned Premium functionality. Check the roadmap in README.md first to see if it is already planned.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem being solved
+      description: What server administration problem would this feature address?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Describe how the feature should work from a server admin's perspective.
+    validations:
+      required: true
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Scope
+      description: Should this be part of the free Lite version or a future Premium version?
+      options:
+        - Lite (free)
+        - Premium (future)
+    validations:
+      required: true
+  - type: textarea
+    id: rationale
+    attributes:
+      label: Why this belongs in LaunchGuard
+      description: Explain why this fits LaunchGuard's purpose as a pre-launch QA and health-check utility.

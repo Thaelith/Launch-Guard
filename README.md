@@ -241,3 +241,11 @@ Requirements: JDK 17+
 ```
 
 The plugin JAR will be in `build/libs/LaunchGuard-0.1.0.jar`.
+
+## Support
+
+- **Bug reports and feature requests:** Open an issue on [GitHub Issues](https://github.com/Thaelith/Launch-Guard/issues).
+- **Configuration help:** Use the "Configuration Help" issue template.
+- Include your LaunchGuard version, server version, Java version, relevant checks.yml sections, and report output.
+- Remove any secrets, passwords, or private webhook URLs before posting.
+- Security-sensitive reports: Contact the repository owner through available channels. If no private contact method is listed, open a regular issue and mark it as sensitive in the description.
