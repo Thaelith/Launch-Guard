@@ -1,0 +1,59 @@
+# Example checks.yml for a Skyblock Minecraft server.
+# Copy to plugins/LaunchGuard/checks.yml and adjust for your server.
+
+checks:
+  plugins:
+    enabled: true
+    required:
+      - Vault
+      - LuckPerms
+      - PlaceholderAPI
+      - ASkyBlock
+      - Essentials
+      - SuperiorSkyblock2
+
+  commands:
+    enabled: true
+    required:
+      - island
+      - spawn
+      - warp
+      - shop
+      - balance
+      - pay
+      - challenges
+      - coop
+
+  worlds:
+    enabled: true
+    required:
+      - world
+      - ASkyBlock
+      - ASkyBlock_nether
+
+  locations:
+    enabled: true
+    entries:
+      spawn:
+        world: world
+        x: 0
+        y: 100
+        z: 0
+        safe: true
+      shop_npc:
+        world: world
+        x: -10
+        y: 100
+        z: 15
+        safe: true
+
+  permissions:
+    enabled: true
+    nodes:
+      shouldExist:
+        - askyblock.island.create
+        - askyblock.island.home
+        - essentials.spawn
+      dangerous:
+        - minecraft.command.op
+        - bukkit.command.stop

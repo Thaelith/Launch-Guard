@@ -11,6 +11,12 @@ import java.util.Set;
 
 public final class LocationUtil {
 
+    public enum SafetyStatus {
+        SAFE,
+        UNSAFE,
+        UNKNOWN
+    }
+
     private static final Set<Material> UNSAFE_BLOCK = EnumSet.of(
             Material.LAVA,
             Material.FIRE,
@@ -54,43 +60,48 @@ public final class LocationUtil {
 
     public static SafeResult checkSafety(Location location) {
         if (location == null) {
-            return new SafeResult(false, "Null location");
+            return new SafeResult(SafetyStatus.UNSAFE, "Null location");
         }
 
         World world = location.getWorld();
         if (world == null) {
-            return new SafeResult(false, "World not loaded");
-        }
-
-        if (location.getY() < world.getMinHeight() || location.getY() > world.getMaxHeight()) {
-            return new SafeResult(false,
-                    "Y coordinate out of world bounds (min: " + world.getMinHeight()
-                    + ", max: " + world.getMaxHeight() + ")");
+            return new SafeResult(SafetyStatus.UNSAFE, "World not loaded");
         }
 
         if (!isChunkLoadedForLocation(location)) {
-            return new SafeResult(true, "Chunk not loaded; assuming safe");
+            return new SafeResult(SafetyStatus.UNKNOWN, "Chunk not loaded");
         }
 
         Block block = location.getBlock();
         Material blockType = block.getType();
         if (UNSAFE_BLOCK.contains(blockType)) {
-            return new SafeResult(false, "Block at location is " + blockType.name());
+            return new SafeResult(SafetyStatus.UNSAFE, "Block at location is " + blockType.name());
         }
 
         Block headBlock = block.getRelative(BlockFace.UP);
         if (UNSAFE_BLOCK.contains(headBlock.getType())) {
-            return new SafeResult(false, "Block above location is " + headBlock.getType().name());
+            return new SafeResult(SafetyStatus.UNSAFE, "Block above location is " + headBlock.getType().name());
         }
 
         Block standBlock = block.getRelative(BlockFace.DOWN);
         if (UNSAFE_STAND.contains(standBlock.getType())) {
-            return new SafeResult(false, "Block below location is " + standBlock.getType().name());
+            return new SafeResult(SafetyStatus.UNSAFE, "Block below location is " + standBlock.getType().name());
         }
 
-        return new SafeResult(true, null);
+        return new SafeResult(SafetyStatus.SAFE, null);
     }
 
-    public record SafeResult(boolean safe, String reason) {
+    public record SafeResult(SafetyStatus status, String reason) {
+        public boolean isSafe() {
+            return status == SafetyStatus.SAFE;
+        }
+
+        public boolean isUnknown() {
+            return status == SafetyStatus.UNKNOWN;
+        }
+
+        public boolean isUnsafe() {
+            return status == SafetyStatus.UNSAFE;
+        }
     }
 }

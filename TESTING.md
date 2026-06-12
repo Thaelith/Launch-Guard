@@ -1,4 +1,4 @@
-# LaunchGuard Testing Guide
+# Testing Guide
 
 ## Building
 
@@ -14,6 +14,8 @@ The JAR is produced at `build/libs/LaunchGuard-0.1.0.jar`.
 2. Start the server or run `/reload confirm`.
 3. Verify the plugin loads: check console for `LaunchGuard v0.1.0 enabled.`
 4. Configuration files are created in `plugins/LaunchGuard/`.
+
+Note: LaunchGuard permissions are op-only by default. Use an operator account or grant `launchguard.use` to test players.
 
 ## Test Cases
 
@@ -33,12 +35,12 @@ The JAR is produced at `build/libs/LaunchGuard-0.1.0.jar`.
 
 | Test | Expected Result |
 |---|---|
-| Console: `/launchguard run` | Runs checks (console has all permissions) |
-| Console: `/launchguard reload` | Reloads successfully |
-| Normal player: `/launchguard run` | Permission denied |
-| Normal player: `/launchguard help` | Shows help (launchguard.use is default:true) |
+| Normal player: `/launchguard` | Permission denied (default: op) |
+| Normal player with launchguard.use: `/launchguard help` | Shows help |
+| Normal player with launchguard.use only: `/launchguard run` | Permission denied (needs launchguard.run) |
 | OP player: `/launchguard run` | Runs checks |
 | OP player: `/launchguard reload` | Reloads successfully |
+| Console: `/launchguard run` | Runs checks (console has all permissions) |
 
 ### 3. Plugin Checks
 
@@ -53,8 +55,8 @@ The JAR is produced at `build/libs/LaunchGuard-0.1.0.jar`.
    ```
 2. Run `/launchguard run`.
 3. Expected:
-   - `[PASS]` or `[FAIL]` for Vault (depending on whether it is installed)
-   - `[FAIL]` for NonExistentPlugin with suggestion text
+   - `[PASS]` or `[FAIL]` for Vault (depending on installation)
+   - `[FAIL]` for NonExistentPlugin with suggestion
 
 ### 4. Command Checks
 
@@ -72,8 +74,8 @@ The JAR is produced at `build/libs/LaunchGuard-0.1.0.jar`.
 3. Expected:
    - `[PASS]` for `help` (Minecraft built-in)
    - `[FAIL]` for `fakecommand`
-   - Commands with leading `/` are normalized (e.g., `/spawn` is checked as `spawn`)
-   - No commands are actually executed during the check
+   - Commands with leading `/` are normalized
+   - No commands are executed
 
 ### 5. World Checks
 
@@ -93,7 +95,17 @@ The JAR is produced at `build/libs/LaunchGuard-0.1.0.jar`.
    - `[PASS]` for loaded worlds
    - `[FAIL]` for `nonexistent_world`
 
-### 6. Location Safety
+### 6. Location Safety - Unloaded Chunk
+
+1. Configure a location in a part of the world that has never been visited.
+2. Run `/launchguard run`.
+3. Expected:
+   - `[WARN]` with message about chunk not loaded (not PASS)
+   - Suggestion: "Visit or load the area once, then run the check again."
+4. Visit the area, run again.
+5. Expected: Actual safety result (PASS or FAIL) appears.
+
+### 7. Location Safety - Invalid Coordinates
 
 1. Edit `plugins/LaunchGuard/checks.yml`:
    ```yaml
@@ -101,35 +113,37 @@ The JAR is produced at `build/libs/LaunchGuard-0.1.0.jar`.
      locations:
        enabled: true
        entries:
-         spawn:
+         bad_x:
            world: world
-           x: 0
            y: 80
            z: 0
-           safe: true
-         void_check:
+         bad_y:
            world: world
            x: 0
-           y: -64
+           y: abc
            z: 0
-           safe: true
+         out_of_bounds:
+           world: world
+           x: 0
+           y: -999
+           z: 0
          missing_world:
            world: doesnotexist
            x: 0
            y: 64
            z: 0
-           safe: true
    ```
 2. Run `/launchguard run`.
 3. Expected:
-   - `[PASS]` or appropriate result for `spawn` (depends on block at that location)
-   - `[FAIL]` for `void_check` if Y is out of bounds
-   - `[FAIL]` for `missing_world` with world missing message
-4. Verify: no player is teleported, no blocks are modified.
+   - `[FAIL]` for `bad_x` (x is missing or not numeric)
+   - `[FAIL]` for `bad_y` (y is missing or not numeric)
+   - `[FAIL]` for `out_of_bounds` (y is outside world height limits)
+   - `[FAIL]` for `missing_world` (world not found)
+4. No console stack traces for normal users.
 
-### 7. Permission Node Checks
+### 8. Permission Node Checks
 
-1. Edit `plugins/LaunchGuard/checks.yml`:
+1. Edit checks.yml:
    ```yaml
    checks:
      permissions:
@@ -144,53 +158,41 @@ The JAR is produced at `build/libs/LaunchGuard-0.1.0.jar`.
    ```
 2. Run `/launchguard run`.
 3. Expected:
-   - `[PASS]` for `bukkit.command.help` (registered by Bukkit)
-   - `[WARN]` for `some.unknown.node` (not FAIL)
+   - `[PASS]` for `bukkit.command.help`
+   - `[WARN]` for `some.unknown.node`
    - `[WARN]` for dangerous nodes that are registered
 
-### 8. Broken YAML
+### 9. Broken YAML
 
-1. Corrupt `plugins/LaunchGuard/config.yml` (e.g., replace a colon with an equals sign).
+1. Corrupt `plugins/LaunchGuard/config.yml` with invalid YAML.
 2. Run `/launchguard reload`.
 3. Expected:
    - Reload reports failure to sender and console
    - Plugin does not crash
    - Previous valid configuration is kept
-   - `/launchguard run` still works with previous config
+   - `/launchguard run` still works
 
-### 9. Missing Config Files
+### 10. Missing Config Files
 
 1. Delete `plugins/LaunchGuard/checks.yml`.
 2. Run `/launchguard reload`.
-3. Expected:
-   - File is recreated from defaults
-   - Reload succeeds
-
-### 10. Empty Check Lists
-
-1. Edit checks so all `required:` lists are empty or the checks are disabled.
-2. Run `/launchguard run`.
-3. Expected:
-   - If all checks disabled: message says no checks enabled
-   - If checks enabled but lists empty: report shows zero results
+3. Expected: File recreated from defaults, reload succeeds.
 
 ### 11. Console Output
 
-1. Run `/launchguard run` as a player.
-2. Expected:
-   - Report appears in player's chat
-   - Report also appears in console (if `reportToConsole: true` in config.yml)
+1. Run `/launchguard run` as a player (with reportToConsole: true).
+2. Expected: Report appears in console as well as chat.
 
-## Safety Verification Checklist
+## Safety Verification
 
-After running all tests, confirm:
+After all tests, confirm:
 
-- [ ] No arbitrary server commands were executed
+- [ ] No commands were executed by checks
 - [ ] No players were teleported
 - [ ] No blocks were modified
-- [ ] No economy data was changed
-- [ ] No permission data was changed
-- [ ] The whitelist state is unchanged
+- [ ] No chunks were force-loaded
+- [ ] No economy data changed
+- [ ] No permission data changed
+- [ ] Whitelist state unchanged
 - [ ] No files created outside `plugins/LaunchGuard/`
-- [ ] No network requests were made
-- [ ] No user data was collected or sent
+- [ ] No network requests made

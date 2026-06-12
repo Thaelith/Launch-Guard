@@ -1,5 +1,4 @@
 settings:
   showPassedChecks: true
   reportToConsole: true
-  stopOnCriticalFail: false
   prefix: "[LaunchGuard]"

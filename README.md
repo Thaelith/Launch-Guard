@@ -16,7 +16,7 @@ Use LaunchGuard before:
 
 ## What LaunchGuard Checks
 
-**[PASS] indicates the check passed. [WARN] indicates a potential issue. [FAIL] indicates a problem that should be fixed before launch. [INFO] provides additional context.**
+[PASS] indicates the check passed. [WARN] indicates a potential issue. [FAIL] indicates a problem that should be fixed before launch. [INFO] provides additional context.
 
 ### Required Plugins
 Checks each plugin listed in `checks.plugins.required`. Reports PASS if the plugin is loaded and enabled, FAIL if missing or disabled.
@@ -30,10 +30,12 @@ Checks each world listed in `checks.worlds.required`. Reports PASS if the world 
 ### Safe Locations
 For each configured location, checks:
 - The target world exists
+- Coordinates are valid (present and numeric)
 - Y coordinate is within world bounds
 - The block at the location is not lava, fire, cactus, powder snow, etc.
 - The block below is solid enough to stand on
-- If the chunk is not loaded, reports as safe with a note rather than loading the chunk
+- If the chunk is not loaded, reports WARN (does not force-load chunks)
+- Invalid coordinates (missing, non-numeric, out of bounds) are reported as FAIL
 
 ### Permission Nodes
 - `shouldExist` nodes: reports PASS if registered, WARN if not found
@@ -54,8 +56,22 @@ This is the Lite version. It inspects state and reports issues. It does not:
 
 1. Drop `LaunchGuard-0.1.0.jar` into your server's `plugins/` directory.
 2. Restart the server.
-3. Edit `plugins/LaunchGuard/checks.yml` to match your server's requirements.
-4. Run `/launchguard run` to check your server.
+3. Grant `launchguard.use` to staff who need to run checks (OPs have it by default).
+4. Edit `plugins/LaunchGuard/checks.yml` to match your server's requirements.
+5. Run `/launchguard run` to check your server.
+
+## Quick Start
+
+```bash
+# Grant a player access
+/lp user MyPlayer permission set launchguard.use true
+
+# Run checks
+/launchguard run
+
+# Reload after editing config
+/launchguard reload
+```
 
 ## Commands
 
@@ -70,9 +86,11 @@ Aliases: `/lg`, `/preflight`
 
 ## Permissions
 
+All permissions default to op-only.
+
 | Permission | Default | Description |
 |---|---|---|
-| launchguard.use | true | Access /launchguard command |
+| launchguard.use | op | Access /launchguard command |
 | launchguard.run | op | Run pre-launch checks |
 | launchguard.reload | op | Reload configuration |
 | launchguard.admin | op | Full admin access (implies run and reload) |
@@ -87,7 +105,6 @@ All configuration files are in `plugins/LaunchGuard/`.
 settings:
   showPassedChecks: true    # Show PASS results in report
   reportToConsole: true     # Also log report to console
-  stopOnCriticalFail: false # Reserved for future use
   prefix: "[LaunchGuard]"   # Message prefix
 ```
 
@@ -149,22 +166,36 @@ Customize all user-facing messages. See the generated file in `plugins/LaunchGua
 [PASS] World exists: world
 [FAIL] World missing: world_the_end
        -> Check the world folder name or load the world before launch.
-[PASS] Location safe: spawn
+[WARN] Location could not be fully checked because the chunk is not loaded: spawn
+       -> Visit or load the area once, then run the check again.
+[FAIL] Location config invalid: crates (x is missing or not numeric)
+       -> Fix the location coordinates in checks.yml.
 ----------------------------------------
 Result: NOT_READY
-Passed: 5
-Warnings: 0
-Failures: 2
+Passed: 4
+Warnings: 1
+Failures: 4
 ```
 
 ## Safety
 
 LaunchGuard Lite v0.1 is read-only. It inspects server state and reports findings. It never executes commands, teleports players, modifies data, or changes server behavior. You control what it checks through configuration files.
 
+## Known Limitations
+
+- Location checks cannot inspect unloaded chunks (reports WARN instead)
+- Command detection uses reflection-based command map access; some dynamically registered commands may not be detected
+- Permission checks inspect globally registered nodes only, not group-level assignments
+- Lite v0.1 does not integrate with LuckPerms, Vault, or PlaceholderAPI
+- Report output is text-only (no HTML, JSON, or Discord output in Lite)
+
 ## Troubleshooting
 
 **Plugin does not load:**
 Check the server console for errors. LaunchGuard requires Paper 1.20+.
+
+**Cannot run commands:**
+LaunchGuard permissions are op-only by default. Grant `launchguard.use` to the player or group that needs access.
 
 **Checks pass but server has issues:**
 Add the missing plugin, world, or command to your checks.yml. Defaults are starting points; customize them.
@@ -175,8 +206,8 @@ If config.yml, checks.yml, or messages.yml has invalid YAML, the reload fails an
 **No checks are enabled:**
 Verify that `enabled: true` is set for at least one check category in checks.yml.
 
-**Command returns "no permission":**
-Grant `launchguard.run` to the user or make them an operator.
+**Location shows WARN about unloaded chunk:**
+Visit or teleport to the area once so the chunk loads, then run the check again.
 
 ## Roadmap
 

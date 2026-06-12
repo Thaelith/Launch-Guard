@@ -15,7 +15,7 @@ commands:
 permissions:
   launchguard.use:
     description: Allows use of the /launchguard command.
-    default: true
+    default: op
   launchguard.run:
     description: Allows running pre-launch checks.
     default: op

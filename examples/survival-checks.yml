@@ -1,0 +1,71 @@
+# Example checks.yml for a survival Minecraft server.
+# Copy to plugins/LaunchGuard/checks.yml and adjust for your server.
+
+checks:
+  plugins:
+    enabled: true
+    required:
+      - Vault
+      - LuckPerms
+      - Essentials
+      - GriefPrevention
+      - Dynmap
+
+  commands:
+    enabled: true
+    required:
+      - spawn
+      - home
+      - sethome
+      - tpa
+      - tpaaccept
+      - warp
+      - kit
+      - shop
+      - balance
+      - pay
+
+  worlds:
+    enabled: true
+    required:
+      - world
+      - world_nether
+      - world_the_end
+
+  locations:
+    enabled: true
+    entries:
+      spawn:
+        world: world
+        x: 0
+        y: 80
+        z: 0
+        safe: true
+      shop:
+        world: world
+        x: 50
+        y: 72
+        z: 100
+        safe: true
+      pvp_arena:
+        world: world
+        x: 500
+        y: 70
+        z: -500
+        safe: true
+
+  permissions:
+    enabled: true
+    nodes:
+      shouldExist:
+        - essentials.spawn
+        - essentials.home
+        - essentials.warp
+        - essentials.kit
+        - griefprevention.claims
+      dangerous:
+        - minecraft.command.op
+        - bukkit.command.stop
+        - bukkit.command.reload
+        - essentials.ban
+        - essentials.mute

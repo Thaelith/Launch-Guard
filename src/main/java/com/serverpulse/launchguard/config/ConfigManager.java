@@ -72,11 +72,6 @@ public class ConfigManager {
         return config.getBoolean("settings.reportToConsole", true);
     }
 
-    public boolean stopOnCriticalFail() {
-        if (config == null) return false;
-        return config.getBoolean("settings.stopOnCriticalFail", false);
-    }
-
     private FileConfiguration loadYamlSafe(File file, String resourceName) {
         try {
             YamlConfiguration yaml = new YamlConfiguration();
