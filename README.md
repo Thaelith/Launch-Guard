@@ -63,8 +63,14 @@ This is the Lite version. It inspects state and reports issues. It does not:
 ## Quick Start
 
 ```bash
-# Grant a player access
+# Grant access to the LaunchGuard command
 /lp user MyPlayer permission set launchguard.use true
+
+# Grant permission to run checks
+/lp user MyPlayer permission set launchguard.run true
+
+# Optional: grant permission to reload configuration
+/lp user MyPlayer permission set launchguard.reload true
 
 # Run checks
 /launchguard run
@@ -90,10 +96,12 @@ All permissions default to op-only.
 
 | Permission | Default | Description |
 |---|---|---|
-| launchguard.use | op | Access /launchguard command |
-| launchguard.run | op | Run pre-launch checks |
-| launchguard.reload | op | Reload configuration |
-| launchguard.admin | op | Full admin access (implies run and reload) |
+| launchguard.use | op | Access to help and version subcommands |
+| launchguard.run | op | Required for /launchguard run |
+| launchguard.reload | op | Required for /launchguard reload |
+| launchguard.admin | op | Full access; includes run and reload as child permissions |
+
+Note: `launchguard.use` alone does not permit `/launchguard run`. The `run` and `reload` subcommands each require their own permission or `launchguard.admin`.
 
 ## Configuration
 
@@ -195,7 +203,7 @@ LaunchGuard Lite v0.1 is read-only. It inspects server state and reports finding
 Check the server console for errors. LaunchGuard requires Paper 1.20+.
 
 **Cannot run commands:**
-LaunchGuard permissions are op-only by default. Grant `launchguard.use` to the player or group that needs access.
+LaunchGuard permissions are op-only by default. Grant `launchguard.use` for basic command access, `launchguard.run` to run checks, and `launchguard.reload` to reload configuration. Use `launchguard.admin` to grant all permissions at once.
 
 **Checks pass but server has issues:**
 Add the missing plugin, world, or command to your checks.yml. Defaults are starting points; customize them.
