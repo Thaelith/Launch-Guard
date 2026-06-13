@@ -2,6 +2,13 @@
 
 Automated pre-launch checks for Minecraft servers.
 
+## Download
+
+- GitHub Releases: https://github.com/Thaelith/Launch-Guard/releases
+- Hangar: <Hangar [project link](https://hangar.papermc.io/Thaelith/LaunchGuard)>
+- Modrinth: <Modrinth [project link](https://modrinth.com/plugin/launchguard)>
+- SpigotMC: <Spigot [resource link](https://www.spigotmc.org/resources/launchguard.136118/)>
+
 ## What LaunchGuard Is
 
 LaunchGuard is a server administration utility that runs automated checks before you open your server to players. It inspects plugin state, command registration, world availability, location safety, and permission configuration, then produces a clear READY / NOT_READY report.
