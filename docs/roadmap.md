@@ -1,8 +1,8 @@
 # Roadmap
 
-LaunchGuard Lite v0.1 is the initial release focusing on essential read-only pre-launch checks.
+LaunchGuard Lite v0.1 was the initial release focusing on essential read-only pre-launch checks.
 
-## v0.2 (In Development)
+## v0.2.0
 
 - Plugin inventory report
 - Plugin dependency visibility report

@@ -81,8 +81,6 @@ checks:
 
 ### Plugin Inventory Fields
 
-Note: The plugin inventory configuration is part of unreleased v0.2.0-SNAPSHOT until v0.2.0 is published.
-
 | Field | Type | Default | Description |
 |---|---|---|---|
 | enabled | boolean | false | Adds concise plugin inventory and dependency visibility results to `/launchguard run` |

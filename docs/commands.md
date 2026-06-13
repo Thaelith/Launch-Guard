@@ -30,8 +30,6 @@ If `reportToConsole: true` in config.yml, the report is also sent to the server 
 
 ## /launchguard plugins
 
-Note: Plugin inventory commands are part of unreleased v0.2.0-SNAPSHOT until v0.2.0 is published.
-
 Shows a concise read-only plugin inventory report.
 
 Permission: `launchguard.plugins` or `launchguard.admin`

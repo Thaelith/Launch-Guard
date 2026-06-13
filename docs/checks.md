@@ -85,8 +85,6 @@ Notable: LaunchGuard does not integrate with LuckPerms. It only checks globally 
 
 ## Plugin Inventory
 
-Note: The plugin inventory preflight section is part of unreleased v0.2.0-SNAPSHOT until v0.2.0 is published.
-
 The optional plugin inventory check is disabled by default:
 
 ```yaml

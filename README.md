@@ -2,9 +2,7 @@
 
 Read-only pre-launch checks for Paper Minecraft servers.
 
-Development notice: The main branch may include unreleased v0.2.0-SNAPSHOT changes. The latest public release is v0.1.0. Use the GitHub Releases page, Hangar, Modrinth, or SpigotMC to download the latest stable release.
-
-Plugin inventory commands documented below are part of unreleased v0.2.0-SNAPSHOT until v0.2.0 is published.
+Latest release: v0.2.0. Use the GitHub Releases page to download the v0.2.0 JAR. Hangar, Modrinth, and SpigotMC may still show v0.1.0 until those pages are updated manually.
 
 ## Download
 
@@ -227,7 +225,7 @@ LaunchGuard Plugin Inventory
 
 Plugins: 12 total, 12 enabled, 0 disabled
 
-[PASS] LaunchGuard 0.2.0-SNAPSHOT enabled
+[PASS] LaunchGuard 0.2.0 enabled
 [PASS] LuckPerms 5.x enabled
 [PASS] Vault 1.x enabled
 [PASS] PlaceholderAPI 2.x enabled
@@ -271,7 +269,7 @@ Visit or teleport to the area once so the chunk loads, then run the check again.
 
 ## Roadmap
 
-In development for v0.2:
+Released in v0.2.0:
 
 - Plugin inventory report
 - Dependency visibility report
@@ -290,7 +288,7 @@ Requirements: JDK 17+
 ./gradlew build
 ```
 
-The development plugin JAR will be in `build/libs/LaunchGuard-0.2.0-SNAPSHOT.jar`.
+The plugin JAR will be in `build/libs/LaunchGuard-0.2.0.jar`.
 
 ## Support
 

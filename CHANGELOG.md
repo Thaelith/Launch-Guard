@@ -1,20 +1,27 @@
 # Changelog
 
-## 0.2.0-SNAPSHOT - Unreleased
-
-Development changes for LaunchGuard v0.2.0.
+## 0.2.0
 
 ### Added
-- `/launchguard plugins` for a concise read-only plugin inventory report
-- `/launchguard plugins verbose` for installed plugin metadata details
-- `/launchguard plugins dependencies` for dependency visibility
-- New `launchguard.plugins` permission, defaulting to op
-- Optional `checks.pluginInventory` preflight section, disabled by default
+- Added `/launchguard plugins` for a concise installed plugin inventory.
+- Added `/launchguard plugins verbose` for detailed plugin metadata.
+- Added `/launchguard plugins dependencies` for dependency visibility.
+- Added `launchguard.plugins` permission.
+- Added optional `pluginInventory` preflight integration in `checks.yml`.
 
-### Notes
-- Plugin inventory reports metadata, enabled state, and dependency visibility only
-- Plugin inventory does not verify that each plugin is correctly configured
-- LaunchGuard does not install, download, enable, disable, reload, or fix plugins
+### Changed
+- Updated documentation for plugin inventory and dependency visibility.
+- Updated version from `0.2.0-SNAPSHOT` to `0.2.0`.
+
+### Safety
+- Plugin inventory is read-only.
+- LaunchGuard does not install, download, enable, disable, reload, or modify plugins.
+- LaunchGuard does not execute plugin commands or configured commands.
+
+### Limitations
+- Plugin inventory reports metadata, enabled state, and dependency visibility only.
+- It does not verify plugin configuration correctness or full runtime behavior.
+- Missing hard dependencies may not appear if Paper prevents the dependent plugin from loading.
 
 ## 0.1.0 - Initial Lite Release
 
