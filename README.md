@@ -2,12 +2,16 @@
 
 Read-only pre-launch checks for Paper Minecraft servers.
 
+Development notice: The main branch may include unreleased v0.2.0-SNAPSHOT changes. The latest public release is v0.1.0. Use the GitHub Releases page, Hangar, Modrinth, or SpigotMC to download the latest stable release.
+
+Plugin inventory commands documented below are part of unreleased v0.2.0-SNAPSHOT until v0.2.0 is published.
+
 ## Download
 
-- GitHub Releases: https://github.com/Thaelith/Launch-Guard/releases
-- Hangar: <Hangar [project link](https://hangar.papermc.io/Thaelith/LaunchGuard)>
-- Modrinth: <Modrinth [project link](https://modrinth.com/plugin/launchguard)>
-- SpigotMC: <Spigot [resource link](https://www.spigotmc.org/resources/launchguard.136118/)>
+- [GitHub Releases](https://github.com/Thaelith/Launch-Guard/releases)
+- [Hangar](https://hangar.papermc.io/Thaelith/LaunchGuard)
+- [Modrinth](https://modrinth.com/plugin/launchguard)
+- [SpigotMC](https://www.spigotmc.org/resources/launchguard.136118/)
 
 ## What LaunchGuard Is
 

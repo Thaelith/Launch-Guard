@@ -10,7 +10,7 @@ All LaunchGuard permissions default to op-only.
 | launchguard.run | op | Run pre-launch checks |
 | launchguard.plugins | op | View plugin inventory and dependency reports |
 | launchguard.reload | op | Reload configuration files |
-| launchguard.admin | op | Full admin access (implies run, plugins, and reload) |
+| launchguard.admin | op | Full admin access; includes use, run, plugins, and reload |
 
 ## Granting Permissions
 

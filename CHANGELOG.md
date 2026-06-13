@@ -48,7 +48,7 @@ First public release of LaunchGuard Lite.
 - `launchguard.use` controls basic command access
 - `launchguard.run` controls check execution
 - `launchguard.reload` controls config reload
-- `launchguard.admin` includes run and reload children
+- `launchguard.admin` includes use, run, and reload children
 
 ### Configuration
 - config.yml: showPassedChecks, reportToConsole, prefix
