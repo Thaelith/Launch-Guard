@@ -2,6 +2,8 @@
 
 All LaunchGuard permissions default to op-only.
 
+Note: `launchguard.plugins` is part of unreleased v0.2.0-SNAPSHOT until v0.2.0 is published.
+
 ## Permission Nodes
 
 | Permission | Default | Description |
