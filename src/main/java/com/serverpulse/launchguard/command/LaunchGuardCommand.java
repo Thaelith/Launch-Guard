@@ -21,9 +21,11 @@ import java.util.Map;
 public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
 
     private final LaunchGuardPlugin plugin;
+    private final PluginInventoryCommand pluginInventoryCommand;
 
     public LaunchGuardCommand(LaunchGuardPlugin plugin) {
         this.plugin = plugin;
+        this.pluginInventoryCommand = new PluginInventoryCommand(plugin);
     }
 
     @Override
@@ -39,6 +41,8 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
                 return handleRun(sender);
             case "reload":
                 return handleReload(sender);
+            case "plugins":
+                return pluginInventoryCommand.handle(sender, args);
             case "version":
                 return handleVersion(sender);
             default:
@@ -51,6 +55,7 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage(Component.text(prefix + " LaunchGuard Commands", NamedTextColor.WHITE));
         sender.sendMessage(Component.text("/launchguard help    - Show this help", NamedTextColor.GRAY));
         sender.sendMessage(Component.text("/launchguard run     - Run pre-launch checks", NamedTextColor.GRAY));
+        sender.sendMessage(Component.text("/launchguard plugins - Show plugin inventory report", NamedTextColor.GRAY));
         sender.sendMessage(Component.text("/launchguard reload  - Reload configuration", NamedTextColor.GRAY));
         sender.sendMessage(Component.text("/launchguard version - Show version", NamedTextColor.GRAY));
         return true;
@@ -148,7 +153,17 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             List<String> completions = new ArrayList<>();
             String partial = args[0].toLowerCase();
-            for (String sub : new String[]{"help", "run", "reload", "version"}) {
+            for (String sub : new String[]{"help", "run", "plugins", "reload", "version"}) {
+                if (sub.startsWith(partial)) {
+                    completions.add(sub);
+                }
+            }
+            return completions;
+        }
+        if (args.length == 2 && args[0].equalsIgnoreCase("plugins")) {
+            List<String> completions = new ArrayList<>();
+            String partial = args[1].toLowerCase();
+            for (String sub : new String[]{"verbose", "dependencies"}) {
                 if (sub.startsWith(partial)) {
                     completions.add(sub);
                 }

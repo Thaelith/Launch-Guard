@@ -1,8 +1,8 @@
 name: LaunchGuard
-version: "0.1.0"
+version: "${version}"
 main: com.serverpulse.launchguard.LaunchGuardPlugin
 api-version: "1.20"
-description: Automated pre-launch checks for Minecraft servers.
+description: Read-only pre-launch checks for Minecraft servers.
 author: ServerPulse
 
 commands:
@@ -10,7 +10,7 @@ commands:
     description: Run pre-launch health checks.
     aliases: [lg, preflight]
     permission: launchguard.use
-    usage: /launchguard [help|run|reload|version]
+    usage: /launchguard [help|run|plugins|reload|version]
 
 permissions:
   launchguard.use:
@@ -22,6 +22,11 @@ permissions:
   launchguard.reload:
     description: Allows reloading LaunchGuard configuration.
     default: op
+  launchguard.plugins:
+    description: Allows viewing the read-only plugin inventory and dependency report.
+    default: op
+    children:
+      launchguard.use: true
   launchguard.admin:
     description: Full administrative access to LaunchGuard.
     default: op
@@ -29,3 +34,4 @@ permissions:
       launchguard.use: true
       launchguard.run: true
       launchguard.reload: true
+      launchguard.plugins: true

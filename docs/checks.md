@@ -1,6 +1,6 @@
 # Checks
 
-LaunchGuard runs five categories of checks. Each can be enabled or disabled in checks.yml.
+LaunchGuard runs configured categories of checks. Each can be enabled or disabled in checks.yml.
 
 ## Required Plugins
 
@@ -81,4 +81,34 @@ For `checks.permissions.nodes.dangerous`:
 - **Result: [WARN]** if registered (prompts review)
 - Nodes that are not registered produce no result
 
-Notable: LaunchGuard does not integrate with LuckPerms. It only checks globally registered permission nodes. Group-level assignments are not inspected in Lite v0.1.
+Notable: LaunchGuard does not integrate with LuckPerms. It only checks globally registered permission nodes. Group-level assignments are not inspected in Lite.
+
+## Plugin Inventory
+
+The optional plugin inventory check is disabled by default:
+
+```yaml
+checks:
+  pluginInventory:
+    enabled: false
+    checkDependencies: true
+    warnOnSoftDependencyMissing: true
+```
+
+When enabled, `/launchguard run` includes a concise plugin metadata and dependency visibility section. It does not dump every plugin in the preflight report.
+
+The preflight section reports:
+- Total plugin count
+- Enabled plugin count
+- Disabled plugin count
+- Missing hard dependencies from visible plugin metadata
+- Missing soft dependencies from visible plugin metadata
+
+**Result: [PASS]** if dependency visibility is enabled and no missing dependencies are reported.
+**Result: [INFO]** for inventory counts or missing soft dependencies when `warnOnSoftDependencyMissing: false`.
+**Result: [WARN]** for missing soft dependencies when `warnOnSoftDependencyMissing: true`.
+**Result: [FAIL]** for missing hard dependencies.
+
+Notable: LaunchGuard reads plugin metadata only. It does not execute plugin commands, reload plugins, enable plugins, disable plugins, download plugins, or change server state.
+
+Plugin inventory does not verify that each plugin is correctly configured. It reports installed plugin metadata, enabled state, and dependency visibility.

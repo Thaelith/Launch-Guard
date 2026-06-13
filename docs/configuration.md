@@ -62,6 +62,11 @@ checks:
       dangerous:          # Permission nodes that should be reviewed
         - minecraft.command.op
         - bukkit.command.stop
+
+  pluginInventory:
+    enabled: false        # Disabled by default; does not change /launchguard run unless enabled
+    checkDependencies: true
+    warnOnSoftDependencyMissing: true
 ```
 
 ### Location Entry Fields
@@ -73,6 +78,16 @@ checks:
 | y | number | Yes | Y coordinate |
 | z | number | Yes | Z coordinate |
 | safe | boolean | No | Whether the location should be safe (default: true) |
+
+### Plugin Inventory Fields
+
+| Field | Type | Default | Description |
+|---|---|---|---|
+| enabled | boolean | false | Adds concise plugin inventory and dependency visibility results to `/launchguard run` |
+| checkDependencies | boolean | true | Checks hard and soft dependencies from visible plugin metadata |
+| warnOnSoftDependencyMissing | boolean | true | Reports missing soft dependencies as [WARN] when true and [INFO] when false |
+
+The plugin inventory check is read-only. It reports installed plugin metadata, enabled state, and dependency visibility. It does not verify that each plugin is correctly configured.
 
 ## messages.yml
 

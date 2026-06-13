@@ -8,8 +8,9 @@ All LaunchGuard permissions default to op-only.
 |---|---|---|
 | launchguard.use | op | Access to /launchguard command |
 | launchguard.run | op | Run pre-launch checks |
+| launchguard.plugins | op | View plugin inventory and dependency reports |
 | launchguard.reload | op | Reload configuration files |
-| launchguard.admin | op | Full admin access (implies run and reload) |
+| launchguard.admin | op | Full admin access (implies run, plugins, and reload) |
 
 ## Granting Permissions
 
@@ -18,6 +19,7 @@ All LaunchGuard permissions default to op-only.
 ```
 /lp user PlayerName permission set launchguard.use true
 /lp user PlayerName permission set launchguard.run true
+/lp user PlayerName permission set launchguard.plugins true
 /lp group Staff permission set launchguard.use true
 ```
 
@@ -29,13 +31,16 @@ Not applicable. Use a permission plugin.
 
 - `launchguard.use` controls access to all subcommands.
 - `launchguard.run` is required for `/launchguard run`. Without it, the player receives a permission denied message.
+- `launchguard.plugins` is required for `/launchguard plugins`, `/launchguard plugins verbose`, and `/launchguard plugins dependencies`.
 - `launchguard.reload` is required for `/launchguard reload`.
-- `launchguard.admin` is a parent permission that includes `launchguard.run` and `launchguard.reload` as children.
+- `launchguard.plugins` includes `launchguard.use` as a child permission so staff can be granted inventory access directly.
+- `launchguard.admin` is a parent permission that includes `launchguard.use`, `launchguard.run`, `launchguard.plugins`, and `launchguard.reload` as children.
 - Console always has access to all commands regardless of permission settings.
 - Normal players cannot use `/launchguard` by default. This is intentional.
 
 ## Security Notes
 
 - Do not grant `launchguard.run` to untrusted players. The report may reveal server configuration details.
+- Do not grant `launchguard.plugins` to untrusted players. The inventory report reveals installed plugin metadata and dependency names.
 - Do not grant `launchguard.reload` to untrusted players. Reloading affects server operation.
 - The plugin does not expose any commands that modify server state, so even with full access, users cannot harm the server through LaunchGuard.
