@@ -2,6 +2,7 @@ package com.serverpulse.launchguard;
 
 import com.serverpulse.launchguard.check.CheckRegistry;
 import com.serverpulse.launchguard.check.impl.PermissionNodeCheck;
+import com.serverpulse.launchguard.check.impl.PluginInventoryCheck;
 import com.serverpulse.launchguard.check.impl.RequiredCommandCheck;
 import com.serverpulse.launchguard.check.impl.RequiredPluginCheck;
 import com.serverpulse.launchguard.check.impl.RequiredWorldCheck;
@@ -78,6 +79,7 @@ public class LaunchGuardPlugin extends JavaPlugin {
         checkRegistry.register(new RequiredWorldCheck(), checksConfig.isCheckEnabled("worlds"));
         checkRegistry.register(new SafeLocationCheck(), checksConfig.isCheckEnabled("locations"));
         checkRegistry.register(new PermissionNodeCheck(), checksConfig.isCheckEnabled("permissions"));
+        checkRegistry.register(new PluginInventoryCheck(), checksConfig.isCheckEnabled("pluginInventory"));
     }
 
     public ConfigManager getConfigManager() {

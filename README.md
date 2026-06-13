@@ -1,10 +1,10 @@
 # LaunchGuard
 
-Automated pre-launch checks for Minecraft servers.
+Read-only pre-launch checks for Paper Minecraft servers.
 
 ## What LaunchGuard Is
 
-LaunchGuard is a server administration utility that runs automated checks before you open your server to players. It inspects plugin state, command registration, world availability, location safety, and permission configuration, then produces a clear READY / NOT_READY report.
+LaunchGuard is a Paper-first server administration utility that runs read-only checks before you open your server to players. It inspects configured plugin requirements, command registration, world availability, location safety, permission nodes, and plugin metadata, then produces a clear READY / NOT_READY report.
 
 Use LaunchGuard before:
 
@@ -41,11 +41,18 @@ For each configured location, checks:
 - `shouldExist` nodes: reports PASS if registered, WARN if not found
 - `dangerous` nodes: reports WARN if registered (for review)
 
+### Plugin Inventory and Dependency Visibility
+Reports installed plugin metadata and enabled state. The plugin dependency report reads hard and soft dependencies from visible plugin metadata and reports whether those dependencies are installed.
+
+Plugin inventory does not verify that each plugin is correctly configured. It reports installed plugin metadata, enabled state, and dependency visibility.
+
 ## What LaunchGuard Does Not Do
 
 This is the Lite version. It inspects state and reports issues. It does not:
 
 - Execute arbitrary server commands
+- Execute plugin commands
+- Install, download, enable, disable, or reload plugins
 - Teleport players
 - Modify worlds, blocks, economy, or permissions
 - Change whitelist state
@@ -54,7 +61,7 @@ This is the Lite version. It inspects state and reports issues. It does not:
 
 ## Installation
 
-1. Drop `LaunchGuard-0.1.0.jar` into your server's `plugins/` directory.
+1. Drop the LaunchGuard jar into your server's `plugins/` directory.
 2. Restart the server.
 3. Grant `launchguard.use` and `launchguard.run` to staff who need to run checks. OPs have all LaunchGuard permissions by default.
 4. Edit `plugins/LaunchGuard/checks.yml` to match your server's requirements.
@@ -72,8 +79,17 @@ This is the Lite version. It inspects state and reports issues. It does not:
 # Optional: grant permission to reload configuration
 /lp user MyPlayer permission set launchguard.reload true
 
+# Optional: grant permission to view plugin inventory and dependency reports
+/lp user MyPlayer permission set launchguard.plugins true
+
 # Run checks
 /launchguard run
+
+# View installed plugin metadata
+/launchguard plugins
+
+# View dependency visibility only
+/launchguard plugins dependencies
 
 # Reload after editing config
 /launchguard reload
@@ -85,6 +101,9 @@ This is the Lite version. It inspects state and reports issues. It does not:
 |---|---|
 | `/launchguard help` | Show help |
 | `/launchguard run` | Run all pre-launch checks |
+| `/launchguard plugins` | Show concise plugin inventory |
+| `/launchguard plugins verbose` | Show plugin metadata details |
+| `/launchguard plugins dependencies` | Show dependency visibility report |
 | `/launchguard reload` | Reload configuration files |
 | `/launchguard version` | Show plugin version |
 
@@ -99,9 +118,10 @@ All permissions default to op-only.
 | launchguard.use | op | Access to help and version subcommands |
 | launchguard.run | op | Required for /launchguard run |
 | launchguard.reload | op | Required for /launchguard reload |
-| launchguard.admin | op | Full access; includes use, run, and reload as child permissions |
+| launchguard.plugins | op | Required for /launchguard plugins |
+| launchguard.admin | op | Full access; includes use, run, reload, and plugins as child permissions |
 
-Note: `launchguard.use` alone does not permit `/launchguard run`. The `run` and `reload` subcommands each require their own permission. `launchguard.admin` grants `use`, `run`, and `reload` as child permissions.
+Note: `launchguard.use` alone does not permit `/launchguard run`, `/launchguard reload`, or `/launchguard plugins`. Those subcommands each require their own permission. `launchguard.admin` grants `use`, `run`, `reload`, and `plugins` as child permissions.
 
 ## Configuration
 
@@ -153,6 +173,10 @@ checks:
       dangerous:
         - minecraft.command.op
         - bukkit.command.stop
+  pluginInventory:
+    enabled: false
+    checkDependencies: true
+    warnOnSoftDependencyMissing: true
 ```
 
 ### messages.yml
@@ -185,17 +209,34 @@ Warnings: 1
 Failures: 4
 ```
 
+## Plugin Inventory Example
+
+```
+LaunchGuard Plugin Inventory
+
+Plugins: 12 total, 12 enabled, 0 disabled
+
+[PASS] LaunchGuard 0.2.0-SNAPSHOT enabled
+[PASS] LuckPerms 5.x enabled
+[PASS] Vault 1.x enabled
+[PASS] PlaceholderAPI 2.x enabled
+
+Run /launchguard plugins verbose for metadata details.
+Run /launchguard plugins dependencies for dependency visibility.
+```
+
 ## Safety
 
-LaunchGuard Lite v0.1 is read-only. It inspects server state and reports findings. It never executes commands, teleports players, modifies data, or changes server behavior. You control what it checks through configuration files.
+LaunchGuard Lite is read-only. It inspects server state and reports findings. It never executes commands, teleports players, modifies data, changes server behavior, sends network requests, or uploads data. You control what it checks through configuration files.
 
 ## Known Limitations
 
 - Location checks cannot inspect unloaded chunks (reports WARN instead)
 - Command detection uses reflection-based command map access; some dynamically registered commands may not be detected
 - Permission checks inspect globally registered nodes only, not group-level assignments
-- Lite v0.1 does not integrate with LuckPerms, Vault, or PlaceholderAPI
-- Report output is text-only (no HTML, JSON, or Discord output in Lite)
+- Plugin inventory does not verify that each plugin is correctly configured. It reports installed plugin metadata, enabled state, and dependency visibility.
+- Lite does not integrate with LuckPerms, Vault, or PlaceholderAPI
+- Report output is text-only
 
 ## Troubleshooting
 
@@ -219,18 +260,16 @@ Visit or teleport to the area once so the chunk loads, then run the check again.
 
 ## Roadmap
 
-Planned for future versions (not included in Lite v0.1):
+In development for v0.2:
 
-- HTML reports
-- Discord webhook reports
-- Scheduled checks
-- Startup checks (run on server start)
-- Vault economy checks
-- PlaceholderAPI placeholder validation
-- LuckPerms group audit
-- Launch mode (automated pre-launch workflow)
-- Report history
-- JSON export
+- Plugin inventory report
+- Dependency visibility report
+- Optional plugin inventory preflight section
+
+Not planned for LaunchGuard Lite:
+
+- Executing arbitrary commands configured by server owners
+- Modifying server state
 
 ## Building From Source
 
@@ -240,7 +279,7 @@ Requirements: JDK 17+
 ./gradlew build
 ```
 
-The plugin JAR will be in `build/libs/LaunchGuard-0.1.0.jar`.
+The development plugin JAR will be in `build/libs/LaunchGuard-0.2.0-SNAPSHOT.jar`.
 
 ## Support
 

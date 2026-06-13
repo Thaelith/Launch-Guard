@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.2.0-SNAPSHOT - Unreleased
+
+Development changes for LaunchGuard v0.2.0.
+
+### Added
+- `/launchguard plugins` for a concise read-only plugin inventory report
+- `/launchguard plugins verbose` for installed plugin metadata details
+- `/launchguard plugins dependencies` for dependency visibility
+- New `launchguard.plugins` permission, defaulting to op
+- Optional `checks.pluginInventory` preflight section, disabled by default
+
+### Notes
+- Plugin inventory reports metadata, enabled state, and dependency visibility only
+- Plugin inventory does not verify that each plugin is correctly configured
+- LaunchGuard does not install, download, enable, disable, reload, or fix plugins
+
 ## 0.1.0 - Initial Lite Release
 
 First public release of LaunchGuard Lite.

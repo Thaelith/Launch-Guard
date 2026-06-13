@@ -45,3 +45,7 @@ checks:
         - minecraft.command.op
         - bukkit.command.stop
         - essentials.ban
+  pluginInventory:
+    enabled: false
+    checkDependencies: true
+    warnOnSoftDependencyMissing: true

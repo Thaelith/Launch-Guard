@@ -1,0 +1,19 @@
+﻿[13:54:26] [Server thread/INFO]: [LaunchGuard] Running pre-launch checks.
+[13:54:26] [Server thread/INFO]: [LaunchGuard] LaunchGuard Preflight Report
+----------------------------------------
+[PASS] Plugin loaded: LaunchGuard
+[FAIL] Plugin missing or disabled: PlaceholderAPI
+       -> Install and enable the missing plugin before launch.
+[PASS] Command registered: /launchguard
+[FAIL] Command missing: /shop
+       -> Install or configure the plugin that provides this command.
+[PASS] World exists: world
+[FAIL] World missing: definitely_missing_world_123
+       -> Check the world folder name or load the world before launch.
+[WARN] Location could not be fully checked because the chunk is not loaded: far_spawn
+       -> Visit or load the area once, then run the check again.
+----------------------------------------
+Result: NOT_READY
+Passed: 3
+Warnings: 1
+Failures: 3
