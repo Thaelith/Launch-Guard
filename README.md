@@ -2,6 +2,17 @@
 
 Read-only pre-launch checks for Paper Minecraft servers.
 
+Development notice: The main branch may include unreleased v0.2.0-SNAPSHOT changes. The latest public release is v0.1.0. Use the GitHub Releases page, Hangar, Modrinth, or SpigotMC to download the latest stable release.
+
+Plugin inventory commands documented below are part of unreleased v0.2.0-SNAPSHOT until v0.2.0 is published.
+
+## Downloads
+
+- [GitHub Releases](https://github.com/Thaelith/Launch-Guard/releases)
+- [Hangar](https://hangar.papermc.io/Thaelith/LaunchGuard)
+- [Modrinth](https://modrinth.com/plugin/launchguard)
+- [SpigotMC](https://www.spigotmc.org/resources/launchguard.136118/)
+
 ## What LaunchGuard Is
 
 LaunchGuard is a Paper-first server administration utility that runs read-only checks before you open your server to players. It inspects configured plugin requirements, command registration, world availability, location safety, permission nodes, and plugin metadata, then produces a clear READY / NOT_READY report.
