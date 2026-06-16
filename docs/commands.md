@@ -109,6 +109,19 @@ If the file is unusually large, the output is truncated with a notification. If 
 
 This command reads only from `plugins/LaunchGuard/reports/`. It does not accept arbitrary filenames or paths.
 
+## /launchguard validate
+
+Validates LaunchGuard configuration files and reports structural problems without running preflight checks.
+
+Permission: `launchguard.validate` or `launchguard.admin`
+
+Validates:
+- `config.yml` -- type checks, invalid values, unknown keys
+- `checks.yml` -- structure, duplicate entries, invalid coordinate types, missing sections
+- `messages.yml` -- missing or empty keys, non-string values
+
+Validation is read-only. It does not modify configuration files, reload config automatically, or run preflight checks.
+
 ## /launchguard version
 
 Displays the plugin version.
@@ -172,7 +185,7 @@ This command is read-only. It does not send network requests or include tokens, 
 
 ## Tab Completion
 
-Tab completion is supported for all subcommands: help, run, plugins, history, reload, version, export.
+Tab completion is supported for all subcommands: help, run, plugins, history, reload, version, export, validate.
 
 `/launchguard plugins` also supports tab completion for `verbose` and `dependencies`.
 

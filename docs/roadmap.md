@@ -17,13 +17,15 @@ LaunchGuard Lite v0.1 was the initial release focusing on essential read-only pr
 - Report retention (configurable max files)
 - `launchguard.history` permission
 
-## v0.4.0-SNAPSHOT
+## v0.5.0-SNAPSHOT
 
 - `/launchguard export json`
+- `/launchguard export html`
+- `/launchguard validate`
+- `launchguard.export` and `launchguard.validate` permissions
 - JSON report export with versioned schema
 - Static HTML report export
-- `launchguard.export` permission
-- JSON export retention with `settings.exportsToKeep`
+- Configuration validation for config.yml, checks.yml, and messages.yml
 
 ## Future Candidates
 

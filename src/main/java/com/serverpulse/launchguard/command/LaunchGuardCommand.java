@@ -10,6 +10,9 @@ import com.serverpulse.launchguard.report.PreflightReport;
 import com.serverpulse.launchguard.report.PreflightRunner;
 import com.serverpulse.launchguard.report.ReportFileWriter;
 import com.serverpulse.launchguard.report.ReportRenderer;
+import com.serverpulse.launchguard.validation.ConfigValidationService;
+import com.serverpulse.launchguard.validation.ValidationReport;
+import com.serverpulse.launchguard.validation.ValidationRenderer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;
@@ -55,6 +58,8 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
                 return handleHistory(sender, args);
             case "export":
                 return handleExport(sender, args);
+            case "validate":
+                return handleValidate(sender);
             case "version":
                 return handleVersion(sender);
             default:
@@ -71,6 +76,7 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage(Component.text("/launchguard history - Show saved report history", NamedTextColor.GRAY));
         sender.sendMessage(Component.text("/launchguard reload  - Reload configuration", NamedTextColor.GRAY));
         sender.sendMessage(Component.text("/launchguard export  - Export report as JSON or HTML", NamedTextColor.GRAY));
+        sender.sendMessage(Component.text("/launchguard validate - Validate configuration files", NamedTextColor.GRAY));
         sender.sendMessage(Component.text("/launchguard version - Show version", NamedTextColor.GRAY));
         return true;
     }
@@ -299,6 +305,29 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
         return true;
     }
 
+    private boolean handleValidate(CommandSender sender) {
+        if (!sender.hasPermission("launchguard.validate") && !sender.hasPermission("launchguard.admin")) {
+            sendNoPermission(sender);
+            return true;
+        }
+
+        String prefix = plugin.getMessageManager().get("prefix");
+        sender.sendMessage(Component.text(prefix + " Running configuration validation.", NamedTextColor.WHITE));
+
+        ConfigValidationService service = new ConfigValidationService(plugin);
+        ValidationReport report = service.validateAll();
+
+        ValidationRenderer renderer = new ValidationRenderer();
+        Component output = renderer.render(report);
+        sender.sendMessage(output);
+
+        if (plugin.getConfigManager().reportToConsole() && !(sender instanceof ConsoleCommandSender)) {
+            plugin.getServer().getConsoleSender().sendMessage(output);
+        }
+
+        return true;
+    }
+
     private boolean handleReload(CommandSender sender) {
         if (!sender.hasPermission("launchguard.reload") && !sender.hasPermission("launchguard.admin")) {
             sendNoPermission(sender);
@@ -338,7 +367,7 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             List<String> completions = new ArrayList<>();
             String partial = args[0].toLowerCase();
-            for (String sub : new String[]{"help", "run", "plugins", "history", "reload", "version", "export"}) {
+            for (String sub : new String[]{"help", "run", "plugins", "history", "reload", "version", "export", "validate"}) {
                 if (sub.startsWith(partial)) {
                     completions.add(sub);
                 }

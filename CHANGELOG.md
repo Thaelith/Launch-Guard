@@ -1,22 +1,24 @@
 # Changelog
 
-## 0.4.0-SNAPSHOT
+## 0.5.0-SNAPSHOT
 
 ### Added
 - Added `/launchguard export json`.
 - Added `/launchguard export html`.
+- Added `/launchguard validate`.
 - Added `launchguard.export` permission.
-- Added JSON report files under `plugins/LaunchGuard/exports/`.
-- Added static HTML report files under `plugins/LaunchGuard/exports/`.
+- Added `launchguard.validate` permission.
+- Added local JSON and HTML export files under `plugins/LaunchGuard/exports/`.
 - Added export retention with `settings.exportsToKeep`.
 - Added versioned JSON schema with `schemaVersion: 1`.
+- Added configuration validation for `config.yml`, `checks.yml`, and `messages.yml`.
 
 ### Safety
-- JSON and HTML export are read-only.
-- Export files are written only under `plugins/LaunchGuard/exports/`.
-- Exports do not send network requests.
-- Exports do not include tokens, webhook URLs, full logs, player IPs, or absolute file paths.
-- HTML exports are self-contained and do not load external resources.
+- Export and validation commands are read-only.
+- Validation reads configuration files but does not modify them.
+- Validation does not run preflight checks.
+- Exports are written only under `plugins/LaunchGuard/exports/`.
+- No network calls are introduced.
 
 ## 0.3.0
 

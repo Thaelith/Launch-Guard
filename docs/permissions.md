@@ -11,8 +11,9 @@ All LaunchGuard permissions default to op-only.
 | launchguard.plugins | op | View plugin inventory and dependency reports |
 | launchguard.history | op | View saved report history |
 | launchguard.export | op | Export reports as JSON or HTML |
+| launchguard.validate | op | Validate configuration files |
 | launchguard.reload | op | Reload configuration files |
-| launchguard.admin | op | Full admin access; includes use, run, plugins, history, export, and reload |
+| launchguard.admin | op | Full admin access; includes use, run, plugins, history, export, validate, and reload |
 
 ## Granting Permissions
 
@@ -36,6 +37,7 @@ Not applicable. Use a permission plugin.
 - `launchguard.plugins` is required for `/launchguard plugins`, `/launchguard plugins verbose`, and `/launchguard plugins dependencies`.
 - `launchguard.history` is required for `/launchguard history` and `/launchguard history latest`.
 - `launchguard.export` is required for `/launchguard export json` and `/launchguard export html`.
+- `launchguard.validate` is required for `/launchguard validate`.
 - `launchguard.reload` is required for `/launchguard reload`.
 - `launchguard.history` includes `launchguard.use` as a child permission so staff can be granted history access directly.
 - `launchguard.export` includes `launchguard.use` as a child permission so staff can be granted export access directly.
