@@ -240,7 +240,7 @@ LaunchGuard Plugin Inventory
 
 Plugins: 12 total, 12 enabled, 0 disabled
 
-[PASS] LaunchGuard 0.2.0 enabled
+[PASS] LaunchGuard 0.3.0 enabled
 [PASS] LuckPerms 5.x enabled
 [PASS] Vault 1.x enabled
 [PASS] PlaceholderAPI 2.x enabled
