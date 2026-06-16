@@ -68,6 +68,8 @@ This is the Lite version. It inspects state and reports issues. It does not:
 - Send network requests or upload data
 - Write files outside the plugin data folder
 
+Saved report files are written under `plugins/LaunchGuard/reports/` only. No files are written outside the plugin data folder.
+
 ## Installation
 
 1. Drop the LaunchGuard jar into your server's `plugins/` directory.
@@ -100,6 +102,12 @@ This is the Lite version. It inspects state and reports issues. It does not:
 # View dependency visibility only
 /launchguard plugins dependencies
 
+# View saved report history
+/launchguard history
+
+# View latest saved report
+/launchguard history latest
+
 # Reload after editing config
 /launchguard reload
 ```
@@ -113,6 +121,8 @@ This is the Lite version. It inspects state and reports issues. It does not:
 | `/launchguard plugins` | Show concise plugin inventory |
 | `/launchguard plugins verbose` | Show plugin metadata details |
 | `/launchguard plugins dependencies` | Show dependency visibility report |
+| `/launchguard history` | List recently saved reports |
+| `/launchguard history latest` | Show latest saved report content |
 | `/launchguard reload` | Reload configuration files |
 | `/launchguard version` | Show plugin version |
 
@@ -128,9 +138,10 @@ All permissions default to op-only.
 | launchguard.run | op | Required for /launchguard run |
 | launchguard.reload | op | Required for /launchguard reload |
 | launchguard.plugins | op | Required for /launchguard plugins |
-| launchguard.admin | op | Full access; includes use, run, reload, and plugins as child permissions |
+| launchguard.history | op | Required for /launchguard history |
+| launchguard.admin | op | Full access; includes use, run, reload, plugins, and history as child permissions |
 
-Note: `launchguard.use` alone does not permit `/launchguard run`, `/launchguard reload`, or `/launchguard plugins`. Those subcommands each require their own permission. `launchguard.admin` grants `use`, `run`, `reload`, and `plugins` as child permissions.
+Note: `launchguard.use` alone does not permit `/launchguard run`, `/launchguard reload`, `/launchguard plugins`, or `/launchguard history`. Those subcommands each require their own permission. `launchguard.admin` grants `use`, `run`, `reload`, `plugins`, and `history` as child permissions.
 
 ## Configuration
 
@@ -143,6 +154,10 @@ settings:
   showPassedChecks: true    # Show PASS results in report
   reportToConsole: true     # Also log report to console
   prefix: "[LaunchGuard]"   # Message prefix
+  runOnStartup: false       # Run preflight check on server start
+  startupDelayTicks: 100    # Delay before startup check (ticks)
+  saveReports: false        # Save report to plain text file
+  reportsToKeep: 25         # Max report files to keep
 ```
 
 ### checks.yml
@@ -275,6 +290,12 @@ Released in v0.2.0:
 - Dependency visibility report
 - Optional plugin inventory preflight section
 
+In development (v0.3.0-SNAPSHOT):
+
+- Startup preflight checks
+- Saved plain text report files
+- Report history commands
+
 Not planned for LaunchGuard Lite:
 
 - Executing arbitrary commands configured by server owners
@@ -288,7 +309,7 @@ Requirements: JDK 17+
 ./gradlew build
 ```
 
-The plugin JAR will be in `build/libs/LaunchGuard-0.2.0.jar`.
+The plugin JAR will be in `build/libs/LaunchGuard-0.3.0-SNAPSHOT.jar`.
 
 ## Support
 

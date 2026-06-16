@@ -11,6 +11,10 @@ settings:
   showPassedChecks: true    # Include PASS results in report output
   reportToConsole: true     # Send report to console when run by a player
   prefix: "[LaunchGuard]"   # Prefix shown before all messages
+  runOnStartup: false       # Run preflight check automatically after server start
+  startupDelayTicks: 100    # Ticks to wait before running startup check (minimum 1)
+  saveReports: false        # Save report output to plain text files
+  reportsToKeep: 25         # Maximum number of report files to keep in reports/ directory
 ```
 
 | Key | Type | Default | Description |
@@ -18,6 +22,27 @@ settings:
 | showPassedChecks | boolean | true | When false, [PASS] results are hidden from the report |
 | reportToConsole | boolean | true | When true, reports from player commands are also printed to console |
 | prefix | string | [LaunchGuard] | Prefix prepended to all messages |
+| runOnStartup | boolean | false | When true, runs a preflight check automatically after server start |
+| startupDelayTicks | int | 100 | Ticks to wait after server start before running startup check. Values below 1 are treated as 100 |
+| saveReports | boolean | false | When true, saves preflight report output to plain text files under `plugins/LaunchGuard/reports/` |
+| reportsToKeep | int | 25 | Maximum number of saved report `.txt` files to retain. Oldest files are pruned first. Values below 1 are treated as 25. Pruning only affects the `reports/` directory |
+
+### Report Files
+
+When `saveReports: true`, report files are saved to:
+
+```
+plugins/LaunchGuard/reports/
+```
+
+File naming format:
+
+```
+YYYY-MM-DD_HH-mm-ss_manual.txt    (for /launchguard run)
+YYYY-MM-DD_HH-mm-ss_startup.txt   (for startup checks)
+```
+
+Report files are plain text. They do not include Minecraft color codes. Each file includes a timestamp, source (manual or startup), LaunchGuard version, check results, and final status.
 
 ## checks.yml
 

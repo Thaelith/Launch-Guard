@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.3.0-SNAPSHOT
+
+### Added
+- Added optional startup preflight checks.
+- Added saved plain text report files.
+- Added `/launchguard history`.
+- Added `/launchguard history latest`.
+- Added `launchguard.history` permission.
+- Added report retention setting.
+
+### Safety
+- Startup checks are read-only.
+- Saved reports are written only under `plugins/LaunchGuard/reports/`.
+- LaunchGuard does not execute commands, modify server state, or send network requests.
+
 ## 0.2.0
 
 ### Added

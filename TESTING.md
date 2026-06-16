@@ -183,6 +183,46 @@ Note: LaunchGuard permissions are op-only by default. Use an operator account or
 1. Run `/launchguard run` as a player (with reportToConsole: true).
 2. Expected: Report appears in console as well as chat.
 
+### 12. Saved Report Files
+
+1. Set `saveReports: true` in config.yml.
+2. Run `/launchguard reload` and `/launchguard run`.
+3. Expected:
+   - `plugins/LaunchGuard/reports/` directory is created
+   - A `YYYY-MM-DD_HH-mm-ss_manual.txt` file is created inside
+   - Message shows the saved file path
+4. Run `/launchguard history`.
+5. Expected: Lists the saved report file with filename, modification time, and file size.
+6. Run `/launchguard history latest`.
+7. Expected: Displays the content of the most recent report file.
+
+### 13. Startup Check Mode
+
+1. Set `runOnStartup: true`, `startupDelayTicks: 100`, `saveReports: true` in config.yml.
+2. Restart the server.
+3. Expected:
+   - Console shows "Running startup preflight check" after server start
+   - Preflight report appears in console
+   - A `YYYY-MM-DD_HH-mm-ss_startup.txt` file is created in `plugins/LaunchGuard/reports/`
+   - Server continues normal startup without errors
+
+### 14. Report Retention
+
+1. Set `saveReports: true`, `reportsToKeep: 2` in config.yml.
+2. Run `/launchguard run` at least 3 times.
+3. Check `plugins/LaunchGuard/reports/`.
+4. Expected: Only the 2 most recent `.txt` files remain. Older files are deleted.
+5. No non-report files or directories in the reports folder are affected.
+
+### 15. History Permissions
+
+1. Not granting `launchguard.history` to a non-OP player.
+2. Expected: `/launchguard history` shows permission denied.
+3. Grant `launchguard.history`.
+4. Expected: `/launchguard history` and `/launchguard history latest` work.
+5. Grant `launchguard.admin`.
+6. Expected: All history commands work.
+
 ## Safety Verification
 
 After all tests, confirm:
@@ -195,4 +235,6 @@ After all tests, confirm:
 - [ ] No permission data changed
 - [ ] Whitelist state unchanged
 - [ ] No files created outside `plugins/LaunchGuard/`
+- [ ] Report files only in `plugins/LaunchGuard/reports/`
 - [ ] No network requests made
+- [ ] No commands executed during startup check

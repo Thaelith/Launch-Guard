@@ -10,7 +10,7 @@ commands:
     description: Run pre-launch health checks.
     aliases: [lg, preflight]
     permission: launchguard.use
-    usage: /launchguard [help|run|plugins|reload|version]
+    usage: /launchguard [help|run|plugins|history|reload|version]
 
 permissions:
   launchguard.use:
@@ -27,6 +27,11 @@ permissions:
     default: op
     children:
       launchguard.use: true
+  launchguard.history:
+    description: Allows viewing saved report history.
+    default: op
+    children:
+      launchguard.use: true
   launchguard.admin:
     description: Full administrative access to LaunchGuard.
     default: op
@@ -35,3 +40,4 @@ permissions:
       launchguard.run: true
       launchguard.reload: true
       launchguard.plugins: true
+      launchguard.history: true
