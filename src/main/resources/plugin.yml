@@ -33,7 +33,7 @@ permissions:
     children:
       launchguard.use: true
   launchguard.export:
-    description: Allows exporting reports as JSON.
+    description: Allows exporting reports as JSON or HTML.
     default: op
     children:
       launchguard.use: true

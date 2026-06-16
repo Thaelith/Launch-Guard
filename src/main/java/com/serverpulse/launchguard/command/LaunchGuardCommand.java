@@ -70,7 +70,7 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage(Component.text("/launchguard plugins - Show plugin inventory report", NamedTextColor.GRAY));
         sender.sendMessage(Component.text("/launchguard history - Show saved report history", NamedTextColor.GRAY));
         sender.sendMessage(Component.text("/launchguard reload  - Reload configuration", NamedTextColor.GRAY));
-        sender.sendMessage(Component.text("/launchguard export  - Export report as JSON", NamedTextColor.GRAY));
+        sender.sendMessage(Component.text("/launchguard export  - Export report as JSON or HTML", NamedTextColor.GRAY));
         sender.sendMessage(Component.text("/launchguard version - Show version", NamedTextColor.GRAY));
         return true;
     }

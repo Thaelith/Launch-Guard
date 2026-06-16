@@ -70,15 +70,16 @@ Run through this list before publishing a new version.
 - [ ] Retention only deletes `.txt` files in the reports directory
 - [ ] No files written outside `plugins/LaunchGuard/reports/`
 
-## JSON Export
+## JSON and HTML Export
 
 - [ ] `/launchguard export json` saves JSON file in `plugins/LaunchGuard/exports/`
-- [ ] JSON filename includes milliseconds and ends with `_manual.json`
-- [ ] JSON is valid and includes all required fields
-- [ ] `schemaVersion` is 1
-- [ ] JSON retention respects `exportsToKeep` setting
-- [ ] Retention only deletes `.json` files in the exports directory
-- [ ] JSON export does not include tokens, webhook URLs, or absolute paths
+- [ ] `/launchguard export html` saves HTML file in `plugins/LaunchGuard/exports/`
+- [ ] Export filenames include milliseconds and correct extension
+- [ ] JSON is valid and includes all required fields; `schemaVersion` is 1
+- [ ] HTML is valid and self-contained; no external CSS, JS, images, fonts, or CDN
+- [ ] Export retention respects `exportsToKeep` setting
+- [ ] Retention deletes only `.json` and `.html` files in the exports directory
+- [ ] Exports do not include tokens, webhook URLs, player IPs, or absolute paths
 - [ ] No files written outside `plugins/LaunchGuard/exports/`
 
 ## Config Robustness
