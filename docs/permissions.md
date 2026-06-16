@@ -10,7 +10,7 @@ All LaunchGuard permissions default to op-only.
 | launchguard.run | op | Run pre-launch checks |
 | launchguard.plugins | op | View plugin inventory and dependency reports |
 | launchguard.history | op | View saved report history |
-| launchguard.export | op | Export reports as JSON |
+| launchguard.export | op | Export reports as JSON or HTML |
 | launchguard.reload | op | Reload configuration files |
 | launchguard.admin | op | Full admin access; includes use, run, plugins, history, export, and reload |
 
@@ -35,7 +35,7 @@ Not applicable. Use a permission plugin.
 - `launchguard.run` is required for `/launchguard run`. Without it, the player receives a permission denied message.
 - `launchguard.plugins` is required for `/launchguard plugins`, `/launchguard plugins verbose`, and `/launchguard plugins dependencies`.
 - `launchguard.history` is required for `/launchguard history` and `/launchguard history latest`.
-- `launchguard.export` is required for `/launchguard export json`.
+- `launchguard.export` is required for `/launchguard export json` and `/launchguard export html`.
 - `launchguard.reload` is required for `/launchguard reload`.
 - `launchguard.history` includes `launchguard.use` as a child permission so staff can be granted history access directly.
 - `launchguard.export` includes `launchguard.use` as a child permission so staff can be granted export access directly.

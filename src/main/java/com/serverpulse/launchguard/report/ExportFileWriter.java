@@ -11,17 +11,17 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.logging.Logger;
 
-public class JsonExportFileWriter {
+public class ExportFileWriter {
 
     private final Path exportsDir;
     private final Logger logger;
 
-    public JsonExportFileWriter(Path exportsDir, Logger logger) {
+    public ExportFileWriter(Path exportsDir, Logger logger) {
         this.exportsDir = exportsDir;
         this.logger = logger;
     }
 
-    public Path save(String jsonContent, String source) {
+    public Path save(String content, String source, String extension) {
         try {
             Files.createDirectories(exportsDir);
         } catch (IOException e) {
@@ -30,13 +30,13 @@ public class JsonExportFileWriter {
         }
 
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss-SSS"));
-        String filename = timestamp + "_" + source + ".json";
+        String filename = timestamp + "_" + source + "." + extension;
         Path filePath = exportsDir.resolve(filename);
 
         try {
-            Files.writeString(filePath, jsonContent, StandardCharsets.UTF_8);
+            Files.writeString(filePath, content, StandardCharsets.UTF_8);
         } catch (IOException e) {
-            logger.warning("Failed to write JSON export file: " + e.getMessage());
+            logger.warning("Failed to write export file: " + e.getMessage());
             return null;
         }
 
@@ -49,15 +49,15 @@ public class JsonExportFileWriter {
         File dir = exportsDir.toFile();
         if (!dir.exists() || !dir.isDirectory()) return;
 
-        File[] jsonFiles = dir.listFiles((d, name) -> name.endsWith(".json"));
-        if (jsonFiles == null || jsonFiles.length <= maxToKeep) return;
+        File[] exportFiles = dir.listFiles((d, name) -> name.endsWith(".json") || name.endsWith(".html"));
+        if (exportFiles == null || exportFiles.length <= maxToKeep) return;
 
-        Arrays.sort(jsonFiles, Comparator.comparingLong(File::lastModified));
+        Arrays.sort(exportFiles, Comparator.comparingLong(File::lastModified));
 
-        int toDelete = jsonFiles.length - maxToKeep;
+        int toDelete = exportFiles.length - maxToKeep;
         for (int i = 0; i < toDelete; i++) {
-            if (!jsonFiles[i].delete()) {
-                logger.warning("Failed to delete old JSON export file: " + jsonFiles[i].getName());
+            if (!exportFiles[i].delete()) {
+                logger.warning("Failed to delete old export file: " + exportFiles[i].getName());
             }
         }
     }

@@ -21,6 +21,7 @@ LaunchGuard Lite v0.1 was the initial release focusing on essential read-only pr
 
 - `/launchguard export json`
 - JSON report export with versioned schema
+- Static HTML report export
 - `launchguard.export` permission
 - JSON export retention with `settings.exportsToKeep`
 

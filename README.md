@@ -124,6 +124,7 @@ Saved report files are written under `plugins/LaunchGuard/reports/` only. No fil
 | `/launchguard history` | List recently saved reports |
 | `/launchguard history latest` | Show latest saved report content |
 | `/launchguard export json` | Export report as JSON |
+| `/launchguard export html` | Export report as HTML |
 | `/launchguard reload` | Reload configuration files |
 | `/launchguard version` | Show plugin version |
 
@@ -140,10 +141,10 @@ All permissions default to op-only.
 | launchguard.reload | op | Required for /launchguard reload |
 | launchguard.plugins | op | Required for /launchguard plugins |
 | launchguard.history | op | Required for /launchguard history |
-| launchguard.export | op | Required for /launchguard export json |
+| launchguard.export | op | Required for /launchguard export json and /launchguard export html |
 | launchguard.admin | op | Full access; includes use, run, reload, plugins, history, and export as child permissions |
 
-Note: `launchguard.use` alone does not permit `/launchguard run`, `/launchguard reload`, `/launchguard plugins`, `/launchguard history`, or `/launchguard export json`. Those subcommands each require their own permission. `launchguard.admin` grants `use`, `run`, `reload`, `plugins`, `history`, and `export` as child permissions.
+Note: `launchguard.use` alone does not permit `/launchguard run`, `/launchguard reload`, `/launchguard plugins`, `/launchguard history`, or `/launchguard export`. Those subcommands each require their own permission. `launchguard.admin` grants `use`, `run`, `reload`, `plugins`, `history`, and `export` as child permissions.
 
 ## Configuration
 

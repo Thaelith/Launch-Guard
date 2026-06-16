@@ -46,9 +46,9 @@ YYYY-MM-DD_HH-mm-ss-SSS_startup.txt   (for startup checks)
 
 Report files are plain text. They do not include Minecraft color codes. Each file includes a timestamp, source (manual or startup), LaunchGuard version, check results, and final status.
 
-### JSON Exports
+### JSON and HTML Exports
 
-When using `/launchguard export json`, JSON export files are saved to:
+When using `/launchguard export json` or `/launchguard export html`, export files are saved to:
 
 ```
 plugins/LaunchGuard/exports/
@@ -57,10 +57,15 @@ plugins/LaunchGuard/exports/
 File naming format:
 
 ```
-YYYY-MM-DD_HH-mm-ss-SSS_manual.json
+YYYY-MM-DD_HH-mm-ss-SSS_manual.json    (for /launchguard export json)
+YYYY-MM-DD_HH-mm-ss-SSS_manual.html    (for /launchguard export html)
 ```
 
-JSON exports are versioned with `schemaVersion: 1`. They include the preflight report results, server metadata, and LaunchGuard version. JSON exports do not include tokens, webhook URLs, full logs, or absolute file paths. JSON retention is controlled by `settings.exportsToKeep`.
+JSON exports are versioned with `schemaVersion: 1`. They include the preflight report results, server metadata, and LaunchGuard version.
+
+HTML exports are self-contained static files with embedded CSS. They include a header, summary, results table, and footer. No external resources are loaded. All text content is HTML-escaped.
+
+Exports do not include tokens, webhook URLs, player IPs, full logs, or absolute file paths. Export retention is controlled by `settings.exportsToKeep` and applies to both `.json` and `.html` files in the exports directory.
 
 ## checks.yml
 

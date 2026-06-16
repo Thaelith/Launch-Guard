@@ -2,7 +2,8 @@ package com.serverpulse.launchguard.command;
 
 import com.serverpulse.launchguard.LaunchGuardPlugin;
 import com.serverpulse.launchguard.check.Check;
-import com.serverpulse.launchguard.report.JsonExportFileWriter;
+import com.serverpulse.launchguard.report.ExportFileWriter;
+import com.serverpulse.launchguard.report.HtmlReportRenderer;
 import com.serverpulse.launchguard.report.JsonReportRenderer;
 import com.serverpulse.launchguard.report.PlainTextReportRenderer;
 import com.serverpulse.launchguard.report.PreflightReport;
@@ -218,13 +219,16 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
         }
 
         String mode = args.length > 1 ? args[1].toLowerCase() : "";
-        if (!mode.equals("json")) {
-            String prefix = plugin.getMessageManager().get("prefix");
-            sender.sendMessage(Component.text(prefix + " Usage: /launchguard export json", NamedTextColor.RED));
-            return true;
+        switch (mode) {
+            case "json":
+                return handleExportJson(sender);
+            case "html":
+                return handleExportHtml(sender);
+            default:
+                String prefix = plugin.getMessageManager().get("prefix");
+                sender.sendMessage(Component.text(prefix + " Usage: /launchguard export <json|html>", NamedTextColor.RED));
+                return true;
         }
-
-        return handleExportJson(sender);
     }
 
     private boolean handleExportJson(CommandSender sender) {
@@ -243,8 +247,8 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
                 serverName, serverVersion, bukkitVersion);
 
         try {
-            JsonExportFileWriter writer = plugin.getJsonExportWriter();
-            Path savedPath = writer.save(json, "manual");
+            ExportFileWriter writer = plugin.getExportWriter();
+            Path savedPath = writer.save(json, "manual", "json");
             writer.prune(plugin.getConfigManager().getExportsToKeep());
 
             if (savedPath != null) {
@@ -256,6 +260,40 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
         } catch (Exception e) {
             plugin.getLogger().warning("Failed to save JSON export: " + e.getMessage());
             sender.sendMessage(Component.text("Failed to save JSON export file. Check console for details.", NamedTextColor.YELLOW));
+        }
+
+        return true;
+    }
+
+    private boolean handleExportHtml(CommandSender sender) {
+        String prefix = plugin.getMessageManager().get("prefix");
+        sender.sendMessage(Component.text(prefix + " Running pre-launch checks for HTML export.", NamedTextColor.WHITE));
+
+        PreflightRunner runner = new PreflightRunner(plugin);
+        PreflightReport report = runner.run();
+
+        HtmlReportRenderer htmlRenderer = new HtmlReportRenderer();
+        String serverName = plugin.getServer().getName();
+        String serverVersion = plugin.getServer().getMinecraftVersion();
+        String bukkitVersion = plugin.getServer().getBukkitVersion();
+        String html = htmlRenderer.render(report, "manual",
+                plugin.getDescription().getVersion(),
+                serverName, serverVersion, bukkitVersion);
+
+        try {
+            ExportFileWriter writer = plugin.getExportWriter();
+            Path savedPath = writer.save(html, "manual", "html");
+            writer.prune(plugin.getConfigManager().getExportsToKeep());
+
+            if (savedPath != null) {
+                sender.sendMessage(Component.text("Saved HTML export: plugins/LaunchGuard/exports/"
+                        + savedPath.getFileName(), NamedTextColor.GRAY));
+            } else {
+                sender.sendMessage(Component.text("Failed to save HTML export file.", NamedTextColor.YELLOW));
+            }
+        } catch (Exception e) {
+            plugin.getLogger().warning("Failed to save HTML export: " + e.getMessage());
+            sender.sendMessage(Component.text("Failed to save HTML export file. Check console for details.", NamedTextColor.YELLOW));
         }
 
         return true;
@@ -330,7 +368,7 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
         if (args.length == 2 && args[0].equalsIgnoreCase("export")) {
             List<String> completions = new ArrayList<>();
             String partial = args[1].toLowerCase();
-            for (String sub : new String[]{"json"}) {
+            for (String sub : new String[]{"json", "html"}) {
                 if (sub.startsWith(partial)) {
                     completions.add(sub);
                 }
