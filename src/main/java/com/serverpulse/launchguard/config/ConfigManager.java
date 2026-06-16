@@ -72,6 +72,30 @@ public class ConfigManager {
         return config.getBoolean("settings.reportToConsole", true);
     }
 
+    public boolean isRunOnStartup() {
+        if (config == null) return false;
+        return config.getBoolean("settings.runOnStartup", false);
+    }
+
+    public int getStartupDelayTicks() {
+        if (config == null) return 100;
+        int value = config.getInt("settings.startupDelayTicks", 100);
+        if (value < 1) return 100;
+        return value;
+    }
+
+    public boolean isSaveReports() {
+        if (config == null) return false;
+        return config.getBoolean("settings.saveReports", false);
+    }
+
+    public int getReportsToKeep() {
+        if (config == null) return 25;
+        int value = config.getInt("settings.reportsToKeep", 25);
+        if (value < 1) return 25;
+        return value;
+    }
+
     private FileConfiguration loadYamlSafe(File file, String resourceName) {
         try {
             YamlConfiguration yaml = new YamlConfiguration();

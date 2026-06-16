@@ -2,3 +2,7 @@ settings:
   showPassedChecks: true
   reportToConsole: true
   prefix: "[LaunchGuard]"
+  runOnStartup: false
+  startupDelayTicks: 100
+  saveReports: false
+  reportsToKeep: 25

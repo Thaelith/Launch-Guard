@@ -11,8 +11,17 @@ import com.serverpulse.launchguard.command.LaunchGuardCommand;
 import com.serverpulse.launchguard.config.ChecksConfig;
 import com.serverpulse.launchguard.config.ConfigManager;
 import com.serverpulse.launchguard.config.MessageManager;
+import com.serverpulse.launchguard.report.PlainTextReportRenderer;
+import com.serverpulse.launchguard.report.PreflightReport;
+import com.serverpulse.launchguard.report.PreflightRunner;
+import com.serverpulse.launchguard.report.ReportFileWriter;
+import com.serverpulse.launchguard.report.ReportRenderer;
+import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.io.File;
 
 public class LaunchGuardPlugin extends JavaPlugin {
 
@@ -21,6 +30,7 @@ public class LaunchGuardPlugin extends JavaPlugin {
     private MessageManager messageManager;
     private CheckRegistry checkRegistry;
     private LaunchGuardCommand commandHandler;
+    private ReportFileWriter reportFileWriter;
 
     @Override
     public void onEnable() {
@@ -33,6 +43,9 @@ public class LaunchGuardPlugin extends JavaPlugin {
 
         loadAll();
 
+        File reportsDir = new File(getDataFolder(), "reports");
+        this.reportFileWriter = new ReportFileWriter(reportsDir.toPath(), getLogger());
+
         this.commandHandler = new LaunchGuardCommand(this);
         PluginCommand mainCommand = getCommand("launchguard");
         if (mainCommand != null) {
@@ -40,6 +53,16 @@ public class LaunchGuardPlugin extends JavaPlugin {
             mainCommand.setTabCompleter(commandHandler);
         } else {
             getLogger().warning("Command 'launchguard' not found in plugin.yml. The plugin will not respond to commands.");
+        }
+
+        if (configManager.isRunOnStartup()) {
+            int delayTicks = configManager.getStartupDelayTicks();
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    runStartupCheck();
+                }
+            }.runTaskLater(this, delayTicks);
         }
 
         getLogger().info("LaunchGuard v" + getDescription().getVersion() + " enabled.");
@@ -96,5 +119,32 @@ public class LaunchGuardPlugin extends JavaPlugin {
 
     public CheckRegistry getCheckRegistry() {
         return checkRegistry;
+    }
+
+    public ReportFileWriter getReportFileWriter() {
+        return reportFileWriter;
+    }
+
+    private void runStartupCheck() {
+        getLogger().info("Running startup preflight check.");
+
+        try {
+            PreflightRunner runner = new PreflightRunner(this);
+            PreflightReport report = runner.run();
+
+            ReportRenderer renderer = new ReportRenderer(messageManager, configManager);
+            net.kyori.adventure.text.Component output = renderer.render(report);
+            Bukkit.getConsoleSender().sendMessage(output);
+
+            if (configManager.isSaveReports()) {
+                PlainTextReportRenderer plainRenderer = new PlainTextReportRenderer();
+                String plainText = plainRenderer.render(report, "startup",
+                        getDescription().getVersion(), configManager.showPassedChecks());
+                reportFileWriter.save(plainText, "startup");
+                reportFileWriter.prune(configManager.getReportsToKeep());
+            }
+        } catch (Exception e) {
+            getLogger().warning("Startup preflight check failed with an error: " + e.getMessage());
+        }
     }
 }

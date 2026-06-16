@@ -5,14 +5,14 @@ Run through this list before publishing a new version.
 ## Build
 
 - [ ] Run `./gradlew build` with no errors
-- [ ] Confirm JAR in `build/libs/LaunchGuard-0.1.0.jar`
+- [ ] Confirm JAR in `build/libs/LaunchGuard-0.3.0-SNAPSHOT.jar`
 - [ ] Verify plugin.yml, config.yml, checks.yml, messages.yml in JAR
 
 ## Paper Server Test
 
 - [ ] Install on Paper 1.20+ test server
 - [ ] Confirm plugin enables without errors in console
-- [ ] Confirm `LaunchGuard v0.1.0 enabled.` in console
+- [ ] Confirm `LaunchGuard v0.3.0-SNAPSHOT enabled.` in console
 - [ ] Confirm config files created in `plugins/LaunchGuard/`
 
 ## Commands
@@ -21,10 +21,12 @@ Run through this list before publishing a new version.
 - [ ] `/launchguard help` shows help
 - [ ] `/launchguard version` shows version
 - [ ] `/launchguard run` executes checks
+- [ ] `/launchguard history` lists saved reports (requires `launchguard.history`)
+- [ ] `/launchguard history latest` shows latest report content
 - [ ] `/launchguard reload` reloads config
 - [ ] `/lg` alias works
 - [ ] `/preflight` alias works
-- [ ] Tab completion works for subcommands
+- [ ] Tab completion works for all subcommands (including history, history latest)
 
 ## Permissions
 
@@ -32,7 +34,7 @@ Run through this list before publishing a new version.
 - [ ] Normal player with `launchguard.use` granted can access help
 - [ ] OP player can use all commands
 - [ ] Console can use all commands
-- [ ] `launchguard.admin` works (includes run + reload)
+- [ ] `launchguard.admin` works (includes run + reload + plugins + history)
 
 ## Check Results
 
@@ -49,6 +51,24 @@ Run through this list before publishing a new version.
 - [ ] Y outside world bounds reported as FAIL
 - [ ] Registered dangerous permission reported as WARN
 - [ ] Missing expected permission reported as WARN
+
+## Startup Check
+
+- [ ] `runOnStartup: false` does not run startup checks
+- [ ] `runOnStartup: true` runs preflight check after configured delay
+- [ ] Startup report appears in console only (not chat)
+- [ ] Startup report saved as `*_startup.txt` when `saveReports: true`
+- [ ] Startup check failure does not crash server
+
+## Report Saving and History
+
+- [ ] `saveReports: true` creates report files in `plugins/LaunchGuard/reports/`
+- [ ] Report files are plain text, no color codes
+- [ ] `/launchguard history` lists recent reports with metadata
+- [ ] `/launchguard history latest` displays latest report content
+- [ ] Report retention respects `reportsToKeep` setting
+- [ ] Retention only deletes `.txt` files in the reports directory
+- [ ] No files written outside `plugins/LaunchGuard/reports/`
 
 ## Config Robustness
 
@@ -70,6 +90,7 @@ Run through this list before publishing a new version.
 - [ ] No permission data is changed
 - [ ] Whitelist state unchanged
 - [ ] No files written outside `plugins/LaunchGuard/`
+- [ ] Report files only in `plugins/LaunchGuard/reports/`
 - [ ] No network requests made
 - [ ] No analytics collected
 

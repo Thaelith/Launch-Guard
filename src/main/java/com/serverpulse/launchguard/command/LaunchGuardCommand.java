@@ -2,9 +2,10 @@ package com.serverpulse.launchguard.command;
 
 import com.serverpulse.launchguard.LaunchGuardPlugin;
 import com.serverpulse.launchguard.check.Check;
-import com.serverpulse.launchguard.check.CheckContext;
-import com.serverpulse.launchguard.check.CheckResult;
+import com.serverpulse.launchguard.report.PlainTextReportRenderer;
 import com.serverpulse.launchguard.report.PreflightReport;
+import com.serverpulse.launchguard.report.PreflightRunner;
+import com.serverpulse.launchguard.report.ReportFileWriter;
 import com.serverpulse.launchguard.report.ReportRenderer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -14,9 +15,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.TabCompleter;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
 
@@ -43,6 +48,8 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
                 return handleReload(sender);
             case "plugins":
                 return pluginInventoryCommand.handle(sender, args);
+            case "history":
+                return handleHistory(sender, args);
             case "version":
                 return handleVersion(sender);
             default:
@@ -56,6 +63,7 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage(Component.text("/launchguard help    - Show this help", NamedTextColor.GRAY));
         sender.sendMessage(Component.text("/launchguard run     - Run pre-launch checks", NamedTextColor.GRAY));
         sender.sendMessage(Component.text("/launchguard plugins - Show plugin inventory report", NamedTextColor.GRAY));
+        sender.sendMessage(Component.text("/launchguard history - Show saved report history", NamedTextColor.GRAY));
         sender.sendMessage(Component.text("/launchguard reload  - Reload configuration", NamedTextColor.GRAY));
         sender.sendMessage(Component.text("/launchguard version - Show version", NamedTextColor.GRAY));
         return true;
@@ -79,7 +87,6 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage(Component.text(prefix + " " +
                 plugin.getMessageManager().get("runningChecks"), NamedTextColor.WHITE));
 
-        PreflightReport report = new PreflightReport();
         List<Check> checks = plugin.getCheckRegistry().getEnabledChecks();
 
         if (checks.isEmpty()) {
@@ -88,19 +95,8 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        for (Check check : checks) {
-            Map<String, Object> checkConfig = plugin.getChecksConfig().getCheckConfig(check.id());
-            CheckContext context = new CheckContext(plugin.getServer(), plugin, checkConfig);
-            try {
-                List<CheckResult> results = check.run(context);
-                report.addResults(results);
-            } catch (Exception e) {
-                plugin.getLogger().warning("Check '" + check.id() + "' failed: " + e.getMessage());
-                report.addResult(CheckResult.fail(check.id(),
-                        "Check failed with an internal error: " + check.displayName(),
-                        "See console for details."));
-            }
-        }
+        PreflightRunner runner = new PreflightRunner(plugin);
+        PreflightReport report = runner.run();
 
         ReportRenderer renderer = new ReportRenderer(plugin.getMessageManager(), plugin.getConfigManager());
         Component output = renderer.render(report);
@@ -111,7 +107,103 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
             plugin.getServer().getConsoleSender().sendMessage(output);
         }
 
+        if (plugin.getConfigManager().isSaveReports()) {
+            saveManualReport(report, sender);
+        }
+
         return true;
+    }
+
+    private void saveManualReport(PreflightReport report, CommandSender sender) {
+        try {
+            PlainTextReportRenderer plainRenderer = new PlainTextReportRenderer();
+            String plainText = plainRenderer.render(report, "manual",
+                    plugin.getDescription().getVersion(), plugin.getConfigManager().showPassedChecks());
+            ReportFileWriter writer = plugin.getReportFileWriter();
+            Path savedPath = writer.save(plainText, "manual");
+            writer.prune(plugin.getConfigManager().getReportsToKeep());
+
+            if (savedPath != null) {
+                sender.sendMessage(Component.text("Saved report: plugins/LaunchGuard/reports/"
+                        + savedPath.getFileName(), NamedTextColor.GRAY));
+            } else {
+                sender.sendMessage(Component.text("Failed to save report file.", NamedTextColor.YELLOW));
+            }
+        } catch (Exception e) {
+            plugin.getLogger().warning("Failed to save manual report: " + e.getMessage());
+            sender.sendMessage(Component.text("Failed to save report file. Check console for details.", NamedTextColor.YELLOW));
+        }
+    }
+
+    private boolean handleHistory(CommandSender sender, String[] args) {
+        if (!sender.hasPermission("launchguard.history") && !sender.hasPermission("launchguard.admin")) {
+            sendNoPermission(sender);
+            return true;
+        }
+
+        String mode = args.length > 1 ? args[1].toLowerCase() : "";
+
+        if (mode.equals("latest")) {
+            return handleHistoryLatest(sender);
+        }
+
+        return handleHistoryList(sender);
+    }
+
+    private boolean handleHistoryList(CommandSender sender) {
+        ReportFileWriter writer = plugin.getReportFileWriter();
+        List<ReportFileWriter.ReportFileInfo> files = writer.listRecent(10);
+
+        String prefix = plugin.getMessageManager().get("prefix");
+        sender.sendMessage(Component.text(prefix + " LaunchGuard Report History", NamedTextColor.WHITE));
+
+        if (files.isEmpty()) {
+            sender.sendMessage(Component.text("[INFO] No saved reports found.", NamedTextColor.AQUA));
+            return true;
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                .withZone(ZoneId.systemDefault());
+
+        for (ReportFileWriter.ReportFileInfo info : files) {
+            String modified = formatter.format(Instant.ofEpochMilli(info.lastModified()));
+            String size = formatFileSize(info.size());
+            sender.sendMessage(Component.text("  " + info.name() + "  " + modified + "  " + size, NamedTextColor.GRAY));
+        }
+
+        return true;
+    }
+
+    private boolean handleHistoryLatest(CommandSender sender) {
+        ReportFileWriter writer = plugin.getReportFileWriter();
+        Path latestPath = writer.getLatestReport();
+
+        if (latestPath == null) {
+            String prefix = plugin.getMessageManager().get("prefix");
+            sender.sendMessage(Component.text(prefix + " [INFO] No saved reports found.", NamedTextColor.AQUA));
+            return true;
+        }
+
+        try {
+            String content = Files.readString(latestPath);
+            final int maxChars = 8000;
+            if (content.length() > maxChars) {
+                content = content.substring(0, maxChars) + "\n\n... (report truncated, file is too large)";
+            }
+            sender.sendMessage(Component.text(content, NamedTextColor.GRAY));
+        } catch (Exception e) {
+            plugin.getLogger().warning("Failed to read report file: " + e.getMessage());
+            String prefix = plugin.getMessageManager().get("prefix");
+            sender.sendMessage(Component.text(prefix + " Failed to read the latest report file.", NamedTextColor.RED));
+        }
+
+        return true;
+    }
+
+    private String formatFileSize(long bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return String.format("%.1f KB", bytes / 1024.0);
+        return String.format("%.1f MB", bytes / (1024.0 * 1024.0));
     }
 
     private boolean handleReload(CommandSender sender) {
@@ -153,7 +245,7 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             List<String> completions = new ArrayList<>();
             String partial = args[0].toLowerCase();
-            for (String sub : new String[]{"help", "run", "plugins", "reload", "version"}) {
+            for (String sub : new String[]{"help", "run", "plugins", "history", "reload", "version"}) {
                 if (sub.startsWith(partial)) {
                     completions.add(sub);
                 }
@@ -164,6 +256,16 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
             List<String> completions = new ArrayList<>();
             String partial = args[1].toLowerCase();
             for (String sub : new String[]{"verbose", "dependencies"}) {
+                if (sub.startsWith(partial)) {
+                    completions.add(sub);
+                }
+            }
+            return completions;
+        }
+        if (args.length == 2 && args[0].equalsIgnoreCase("history")) {
+            List<String> completions = new ArrayList<>();
+            String partial = args[1].toLowerCase();
+            for (String sub : new String[]{"latest"}) {
                 if (sub.startsWith(partial)) {
                     completions.add(sub);
                 }

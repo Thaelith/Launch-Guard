@@ -84,6 +84,31 @@ Permission: `launchguard.reload` or `launchguard.admin`
 
 If any file has invalid YAML, the reload fails for that file and the previous valid configuration is kept. An error message is shown in chat and the console.
 
+## /launchguard history
+
+Lists the most recent saved report files (up to 10).
+
+Permission: `launchguard.history` or `launchguard.admin`
+
+The output includes:
+- Filename
+- Last modified time
+- File size
+
+If no saved reports exist, an [INFO] message is displayed.
+
+Report files are stored in `plugins/LaunchGuard/reports/`. This command is read-only and only lists files from the reports directory. No path traversal is possible.
+
+## /launchguard history latest
+
+Displays the content of the most recently saved report file.
+
+Permission: `launchguard.history` or `launchguard.admin`
+
+If the file is unusually large, the output is truncated with a notification. If no reports exist, an [INFO] message is displayed.
+
+This command reads only from `plugins/LaunchGuard/reports/`. It does not accept arbitrary filenames or paths.
+
 ## /launchguard version
 
 Displays the plugin version.
@@ -92,6 +117,8 @@ Permission: `launchguard.use`
 
 ## Tab Completion
 
-Tab completion is supported for all subcommands: help, run, plugins, reload, version.
+Tab completion is supported for all subcommands: help, run, plugins, history, reload, version.
 
 `/launchguard plugins` also supports tab completion for `verbose` and `dependencies`.
+
+`/launchguard history` also supports tab completion for `latest`.
