@@ -5,14 +5,14 @@ Run through this list before publishing a new version.
 ## Build
 
 - [ ] Run `./gradlew build` with no errors
-- [ ] Confirm JAR in `build/libs/LaunchGuard-0.3.0.jar`
+- [ ] Confirm JAR in `build/libs/LaunchGuard-0.4.0-SNAPSHOT.jar`
 - [ ] Verify plugin.yml, config.yml, checks.yml, messages.yml in JAR
 
 ## Paper Server Test
 
 - [ ] Install on Paper 1.20.4, 1.20.6, 1.21.1, or 1.21.8 test server
 - [ ] Confirm plugin enables without errors in console
-- [ ] Confirm `LaunchGuard v0.3.0 enabled.` in console
+- [ ] Confirm `LaunchGuard v0.4.0-SNAPSHOT enabled.` in console
 - [ ] Confirm config files created in `plugins/LaunchGuard/`
 
 ## Commands
@@ -69,6 +69,18 @@ Run through this list before publishing a new version.
 - [ ] Report retention respects `reportsToKeep` setting
 - [ ] Retention only deletes `.txt` files in the reports directory
 - [ ] No files written outside `plugins/LaunchGuard/reports/`
+
+## JSON and HTML Export
+
+- [ ] `/launchguard export json` saves JSON file in `plugins/LaunchGuard/exports/`
+- [ ] `/launchguard export html` saves HTML file in `plugins/LaunchGuard/exports/`
+- [ ] Export filenames include milliseconds and correct extension
+- [ ] JSON is valid and includes all required fields; `schemaVersion` is 1
+- [ ] HTML is valid and self-contained; no external CSS, JS, images, fonts, or CDN
+- [ ] Export retention respects `exportsToKeep` setting
+- [ ] Retention deletes only `.json` and `.html` files in the exports directory
+- [ ] Exports do not include tokens, webhook URLs, player IPs, or absolute paths
+- [ ] No files written outside `plugins/LaunchGuard/exports/`
 
 ## Config Robustness
 

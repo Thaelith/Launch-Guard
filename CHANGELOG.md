@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.4.0-SNAPSHOT
+
+### Added
+- Added `/launchguard export json`.
+- Added `/launchguard export html`.
+- Added `launchguard.export` permission.
+- Added JSON report files under `plugins/LaunchGuard/exports/`.
+- Added static HTML report files under `plugins/LaunchGuard/exports/`.
+- Added export retention with `settings.exportsToKeep`.
+- Added versioned JSON schema with `schemaVersion: 1`.
+
+### Safety
+- JSON and HTML export are read-only.
+- Export files are written only under `plugins/LaunchGuard/exports/`.
+- Exports do not send network requests.
+- Exports do not include tokens, webhook URLs, full logs, player IPs, or absolute file paths.
+- HTML exports are self-contained and do not load external resources.
+
 ## 0.3.0
 
 ### Added

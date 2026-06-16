@@ -96,6 +96,13 @@ public class ConfigManager {
         return value;
     }
 
+    public int getExportsToKeep() {
+        if (config == null) return 25;
+        int value = config.getInt("settings.exportsToKeep", 25);
+        if (value < 1) return 25;
+        return value;
+    }
+
     private FileConfiguration loadYamlSafe(File file, String resourceName) {
         try {
             YamlConfiguration yaml = new YamlConfiguration();
