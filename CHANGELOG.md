@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.5.0-SNAPSHOT
+## 0.5.0
 
 ### Added
 - Added `/launchguard export json`.
@@ -13,12 +13,26 @@
 - Added versioned JSON schema with `schemaVersion: 1`.
 - Added configuration validation for `config.yml`, `checks.yml`, and `messages.yml`.
 
+### Changed
+- Updated documentation for exports and configuration validation.
+- Updated version from `0.5.0-SNAPSHOT` to `0.5.0`.
+
 ### Safety
 - Export and validation commands are read-only.
 - Validation reads configuration files but does not modify them.
+- Validation does not reload config automatically.
 - Validation does not run preflight checks.
 - Exports are written only under `plugins/LaunchGuard/exports/`.
+- HTML exports are self-contained and do not load external resources.
+- Export retention deletes only `.json` and `.html` files inside the exports directory.
 - No network calls are introduced.
+
+### Limitations
+- Export is manual only.
+- Validation does not perform cross-file validation.
+- Validation does not check actual plugin runtime behavior.
+- Message key validation uses a static expected-key list.
+- JSON and HTML exports are local files only.
 
 ## 0.3.0
 

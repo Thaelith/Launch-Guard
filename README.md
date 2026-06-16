@@ -2,7 +2,7 @@
 
 Read-only pre-launch checks for Paper Minecraft servers.
 
-Development notice: The main branch may include unreleased v0.4 and v0.5 development features. The latest public release is v0.3.0. Use the GitHub Releases page, Hangar, Modrinth, or SpigotMC to download the latest stable release.
+Latest release: v0.5.0. Use the GitHub Releases page, Hangar, Modrinth, or SpigotMC to download the latest stable release.
 
 ## Download
 
@@ -315,7 +315,7 @@ Released in v0.3.0:
 - Saved plain text report files
 - Report history commands
 
-In development (v0.5.0-SNAPSHOT):
+Released in v0.5.0:
 
 - JSON report export
 - HTML report export
@@ -334,7 +334,7 @@ Requirements: JDK 17+
 ./gradlew build
 ```
 
-The plugin JAR will be in `build/libs/LaunchGuard-0.5.0-SNAPSHOT.jar`.
+The plugin JAR will be in `build/libs/LaunchGuard-0.5.0.jar`.
 
 ## Support
 

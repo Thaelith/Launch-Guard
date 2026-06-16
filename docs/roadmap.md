@@ -17,7 +17,7 @@ LaunchGuard Lite v0.1 was the initial release focusing on essential read-only pr
 - Report retention (configurable max files)
 - `launchguard.history` permission
 
-## v0.5.0-SNAPSHOT
+## v0.5.0
 
 - `/launchguard export json`
 - `/launchguard export html`

@@ -1,0 +1,1 @@
+8d85a30a7648cd83b56a8bfb1eece5acb43fd8a2c30c659fbc9c7bf94aec2a45  LaunchGuard-0.5.0.jar
