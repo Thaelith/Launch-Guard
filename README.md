@@ -2,7 +2,7 @@
 
 Read-only pre-launch checks for Paper Minecraft servers.
 
-Development notice: The main branch may include unreleased v0.4.0-SNAPSHOT export changes. The latest public release is v0.3.0. Use the GitHub Releases page, Hangar, Modrinth, or SpigotMC to download the latest stable release.
+Development notice: The main branch may include unreleased v0.4 and v0.5 development features. The latest public release is v0.3.0. Use the GitHub Releases page, Hangar, Modrinth, or SpigotMC to download the latest stable release.
 
 ## Download
 
@@ -125,6 +125,7 @@ Saved report files are written under `plugins/LaunchGuard/reports/` only. No fil
 | `/launchguard history latest` | Show latest saved report content |
 | `/launchguard export json` | Export report as JSON |
 | `/launchguard export html` | Export report as HTML |
+| `/launchguard validate` | Validate configuration files |
 | `/launchguard reload` | Reload configuration files |
 | `/launchguard version` | Show plugin version |
 
@@ -142,9 +143,10 @@ All permissions default to op-only.
 | launchguard.plugins | op | Required for /launchguard plugins |
 | launchguard.history | op | Required for /launchguard history |
 | launchguard.export | op | Required for /launchguard export json and /launchguard export html |
-| launchguard.admin | op | Full access; includes use, run, reload, plugins, history, and export as child permissions |
+| launchguard.validate | op | Required for /launchguard validate |
+| launchguard.admin | op | Full access; includes use, run, reload, plugins, history, export, and validate as child permissions |
 
-Note: `launchguard.use` alone does not permit `/launchguard run`, `/launchguard reload`, `/launchguard plugins`, `/launchguard history`, or `/launchguard export`. Those subcommands each require their own permission. `launchguard.admin` grants `use`, `run`, `reload`, `plugins`, `history`, and `export` as child permissions.
+Note: `launchguard.use` alone does not permit `/launchguard run`, `/launchguard reload`, `/launchguard plugins`, `/launchguard history`, `/launchguard export`, or `/launchguard validate`. Those subcommands each require their own permission. `launchguard.admin` grants `use`, `run`, `reload`, `plugins`, `history`, `export`, and `validate` as child permissions.
 
 ## Configuration
 
@@ -313,9 +315,11 @@ Released in v0.3.0:
 - Saved plain text report files
 - Report history commands
 
-In development (v0.4.0-SNAPSHOT):
+In development (v0.5.0-SNAPSHOT):
 
 - JSON report export
+- HTML report export
+- Configuration validation
 
 Not planned for LaunchGuard Lite:
 
@@ -330,7 +334,7 @@ Requirements: JDK 17+
 ./gradlew build
 ```
 
-The plugin JAR will be in `build/libs/LaunchGuard-0.4.0-SNAPSHOT.jar`.
+The plugin JAR will be in `build/libs/LaunchGuard-0.5.0-SNAPSHOT.jar`.
 
 ## Support
 
