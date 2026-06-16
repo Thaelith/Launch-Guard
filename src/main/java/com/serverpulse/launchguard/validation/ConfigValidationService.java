@@ -349,7 +349,8 @@ public class ConfigValidationService {
         if (!section.contains(key)) return;
         Object value = section.get(key);
         if (!(value instanceof Boolean)) {
-            issues.add(ValidationIssue.fail("config.yml", context + "." + key + " must be a boolean (true/false)"));
+            String source = context.startsWith("checks.") ? "checks.yml" : "config.yml";
+            issues.add(ValidationIssue.fail(source, context + "." + key + " must be a boolean (true/false)"));
         }
     }
 
@@ -378,13 +379,13 @@ public class ConfigValidationService {
         if (!section.contains(key)) return;
         List<?> list = section.getList(key);
         if (list == null) {
-            issues.add(ValidationIssue.fail("config.yml", context + "." + key + " must be a list"));
+            issues.add(ValidationIssue.fail("checks.yml", context + "." + key + " must be a list"));
             return;
         }
         Set<String> seen = new HashSet<>();
         for (Object item : list) {
             if (!(item instanceof String)) {
-                issues.add(ValidationIssue.fail("config.yml", context + "." + key + " must contain only string values"));
+                issues.add(ValidationIssue.fail("checks.yml", context + "." + key + " must contain only string values"));
                 return;
             }
             String str = (String) item;
