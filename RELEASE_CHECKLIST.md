@@ -10,7 +10,7 @@ Run through this list before publishing a new version.
 
 ## Paper Server Test
 
-- [ ] Install on Paper 1.20+ test server
+- [ ] Install on Paper 1.20.4, 1.20.6, 1.21.1, or 1.21.8 test server
 - [ ] Confirm plugin enables without errors in console
 - [ ] Confirm `LaunchGuard v0.3.0 enabled.` in console
 - [ ] Confirm config files created in `plugins/LaunchGuard/`

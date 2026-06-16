@@ -6,13 +6,13 @@
 ./gradlew build
 ```
 
-The JAR is produced at `build/libs/LaunchGuard-0.1.0.jar`.
+The JAR is produced at `build/libs/LaunchGuard-0.3.0.jar`.
 
 ## Installing on a Paper Test Server
 
-1. Copy `build/libs/LaunchGuard-0.1.0.jar` to your Paper server's `plugins/` directory.
+1. Copy `build/libs/LaunchGuard-0.3.0.jar` to your Paper server's `plugins/` directory.
 2. Start the server or run `/reload confirm`.
-3. Verify the plugin loads: check console for `LaunchGuard v0.1.0 enabled.`
+3. Verify the plugin loads: check console for `LaunchGuard v0.3.0 enabled.`
 4. Configuration files are created in `plugins/LaunchGuard/`.
 
 Note: LaunchGuard permissions are op-only by default. Use an operator account or grant `launchguard.use` to test players.
@@ -25,7 +25,7 @@ Note: LaunchGuard permissions are op-only by default. Use an operator account or
 |---|---|
 | `/launchguard` | Shows help listing all subcommands |
 | `/launchguard help` | Shows help |
-| `/launchguard version` | Shows `LaunchGuard version 0.1.0` |
+| `/launchguard version` | Shows `LaunchGuard version 0.3.0` |
 | `/launchguard unknown` | Shows unknown subcommand error |
 | `/lg help` | Same as `/launchguard help` (alias works) |
 | `/lg run` | Same as `/launchguard run` |

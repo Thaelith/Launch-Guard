@@ -2,7 +2,7 @@
 
 Read-only pre-launch checks for Paper Minecraft servers.
 
-Latest release: v0.3.0. Use the GitHub Releases page to download the v0.3.0 JAR. Hangar, Modrinth, and SpigotMC may still show v0.2.0 until those pages are updated manually.
+Latest release: v0.3.0. Use the GitHub Releases page, Hangar, Modrinth, or SpigotMC to download the latest stable release.
 
 ## Download
 
@@ -253,6 +253,19 @@ Run /launchguard plugins dependencies for dependency visibility.
 
 LaunchGuard Lite is read-only. It inspects server state and reports findings. It never executes commands, teleports players, modifies data, changes server behavior, sends network requests, or uploads data. You control what it checks through configuration files.
 
+## Compatibility
+
+Tested on:
+
+* Paper 1.20.4 with Java 17
+* Paper 1.20.6 with Java 21
+* Paper 1.21.1 with Java 21
+* Paper 1.21.8 with Java 21
+
+Built with Java 17 target compatibility. Use the Java version required by your Paper server version.
+
+Other Paper 1.20.x and 1.21.x builds may work where compatible Bukkit/Paper APIs are available, but only the versions listed above are tested.
+
 ## Known Limitations
 
 - Location checks cannot inspect unloaded chunks (reports WARN instead)
@@ -265,7 +278,7 @@ LaunchGuard Lite is read-only. It inspects server state and reports findings. It
 ## Troubleshooting
 
 **Plugin does not load:**
-Check the server console for errors. LaunchGuard requires Paper 1.20+.
+Check the server console for errors. LaunchGuard is tested on Paper 1.20.4, 1.20.6, 1.21.1, and 1.21.8. Use the Java version required by your Paper server version.
 
 **Cannot run commands:**
 LaunchGuard permissions are op-only by default. Grant `launchguard.use` for basic command access, `launchguard.run` to run checks, and `launchguard.reload` to reload configuration. Use `launchguard.admin` to grant all permissions at once.

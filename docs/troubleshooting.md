@@ -2,10 +2,11 @@
 
 ## Plugin does not load
 
-**Symptom:** No `LaunchGuard v0.1.0 enabled.` message in console.
+**Symptom:** No `LaunchGuard v0.3.0 enabled.` message in console.
 
 **Causes:**
-- Server is not Paper 1.20+ (LaunchGuard uses Paper API)
+- Server is not a tested Paper version (LaunchGuard uses Paper API)
+- Java version does not match the Paper server version requirements
 - JAR file is corrupted (re-download)
 - Another plugin is interfering
 
