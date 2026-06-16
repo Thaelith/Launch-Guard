@@ -5,14 +5,14 @@ Run through this list before publishing a new version.
 ## Build
 
 - [ ] Run `./gradlew build` with no errors
-- [ ] Confirm JAR in `build/libs/LaunchGuard-0.3.0-SNAPSHOT.jar`
+- [ ] Confirm JAR in `build/libs/LaunchGuard-0.3.0.jar`
 - [ ] Verify plugin.yml, config.yml, checks.yml, messages.yml in JAR
 
 ## Paper Server Test
 
 - [ ] Install on Paper 1.20+ test server
 - [ ] Confirm plugin enables without errors in console
-- [ ] Confirm `LaunchGuard v0.3.0-SNAPSHOT enabled.` in console
+- [ ] Confirm `LaunchGuard v0.3.0 enabled.` in console
 - [ ] Confirm config files created in `plugins/LaunchGuard/`
 
 ## Commands

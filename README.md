@@ -2,7 +2,7 @@
 
 Read-only pre-launch checks for Paper Minecraft servers.
 
-Latest release: v0.2.0. Use the GitHub Releases page to download the v0.2.0 JAR. Hangar, Modrinth, and SpigotMC may still show v0.1.0 until those pages are updated manually.
+Latest release: v0.3.0. Use the GitHub Releases page to download the v0.3.0 JAR. Hangar, Modrinth, and SpigotMC may still show v0.2.0 until those pages are updated manually.
 
 ## Download
 
@@ -290,7 +290,7 @@ Released in v0.2.0:
 - Dependency visibility report
 - Optional plugin inventory preflight section
 
-In development (v0.3.0-SNAPSHOT):
+Released in v0.3.0:
 
 - Startup preflight checks
 - Saved plain text report files
@@ -309,7 +309,7 @@ Requirements: JDK 17+
 ./gradlew build
 ```
 
-The plugin JAR will be in `build/libs/LaunchGuard-0.3.0-SNAPSHOT.jar`.
+The plugin JAR will be in `build/libs/LaunchGuard-0.3.0.jar`.
 
 ## Support
 

@@ -1,19 +1,31 @@
 # Changelog
 
-## 0.3.0-SNAPSHOT
+## 0.3.0
 
 ### Added
 - Added optional startup preflight checks.
-- Added saved plain text report files.
+- Added saved plain text report files under `plugins/LaunchGuard/reports/`.
 - Added `/launchguard history`.
 - Added `/launchguard history latest`.
 - Added `launchguard.history` permission.
-- Added report retention setting.
+- Added report retention with `settings.reportsToKeep`.
+
+### Changed
+- Refactored preflight execution into a reusable runner used by manual and startup checks.
+- Updated documentation for startup checks, saved reports, and report history.
+- Updated version from `0.3.0-SNAPSHOT` to `0.3.0`.
 
 ### Safety
 - Startup checks are read-only.
 - Saved reports are written only under `plugins/LaunchGuard/reports/`.
+- Report history reads only from `plugins/LaunchGuard/reports/`.
+- Report retention deletes only `.txt` files inside the reports directory.
 - LaunchGuard does not execute commands, modify server state, or send network requests.
+
+### Limitations
+- Startup checks use a configurable fixed delay.
+- Reports are plain text only.
+- Report history has no search or filter support.
 
 ## 0.2.0
 
