@@ -2,7 +2,7 @@
 
 Read-only pre-launch checks for Paper Minecraft servers.
 
-Latest release: v0.3.0. Use the GitHub Releases page, Hangar, Modrinth, or SpigotMC to download the latest stable release.
+Development notice: The main branch may include unreleased v0.4.0-SNAPSHOT export changes. The latest public release is v0.3.0. Use the GitHub Releases page, Hangar, Modrinth, or SpigotMC to download the latest stable release.
 
 ## Download
 
