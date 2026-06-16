@@ -32,7 +32,7 @@ public class ReportFileWriter {
             return null;
         }
 
-        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss-SSS"));
         String filename = timestamp + "_" + source + ".txt";
         Path filePath = reportsDir.resolve(filename);
 

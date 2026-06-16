@@ -38,8 +38,8 @@ plugins/LaunchGuard/reports/
 File naming format:
 
 ```
-YYYY-MM-DD_HH-mm-ss_manual.txt    (for /launchguard run)
-YYYY-MM-DD_HH-mm-ss_startup.txt   (for startup checks)
+YYYY-MM-DD_HH-mm-ss-SSS_manual.txt    (for /launchguard run)
+YYYY-MM-DD_HH-mm-ss-SSS_startup.txt   (for startup checks)
 ```
 
 Report files are plain text. They do not include Minecraft color codes. Each file includes a timestamp, source (manual or startup), LaunchGuard version, check results, and final status.
