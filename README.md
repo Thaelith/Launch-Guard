@@ -123,6 +123,7 @@ Saved report files are written under `plugins/LaunchGuard/reports/` only. No fil
 | `/launchguard plugins dependencies` | Show dependency visibility report |
 | `/launchguard history` | List recently saved reports |
 | `/launchguard history latest` | Show latest saved report content |
+| `/launchguard export json` | Export report as JSON |
 | `/launchguard reload` | Reload configuration files |
 | `/launchguard version` | Show plugin version |
 
@@ -139,9 +140,10 @@ All permissions default to op-only.
 | launchguard.reload | op | Required for /launchguard reload |
 | launchguard.plugins | op | Required for /launchguard plugins |
 | launchguard.history | op | Required for /launchguard history |
-| launchguard.admin | op | Full access; includes use, run, reload, plugins, and history as child permissions |
+| launchguard.export | op | Required for /launchguard export json |
+| launchguard.admin | op | Full access; includes use, run, reload, plugins, history, and export as child permissions |
 
-Note: `launchguard.use` alone does not permit `/launchguard run`, `/launchguard reload`, `/launchguard plugins`, or `/launchguard history`. Those subcommands each require their own permission. `launchguard.admin` grants `use`, `run`, `reload`, `plugins`, and `history` as child permissions.
+Note: `launchguard.use` alone does not permit `/launchguard run`, `/launchguard reload`, `/launchguard plugins`, `/launchguard history`, or `/launchguard export json`. Those subcommands each require their own permission. `launchguard.admin` grants `use`, `run`, `reload`, `plugins`, `history`, and `export` as child permissions.
 
 ## Configuration
 
@@ -158,6 +160,7 @@ settings:
   startupDelayTicks: 100    # Delay before startup check (ticks)
   saveReports: false        # Save report to plain text file
   reportsToKeep: 25         # Max report files to keep
+  exportsToKeep: 25         # Max JSON export files to keep
 ```
 
 ### checks.yml
@@ -309,6 +312,10 @@ Released in v0.3.0:
 - Saved plain text report files
 - Report history commands
 
+In development (v0.4.0-SNAPSHOT):
+
+- JSON report export
+
 Not planned for LaunchGuard Lite:
 
 - Executing arbitrary commands configured by server owners
@@ -322,7 +329,7 @@ Requirements: JDK 17+
 ./gradlew build
 ```
 
-The plugin JAR will be in `build/libs/LaunchGuard-0.3.0.jar`.
+The plugin JAR will be in `build/libs/LaunchGuard-0.4.0-SNAPSHOT.jar`.
 
 ## Support
 

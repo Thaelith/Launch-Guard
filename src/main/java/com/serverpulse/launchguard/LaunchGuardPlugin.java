@@ -11,6 +11,7 @@ import com.serverpulse.launchguard.command.LaunchGuardCommand;
 import com.serverpulse.launchguard.config.ChecksConfig;
 import com.serverpulse.launchguard.config.ConfigManager;
 import com.serverpulse.launchguard.config.MessageManager;
+import com.serverpulse.launchguard.report.JsonExportFileWriter;
 import com.serverpulse.launchguard.report.PlainTextReportRenderer;
 import com.serverpulse.launchguard.report.PreflightReport;
 import com.serverpulse.launchguard.report.PreflightRunner;
@@ -31,6 +32,7 @@ public class LaunchGuardPlugin extends JavaPlugin {
     private CheckRegistry checkRegistry;
     private LaunchGuardCommand commandHandler;
     private ReportFileWriter reportFileWriter;
+    private JsonExportFileWriter jsonExportWriter;
 
     @Override
     public void onEnable() {
@@ -45,6 +47,9 @@ public class LaunchGuardPlugin extends JavaPlugin {
 
         File reportsDir = new File(getDataFolder(), "reports");
         this.reportFileWriter = new ReportFileWriter(reportsDir.toPath(), getLogger());
+
+        File exportsDir = new File(getDataFolder(), "exports");
+        this.jsonExportWriter = new JsonExportFileWriter(exportsDir.toPath(), getLogger());
 
         this.commandHandler = new LaunchGuardCommand(this);
         PluginCommand mainCommand = getCommand("launchguard");
@@ -123,6 +128,10 @@ public class LaunchGuardPlugin extends JavaPlugin {
 
     public ReportFileWriter getReportFileWriter() {
         return reportFileWriter;
+    }
+
+    public JsonExportFileWriter getJsonExportWriter() {
+        return jsonExportWriter;
     }
 
     private void runStartupCheck() {

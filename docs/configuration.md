@@ -15,6 +15,7 @@ settings:
   startupDelayTicks: 100    # Ticks to wait before running startup check (minimum 1)
   saveReports: false        # Save report output to plain text files
   reportsToKeep: 25         # Maximum number of report files to keep in reports/ directory
+  exportsToKeep: 25         # Maximum number of JSON export files to keep in exports/ directory
 ```
 
 | Key | Type | Default | Description |
@@ -26,6 +27,7 @@ settings:
 | startupDelayTicks | int | 100 | Ticks to wait after server start before running startup check. Values below 1 are treated as 100 |
 | saveReports | boolean | false | When true, saves preflight report output to plain text files under `plugins/LaunchGuard/reports/` |
 | reportsToKeep | int | 25 | Maximum number of saved report `.txt` files to retain. Oldest files are pruned first. Values below 1 are treated as 25. Pruning only affects the `reports/` directory |
+| exportsToKeep | int | 25 | Maximum number of JSON export `.json` files to retain. Oldest files are pruned first. Values below 1 are treated as 25. Pruning only affects the `exports/` directory |
 
 ### Report Files
 
@@ -43,6 +45,22 @@ YYYY-MM-DD_HH-mm-ss-SSS_startup.txt   (for startup checks)
 ```
 
 Report files are plain text. They do not include Minecraft color codes. Each file includes a timestamp, source (manual or startup), LaunchGuard version, check results, and final status.
+
+### JSON Exports
+
+When using `/launchguard export json`, JSON export files are saved to:
+
+```
+plugins/LaunchGuard/exports/
+```
+
+File naming format:
+
+```
+YYYY-MM-DD_HH-mm-ss-SSS_manual.json
+```
+
+JSON exports are versioned with `schemaVersion: 1`. They include the preflight report results, server metadata, and LaunchGuard version. JSON exports do not include tokens, webhook URLs, full logs, or absolute file paths. JSON retention is controlled by `settings.exportsToKeep`.
 
 ## checks.yml
 

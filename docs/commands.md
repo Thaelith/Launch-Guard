@@ -115,10 +115,41 @@ Displays the plugin version.
 
 Permission: `launchguard.use`
 
+## /launchguard export json
+
+Runs a fresh preflight check and exports the results as a JSON file.
+
+Permission: `launchguard.export` or `launchguard.admin`
+
+The JSON export includes:
+- `schemaVersion` (versioned schema identifier)
+- `generatedAt` (ISO 8601 timestamp)
+- `source` (manual)
+- `launchGuard.version`
+- `server.name`, `server.version`, `server.bukkitVersion`
+- `summary` (status, passed, warnings, failures, totalResults)
+- `results[]` (checkId, severity, passed, message, suggestion)
+
+JSON files are saved to:
+
+```
+plugins/LaunchGuard/exports/
+```
+
+File naming format:
+
+```
+YYYY-MM-DD_HH-mm-ss-SSS_manual.json
+```
+
+This command is read-only. It does not send network requests or include tokens, webhook URLs, full logs, or absolute file paths.
+
 ## Tab Completion
 
-Tab completion is supported for all subcommands: help, run, plugins, history, reload, version.
+Tab completion is supported for all subcommands: help, run, plugins, history, reload, version, export.
 
 `/launchguard plugins` also supports tab completion for `verbose` and `dependencies`.
 
 `/launchguard history` also supports tab completion for `latest`.
+
+`/launchguard export` also supports tab completion for `json`.

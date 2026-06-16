@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.4.0-SNAPSHOT
+
+### Added
+- Added `/launchguard export json`.
+- Added `launchguard.export` permission.
+- Added JSON report files under `plugins/LaunchGuard/exports/`.
+- Added JSON export retention with `settings.exportsToKeep`.
+- Added versioned JSON schema with `schemaVersion: 1`.
+
+### Safety
+- JSON export is read-only.
+- JSON export writes only under `plugins/LaunchGuard/exports/`.
+- JSON export does not send network requests.
+- JSON export does not include tokens, webhook URLs, full logs, or absolute file paths.
+
 ## 0.3.0
 
 ### Added

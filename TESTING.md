@@ -228,6 +228,7 @@ Note: LaunchGuard permissions are op-only by default. Use an operator account or
 After all tests, confirm:
 
 - [ ] No commands were executed by checks
+- [ ] No commands were executed by JSON export
 - [ ] No players were teleported
 - [ ] No blocks were modified
 - [ ] No chunks were force-loaded
@@ -236,5 +237,7 @@ After all tests, confirm:
 - [ ] Whitelist state unchanged
 - [ ] No files created outside `plugins/LaunchGuard/`
 - [ ] Report files only in `plugins/LaunchGuard/reports/`
+- [ ] JSON exports only in `plugins/LaunchGuard/exports/`
+- [ ] JSON exports do not include tokens, webhook URLs, or absolute paths
 - [ ] No network requests made
 - [ ] No commands executed during startup check
