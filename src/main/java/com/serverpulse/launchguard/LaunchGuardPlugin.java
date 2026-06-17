@@ -11,6 +11,7 @@ import com.serverpulse.launchguard.command.LaunchGuardCommand;
 import com.serverpulse.launchguard.config.ChecksConfig;
 import com.serverpulse.launchguard.config.ConfigManager;
 import com.serverpulse.launchguard.config.MessageManager;
+import com.serverpulse.launchguard.baseline.BaselineStore;
 import com.serverpulse.launchguard.report.ExportFileWriter;
 import com.serverpulse.launchguard.report.PlainTextReportRenderer;
 import com.serverpulse.launchguard.report.PreflightReport;
@@ -33,6 +34,7 @@ public class LaunchGuardPlugin extends JavaPlugin {
     private LaunchGuardCommand commandHandler;
     private ReportFileWriter reportFileWriter;
     private ExportFileWriter exportWriter;
+    private BaselineStore baselineStore;
 
     @Override
     public void onEnable() {
@@ -50,6 +52,9 @@ public class LaunchGuardPlugin extends JavaPlugin {
 
         File exportsDir = new File(getDataFolder(), "exports");
         this.exportWriter = new ExportFileWriter(exportsDir.toPath(), getLogger());
+
+        File baselinesDir = new File(getDataFolder(), "baselines");
+        this.baselineStore = new BaselineStore(baselinesDir.toPath(), getLogger());
 
         this.commandHandler = new LaunchGuardCommand(this);
         PluginCommand mainCommand = getCommand("launchguard");
@@ -132,6 +137,10 @@ public class LaunchGuardPlugin extends JavaPlugin {
 
     public ExportFileWriter getExportWriter() {
         return exportWriter;
+    }
+
+    public BaselineStore getBaselineStore() {
+        return baselineStore;
     }
 
     private void runStartupCheck() {
