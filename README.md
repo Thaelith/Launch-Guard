@@ -2,9 +2,10 @@
 
 Read-only pre-launch checks for Paper Minecraft servers.
 
-Latest stable marketplace release: v0.5.0. Use the GitHub Releases page, Hangar, Modrinth, or SpigotMC to download it.
+Latest stable release: **v1.0.0**  
+Previous marketplace stable release: **v0.5.0**
 
-v1.0.0 release is prepared but not yet published. Current development branch is `release/v1.0.0-prep`.
+LaunchGuard v1.0.0 is the current stable release and the first full stable release after the v0.5.0 marketplace build.
 
 ## Download
 

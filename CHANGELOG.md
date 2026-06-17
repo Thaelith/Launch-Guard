@@ -2,15 +2,9 @@
 
 ## 1.0.0
 
-### Public Release
-- First public marketplace release since v0.5.0.
-- Includes all development since v0.5.0: baseline drift detection, baseline report/export integration, optional startup baseline comparison, configuration validation, JSON/HTML exports, report history, v1 readiness QA, compatibility testing, and release packaging.
+LaunchGuard v1.0.0 is the first full stable release after the v0.5.0 marketplace build. Published 2026-06-17.
 
-### Previous development milestones merged into this release
-- v0.6: Baseline drift detection
-- v0.7: Baseline report save, history, JSON/HTML export integration
-- v0.8: Optional startup baseline comparison
-- v0.9: Stabilization, QA, documentation, compatibility, and safety polish
+This release packages baseline drift detection, baseline report/export integration, optional startup baseline comparison, configuration validation, JSON/HTML exports, report history, plugin inventory visibility, dependency visibility, documentation updates, QA, and release packaging.
 
 ## 0.9.0-SNAPSHOT
 

@@ -52,11 +52,21 @@ LaunchGuard Lite v0.1 was the initial release focusing on essential read-only pr
 
 - Stabilization, QA, documentation, compatibility, and v1.0 readiness preparation
 
-## v1.0.0
+## v1.0.0 — Current Stable Release
 
-- First public marketplace release since v0.5.0
-- Includes all v0.6 through v0.9 development
-- Release packaging and final documentation
+Status: Published.
+
+v1.0.0 packages the post-v0.5.0 development work into a stable release:
+
+- v0.6 baseline drift detection
+- v0.7 baseline reports, history, and baseline JSON/HTML exports
+- v0.8 optional startup baseline comparison
+- v0.9 v1 readiness, QA, documentation, compatibility, and safety polish
+- v1.0.0 release packaging and publication
+
+## Future Work
+
+Potential future work may include small usability improvements, documentation refinements, additional validation coverage, and compatibility maintenance.
 
 ## Future Candidates
 
