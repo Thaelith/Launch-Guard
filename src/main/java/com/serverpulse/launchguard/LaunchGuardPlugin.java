@@ -12,6 +12,7 @@ import com.serverpulse.launchguard.config.ChecksConfig;
 import com.serverpulse.launchguard.config.ConfigManager;
 import com.serverpulse.launchguard.config.MessageManager;
 import com.serverpulse.launchguard.baseline.BaselineStore;
+import com.serverpulse.launchguard.baseline.StartupBaselineCompareService;
 import com.serverpulse.launchguard.report.ExportFileWriter;
 import com.serverpulse.launchguard.report.PlainTextReportRenderer;
 import com.serverpulse.launchguard.report.PreflightReport;
@@ -75,6 +76,17 @@ public class LaunchGuardPlugin extends JavaPlugin {
                 @Override
                 public void run() {
                     runStartupCheck();
+                }
+            }.runTaskLater(this, delayTicks);
+        }
+
+        if (configManager.isCompareBaselineOnStartup()) {
+            int delayTicks = configManager.getStartupBaselineDelayTicks();
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    StartupBaselineCompareService startupCompare = new StartupBaselineCompareService(LaunchGuardPlugin.this);
+                    startupCompare.run();
                 }
             }.runTaskLater(this, delayTicks);
         }

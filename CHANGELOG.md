@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.8.0-SNAPSHOT
+
+### Added
+- Added optional startup baseline comparison.
+- Added `settings.compareBaselineOnStartup`.
+- Added `settings.startupBaselineName`.
+- Added `settings.startupBaselineSaveReport`.
+- Added `settings.startupBaselineDelayTicks`.
+- Added startup baseline text report saving under `plugins/LaunchGuard/reports/baseline/` when enabled.
+
+### Safety
+- Startup baseline comparison is disabled by default.
+- Startup baseline comparison does not execute plugin commands or configured commands.
+- Startup baseline comparison does not stop, restart, or block the server.
+- Startup baseline comparison does not modify server state.
+- Startup baseline comparison does not modify baseline files.
+- Startup baseline reports are local files only.
+- No network calls are introduced.
+
+### Limitations
+- Startup JSON/HTML baseline export is not included in this version.
+- Startup baseline comparison only compares against an existing saved baseline.
+- Startup baseline comparison does not verify plugin runtime behavior.
+
 ## 0.7.0-SNAPSHOT
 
 ### Added
