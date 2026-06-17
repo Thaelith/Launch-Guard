@@ -14,7 +14,9 @@ import com.serverpulse.launchguard.validation.ConfigValidationService;
 import com.serverpulse.launchguard.validation.ValidationReport;
 import com.serverpulse.launchguard.validation.ValidationRenderer;
 import com.serverpulse.launchguard.baseline.BaselineCompareService;
+import com.serverpulse.launchguard.baseline.BaselineDriftIssue;
 import com.serverpulse.launchguard.baseline.BaselineDriftReport;
+import com.serverpulse.launchguard.baseline.BaselineDriftSeverity;
 import com.serverpulse.launchguard.baseline.BaselineNameValidator;
 import com.serverpulse.launchguard.baseline.BaselineRenderer;
 import com.serverpulse.launchguard.baseline.BaselineSnapshotService;
@@ -86,6 +88,7 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage(Component.text("/launchguard reload  - Reload configuration", NamedTextColor.GRAY));
         sender.sendMessage(Component.text("/launchguard export  - Export report as JSON or HTML", NamedTextColor.GRAY));
         sender.sendMessage(Component.text("/launchguard validate - Validate configuration files", NamedTextColor.GRAY));
+        sender.sendMessage(Component.text("/launchguard baseline - Save, list, compare, or delete baselines", NamedTextColor.GRAY));
         sender.sendMessage(Component.text("/launchguard version - Show version", NamedTextColor.GRAY));
         return true;
     }
@@ -404,11 +407,31 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
             return true;
         }
         BaselineStore store = plugin.getBaselineStore();
-        Map<String, Object> baseline = store.load(name);
-        if (baseline == null) {
+        BaselineStore.LoadResult loadResult = store.loadBaseline(name);
+        if (loadResult.status() == BaselineStore.LoadStatus.NOT_FOUND) {
             sender.sendMessage(Component.text("Baseline not found: " + name, NamedTextColor.RED));
             return true;
         }
+        if (loadResult.status() == BaselineStore.LoadStatus.INVALID) {
+            BaselineDriftReport report = new BaselineDriftReport(name);
+            report.add(new BaselineDriftIssue(BaselineDriftSeverity.FAIL,
+                    "Baseline file is invalid or corrupt: " + name));
+            BaselineRenderer renderer = new BaselineRenderer();
+            sender.sendMessage(renderer.renderDrift(report));
+            return true;
+        }
+        Map<String, Object> baseline = loadResult.data();
+
+        Object schemaVersion = baseline.get("schemaVersion");
+        if (!(schemaVersion instanceof Integer) || ((Integer) schemaVersion) != 1) {
+            BaselineDriftReport report = new BaselineDriftReport(name);
+            report.add(new BaselineDriftIssue(BaselineDriftSeverity.FAIL,
+                    "Unsupported baseline schema version"));
+            BaselineRenderer renderer = new BaselineRenderer();
+            sender.sendMessage(renderer.renderDrift(report));
+            return true;
+        }
+
         BaselineSnapshotService service = new BaselineSnapshotService(plugin);
         Map<String, Object> current = service.captureSnapshot(name);
 

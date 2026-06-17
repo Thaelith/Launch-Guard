@@ -43,7 +43,7 @@ permissions:
     children:
       launchguard.use: true
   launchguard.baseline:
-    description: Allows saving and comparing baselines.
+    description: Allows saving, listing, comparing, and deleting baselines.
     default: op
     children:
       launchguard.use: true

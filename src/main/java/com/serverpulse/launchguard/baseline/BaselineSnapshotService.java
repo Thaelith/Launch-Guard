@@ -1,5 +1,6 @@
 package com.serverpulse.launchguard.baseline;
 
+import com.serverpulse.launchguard.LaunchGuardPlugin;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.PluginCommand;
@@ -39,8 +40,41 @@ public class BaselineSnapshotService {
         snapshot.put("plugins", capturePlugins());
         snapshot.put("commands", captureCommands());
         snapshot.put("worlds", captureWorlds());
+        snapshot.put("launchGuardConfig", captureConfig());
 
         return snapshot;
+    }
+
+    private Map<String, Object> captureConfig() {
+        Map<String, Object> config = new LinkedHashMap<>();
+        if (plugin instanceof LaunchGuardPlugin) {
+            LaunchGuardPlugin lg = (LaunchGuardPlugin) plugin;
+            Map<String, Object> checksConfig = lg.getChecksConfig().getCheckConfig("plugins");
+            config.put("configuredRequiredPlugins", checksConfig.getOrDefault("required", List.of()));
+            Map<String, Object> cmdConfig = lg.getChecksConfig().getCheckConfig("commands");
+            config.put("configuredRequiredCommands", cmdConfig.getOrDefault("required", List.of()));
+            Map<String, Object> worldConfig = lg.getChecksConfig().getCheckConfig("worlds");
+            config.put("configuredRequiredWorlds", worldConfig.getOrDefault("required", List.of()));
+            Map<String, Object> permConfig = lg.getChecksConfig().getCheckConfig("permissions");
+            @SuppressWarnings("unchecked")
+            Map<String, Object> nodes = (Map<String, Object>) permConfig.getOrDefault("nodes", Map.of());
+            config.put("configuredPermissionNodes", nodes);
+            Map<String, Object> piConfig = lg.getChecksConfig().getCheckConfig("pluginInventory");
+            Map<String, Object> pi = new LinkedHashMap<>();
+            pi.put("enabled", piConfig.getOrDefault("enabled", false));
+            pi.put("checkDependencies", piConfig.getOrDefault("checkDependencies", true));
+            pi.put("warnOnSoftDependencyMissing", piConfig.getOrDefault("warnOnSoftDependencyMissing", true));
+            config.put("pluginInventory", pi);
+            @SuppressWarnings("unchecked")
+            Map<String, Object> locConfig = lg.getChecksConfig().getCheckConfig("locations");
+            Object entries = locConfig.get("entries");
+            if (entries instanceof Map) {
+                config.put("configuredLocationKeys", new ArrayList<>(((Map<?, ?>) entries).keySet()));
+            } else {
+                config.put("configuredLocationKeys", List.of());
+            }
+        }
+        return config;
     }
 
     private List<Map<String, Object>> capturePlugins() {
@@ -55,6 +89,7 @@ public class BaselineSnapshotService {
             info.put("authors", new ArrayList<>(desc.getAuthors()));
             info.put("depend", new ArrayList<>(desc.getDepend()));
             info.put("softDepend", new ArrayList<>(desc.getSoftDepend()));
+            info.put("loadBefore", new ArrayList<>(desc.getLoadBefore()));
             plugins.add(info);
         }
         plugins.sort(Comparator.comparing(m -> ((String) m.get("name")).toLowerCase()));

@@ -45,17 +45,26 @@ public class BaselineStore {
         return true;
     }
 
-    public Map<String, Object> load(String name) {
+    public enum LoadStatus { FOUND, NOT_FOUND, INVALID }
+
+    public record LoadResult(Map<String, Object> data, LoadStatus status) {}
+
+    public LoadResult loadBaseline(String name) {
         File file = getFile(name);
-        if (!file.exists()) return null;
+        if (!file.exists()) return new LoadResult(null, LoadStatus.NOT_FOUND);
         try {
             YamlConfiguration yaml = new YamlConfiguration();
             yaml.load(file);
-            return yamlToMap(yaml);
+            Map<String, Object> data = yamlToMap(yaml);
+            return new LoadResult(data, LoadStatus.FOUND);
         } catch (Exception e) {
             logger.warning("Failed to load baseline '" + name + "': " + e.getMessage());
-            return null;
+            return new LoadResult(null, LoadStatus.INVALID);
         }
+    }
+
+    public Map<String, Object> load(String name) {
+        return loadBaseline(name).data();
     }
 
     public List<BaselineEntry> listBaselines() {

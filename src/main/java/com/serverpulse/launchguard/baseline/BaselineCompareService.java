@@ -27,6 +27,10 @@ public class BaselineCompareService {
         List<Map<String, Object>> currentWorlds = getList(current, "worlds");
         compareWorlds(report, baselineWorlds, currentWorlds);
 
+        Map<String, Object> baselineConfig = getMap(baseline, "launchGuardConfig");
+        Map<String, Object> currentConfig = getMap(current, "launchGuardConfig");
+        compareConfig(report, baselineConfig, currentConfig);
+
         return report;
     }
 
@@ -133,5 +137,77 @@ public class BaselineCompareService {
             }
         } catch (NumberFormatException ignored) {}
         return false;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void compareConfig(BaselineDriftReport report, Map<String, Object> baseline, Map<String, Object> current) {
+        if (baseline == null || current == null) return;
+
+        List<String> bPlugins = sortStringList((List<String>) baseline.getOrDefault("configuredRequiredPlugins", List.of()));
+        List<String> cPlugins = sortStringList((List<String>) current.getOrDefault("configuredRequiredPlugins", List.of()));
+        if (!bPlugins.equals(cPlugins)) {
+            report.add(new BaselineDriftIssue(BaselineDriftSeverity.WARN, "Required plugin list changed in checks.yml"));
+        }
+
+        List<String> bCmds = sortStringList(normalizeCommands((List<String>) baseline.getOrDefault("configuredRequiredCommands", List.of())));
+        List<String> cCmds = sortStringList(normalizeCommands((List<String>) current.getOrDefault("configuredRequiredCommands", List.of())));
+        if (!bCmds.equals(cCmds)) {
+            report.add(new BaselineDriftIssue(BaselineDriftSeverity.WARN, "Required command list changed in checks.yml"));
+        }
+
+        List<String> bWorlds = sortStringList((List<String>) baseline.getOrDefault("configuredRequiredWorlds", List.of()));
+        List<String> cWorlds = sortStringList((List<String>) current.getOrDefault("configuredRequiredWorlds", List.of()));
+        if (!bWorlds.equals(cWorlds)) {
+            report.add(new BaselineDriftIssue(BaselineDriftSeverity.WARN, "Required world list changed in checks.yml"));
+        }
+
+        Map<String, Object> bNodes = (Map<String, Object>) baseline.getOrDefault("configuredPermissionNodes", Map.of());
+        Map<String, Object> cNodes = (Map<String, Object>) current.getOrDefault("configuredPermissionNodes", Map.of());
+        List<String> bShould = sortStringList((List<String>) bNodes.getOrDefault("shouldExist", List.of()));
+        List<String> cShould = sortStringList((List<String>) cNodes.getOrDefault("shouldExist", List.of()));
+        List<String> bDanger = sortStringList((List<String>) bNodes.getOrDefault("dangerous", List.of()));
+        List<String> cDanger = sortStringList((List<String>) cNodes.getOrDefault("dangerous", List.of()));
+        if (!bShould.equals(cShould) || !bDanger.equals(cDanger)) {
+            report.add(new BaselineDriftIssue(BaselineDriftSeverity.WARN, "Permission node list changed in checks.yml"));
+        }
+
+        Map<String, Object> bPi = (Map<String, Object>) baseline.getOrDefault("pluginInventory", Map.of());
+        Map<String, Object> cPi = (Map<String, Object>) current.getOrDefault("pluginInventory", Map.of());
+        if (!Objects.equals(bPi.get("enabled"), cPi.get("enabled"))
+                || !Objects.equals(bPi.get("checkDependencies"), cPi.get("checkDependencies"))
+                || !Objects.equals(bPi.get("warnOnSoftDependencyMissing"), cPi.get("warnOnSoftDependencyMissing"))) {
+            report.add(new BaselineDriftIssue(BaselineDriftSeverity.WARN, "Plugin inventory settings changed in checks.yml"));
+        }
+
+        List<String> bLocs = sortStringList((List<String>) baseline.getOrDefault("configuredLocationKeys", List.of()));
+        List<String> cLocs = sortStringList((List<String>) current.getOrDefault("configuredLocationKeys", List.of()));
+        if (!bLocs.equals(cLocs)) {
+            report.add(new BaselineDriftIssue(BaselineDriftSeverity.WARN, "Configured location list changed in checks.yml"));
+        }
+    }
+
+    private static Map<String, Object> getMap(Map<String, Object> data, String key) {
+        Object value = data.get(key);
+        if (value instanceof Map) {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> map = (Map<String, Object>) value;
+            return map;
+        }
+        return Map.of();
+    }
+
+    private static List<String> sortStringList(List<String> list) {
+        List<String> sorted = new ArrayList<>(list);
+        sorted.sort(String.CASE_INSENSITIVE_ORDER);
+        return sorted;
+    }
+
+    private static List<String> normalizeCommands(List<String> commands) {
+        List<String> result = new ArrayList<>();
+        for (String cmd : commands) {
+            result.add(cmd.startsWith("/") ? cmd.substring(1).toLowerCase() : cmd.toLowerCase());
+        }
+        result.sort(String.CASE_INSENSITIVE_ORDER);
+        return result;
     }
 }
