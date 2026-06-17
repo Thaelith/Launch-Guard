@@ -17,6 +17,10 @@ settings:
   reportsToKeep: 25         # Maximum number of report files to keep in reports/ directory
   exportsToKeep: 25         # Maximum number of JSON/HTML export files to keep in exports/ directory
   baselineReportsToKeep: 25 # Maximum number of baseline report files to keep in reports/baseline/ directory
+  compareBaselineOnStartup: false       # Run baseline compare on server start
+  startupBaselineName: "production"     # Baseline to compare at startup
+  startupBaselineSaveReport: true       # Save startup baseline report
+  startupBaselineDelayTicks: 120        # Delay before startup baseline compare (ticks, minimum 1)
 ```
 
 | Key | Type | Default | Description |

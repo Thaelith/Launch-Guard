@@ -175,9 +175,12 @@ settings:
   startupDelayTicks: 100    # Delay before startup check (ticks)
   saveReports: false        # Save report to plain text file
   reportsToKeep: 25         # Max report files to keep
-  reportsToKeep: 25         # Max report files to keep
   exportsToKeep: 25         # Max JSON/HTML export files to keep
   baselineReportsToKeep: 25 # Max baseline report files to keep
+  compareBaselineOnStartup: false  # Run baseline compare on server start
+  startupBaselineName: "production" # Baseline to compare at startup
+  startupBaselineSaveReport: true   # Save startup baseline report
+  startupBaselineDelayTicks: 120    # Delay before startup baseline compare (ticks)
 ```
 
 ### checks.yml

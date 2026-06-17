@@ -14,6 +14,12 @@ public class StartupBaselineCompareService {
 
     public void run() {
         String name = plugin.getConfigManager().getStartupBaselineName();
+
+        if (!BaselineNameValidator.isValid(name)) {
+            plugin.getLogger().info("Startup baseline compare skipped: invalid baseline name. Use 1-32 characters: letters, numbers, underscore, or dash.");
+            return;
+        }
+
         plugin.getLogger().info("Running startup baseline compare: " + name);
 
         try {
