@@ -1,11 +1,20 @@
 # v1.0 QA Report
 
-Generated: 2026-06-17
-Plugin: LaunchGuard v0.9.0-SNAPSHOT
+Generated: 2026-06-17 | Published: 2026-06-17
+Plugin: LaunchGuard v1.0.0
+
+## Status
+LaunchGuard v1.0.0 has been prepared and published. The current stable release is v1.0.0.
 
 ## Build Result
-- Java 17 build: PASS
-- JAR: `build/libs/LaunchGuard-0.9.0-SNAPSHOT.jar`
+
+- Compatibility QA basis: `0.9.0-SNAPSHOT`
+- Published release version: `1.0.0`
+- Release build: PASS
+- Release JAR: `build/libs/LaunchGuard-1.0.0.jar`
+- Release asset: `release/v1.0.0/LaunchGuard-1.0.0.jar`
+
+The expanded compatibility matrix was run against the final `0.9.0-SNAPSHOT` QA build before the `1.0.0` version bump. The v1.0.0 release preparation changed versioning and documentation/release packaging only; no new runtime feature was added after the QA matrix.
 
 ## PaperMC Available Versions
 15 stable Paper builds available at test time across 1.20.x and 1.21.x.
@@ -56,12 +65,15 @@ All 8 scenarios tested on 1.20.4: disabled, no-drift, drift, missing, corrupt, i
 ## Safety Audit
 Read-only. No commands, network calls, state modification, or secrets captured.
 
-## Remaining Before v1.0
-- Marketplace text preparation
-- GitHub release notes
-- SHA256SUMS
-- Version bump to 1.0.0
-- Release folder creation
+## Release Status
+- GitHub Release: completed (2026-06-17)
+- Release notes: completed
+- SHA256SUMS: completed
+- Tag v1.0.0: completed
 
-## Final QA Recommendation
-v1.0 release preparation can begin. All available stable Paper 1.20.x and 1.21.x versions were freshly tested with v0.9.0-SNAPSHOT. 14 of 15 passed full smoke tests; 1 loads but has a test-environment lock (not a code defect). Do not release until version bump, release packaging, GitHub release notes, SHA256SUMS, and marketplace text are reviewed intentionally.
+## Marketplace Status
+- Hangar: completed
+- Modrinth: completed
+- SpigotMC: completed
+
+LaunchGuard v1.0.0 is published on GitHub, Hangar, Modrinth, and SpigotMC.

@@ -1,39 +1,24 @@
 # v1.0.0 Release Checklist
 
-## Build
-- [x] Build passes with Java 17
-- [x] JAR exists at `build/libs/LaunchGuard-1.0.0.jar`
-- [x] `plugin.yml` version is `1.0.0`
+## Status: Published
 
-## Release Assets
-- [x] `release/v1.0.0/SHA256SUMS.txt` generated
-- [x] `release/v1.0.0/CHANGELOG.md` created
-- [x] `release/v1.0.0/marketplace-overview.md` created
-- [x] `release/v1.0.0/marketplace-changelog.md` created
-
-## Documentation
-- [x] README updated
-- [x] CHANGELOG updated
-- [x] Roadmap updated
-- [x] v1-readiness.md updated
-- [x] QA report created
-
-## Compatibility
+## Completed
+- [x] Version bumped to 1.0.0
+- [x] Build with Java 17
+- [x] SHA256SUMS generated
+- [x] Git tag v1.0.0 created
+- [x] GitHub Release published
+- [x] Marketplace overview prepared
+- [x] Marketplace changelog prepared
 - [x] 14 Paper versions fully smoke-tested
 - [x] Paper 1.21.11 load-tested only and documented as such
 - [x] Compatibility wording reviewed
 - [x] No untested versions claimed as fully smoke-tested
-
-## Safety
 - [x] Safety wording reviewed
-- [x] No network calls
-- [x] No server state modification
-- [x] No command execution during checks
+- [x] No network calls, no state modification
+- [x] No generated server files committed
 
-## Before Publishing
-- [ ] GitHub release notes finalized
-- [ ] Hangar page updated
-- [ ] Modrinth page updated
-- [ ] SpigotMC page updated
-- [ ] GitHub Release created
-- [ ] Tag v1.0.0 pushed
+## Marketplace Publication
+- [x] Hangar updated
+- [x] Modrinth updated
+- [x] SpigotMC updated

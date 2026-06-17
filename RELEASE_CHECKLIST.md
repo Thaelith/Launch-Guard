@@ -1,130 +1,30 @@
 # Release Checklist
 
-Run through this list before publishing a new version.
+## v1.0.0 Release Status
 
-## Build
+- [x] Version bumped to 1.0.0
+- [x] Build completed
+- [x] SHA256SUMS generated
+- [x] Git tag v1.0.0 created
+- [x] GitHub Release published
+- [x] Marketplace overview prepared
+- [x] Marketplace changelog prepared
+- [x] Hangar updated
+- [x] Modrinth updated
+- [x] SpigotMC updated
 
-- [ ] Run `./gradlew build` with no errors
-- [ ] Confirm JAR in `build/libs/LaunchGuard-0.4.0-SNAPSHOT.jar`
-- [ ] Verify plugin.yml, config.yml, checks.yml, messages.yml in JAR
-
-## Paper Server Test
-
-- [ ] Install on Paper 1.20.4, 1.20.6, 1.21.1, or 1.21.8 test server
-- [ ] Confirm plugin enables without errors in console
-- [ ] Confirm `LaunchGuard v0.4.0-SNAPSHOT enabled.` in console
-- [ ] Confirm config files created in `plugins/LaunchGuard/`
-
-## Commands
-
-- [ ] `/launchguard` shows help (requires permission)
-- [ ] `/launchguard help` shows help
-- [ ] `/launchguard version` shows version
-- [ ] `/launchguard run` executes checks
-- [ ] `/launchguard history` lists saved reports (requires `launchguard.history`)
-- [ ] `/launchguard history latest` shows latest report content
-- [ ] `/launchguard reload` reloads config
-- [ ] `/lg` alias works
-- [ ] `/preflight` alias works
-- [ ] Tab completion works for all subcommands (including history, history latest)
-
-## Permissions
-
-- [ ] Normal player cannot use `/launchguard` (default: op)
-- [ ] Normal player with `launchguard.use` granted can access help
-- [ ] OP player can use all commands
-- [ ] Console can use all commands
-- [ ] `launchguard.admin` works (includes run + reload + plugins + history)
-
-## Check Results
-
-- [ ] Missing required plugin reported as FAIL
-- [ ] Present enabled plugin reported as PASS
-- [ ] Missing command reported as FAIL
-- [ ] Registered command reported as PASS
-- [ ] Missing world reported as FAIL
-- [ ] Loaded world reported as PASS
-- [ ] Safe location with loaded chunk reported as PASS
-- [ ] Unloaded chunk reported as WARN (not PASS)
-- [ ] Invalid coordinate reported as FAIL (not silently defaulted)
-- [ ] Missing world in location entry reported as FAIL
-- [ ] Y outside world bounds reported as FAIL
-- [ ] Registered dangerous permission reported as WARN
-- [ ] Missing expected permission reported as WARN
-
-## Startup Check
-
-- [ ] `runOnStartup: false` does not run startup checks
-- [ ] `runOnStartup: true` runs preflight check after configured delay
-- [ ] Startup report appears in console only (not chat)
-- [ ] Startup report saved as `*_startup.txt` when `saveReports: true`
-- [ ] Startup check failure does not crash server
-
-## Report Saving and History
-
-- [ ] `saveReports: true` creates report files in `plugins/LaunchGuard/reports/`
-- [ ] Report files are plain text, no color codes
-- [ ] `/launchguard history` lists recent reports with metadata
-- [ ] `/launchguard history latest` displays latest report content
-- [ ] Report retention respects `reportsToKeep` setting
-- [ ] Retention only deletes `.txt` files in the reports directory
-- [ ] No files written outside `plugins/LaunchGuard/reports/`
-
-## JSON and HTML Export
-
-- [ ] `/launchguard export json` saves JSON file in `plugins/LaunchGuard/exports/`
-- [ ] `/launchguard export html` saves HTML file in `plugins/LaunchGuard/exports/`
-- [ ] Export filenames include milliseconds and correct extension
-- [ ] JSON is valid and includes all required fields; `schemaVersion` is 1
-- [ ] HTML is valid and self-contained; no external CSS, JS, images, fonts, or CDN
-- [ ] Export retention respects `exportsToKeep` setting
-- [ ] Retention deletes only `.json` and `.html` files in the exports directory
-- [ ] Exports do not include tokens, webhook URLs, player IPs, or absolute paths
-- [ ] No files written outside `plugins/LaunchGuard/exports/`
-
-## Config Robustness
-
-- [ ] Broken YAML in config.yml: reload fails, previous config kept
-- [ ] Broken YAML in checks.yml: reload fails, previous config kept
-- [ ] Broken YAML in messages.yml: reload fails, previous config kept
-- [ ] Missing config file: recreated from defaults
-- [ ] Empty check lists: report shows zero results
-- [ ] All checks disabled: message says no checks enabled
+## Build Verification
+- [x] Run `./gradlew clean build`
+- [x] Confirm JAR in `build/libs/LaunchGuard-1.0.0.jar`
+- [x] Verify plugin.yml reports version 1.0.0
 
 ## Safety Verification
-
-- [ ] No commands are executed by checks
-- [ ] No players are teleported
-- [ ] No blocks are modified
-- [ ] No chunks are force-loaded
-- [ ] No world data is changed
-- [ ] No economy data is changed
-- [ ] No permission data is changed
-- [ ] Whitelist state unchanged
-- [ ] No files written outside `plugins/LaunchGuard/`
-- [ ] Report files only in `plugins/LaunchGuard/reports/`
-- [ ] No network requests made
-- [ ] No analytics collected
+- [x] No commands are executed by checks
+- [x] No network calls are made
+- [x] No server state is modified
+- [x] No files written outside `plugins/LaunchGuard/`
 
 ## Documentation
-
-- [ ] README.md up to date
-- [ ] CHANGELOG.md up to date
-- [ ] docs/ pages accurate
-- [ ] Example configs valid YAML
-- [ ] Marketplace descriptions accurate
-
-## Publishing
-
-- [ ] Prepare screenshots or terminal captures of report output
-- [ ] Publish on Hangar (free)
-- [ ] Publish on Modrinth (free)
-- [ ] Publish on Spigot (free)
-- [ ] Publish on BuiltByBit if applicable
-- [ ] Update GitHub releases
-
-## Post-Release
-
-- [ ] Monitor for bug reports
-- [ ] Collect feedback on check coverage
-- [ ] Prepare next milestone
+- [x] README up to date
+- [x] CHANGELOG up to date
+- [x] Compatibility wording accurate

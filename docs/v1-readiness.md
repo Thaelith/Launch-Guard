@@ -1,11 +1,20 @@
-# v1.0 Readiness
+# v1.0 Status
 
-## Current Stable Marketplace Version
-- v0.5.0 remains the stable marketplace version until v1.0.0 is published.
+## Current Stable Release
+- v1.0.0 is the current stable release.
+- The previous marketplace stable release was v0.5.0.
 
-## Status
-- v1.0.0 release preparation is in progress on branch `release/v1.0.0-prep`
-- v1.0.0 has NOT been tagged, released, or published to marketplaces yet
+## Completed
+- [x] Version bump to 1.0.0
+- [x] Build with Java 17
+- [x] Compatibility QA: 14 versions full smoke PASS, 1 load-tested
+- [x] Safety audit
+- [x] Release folder prepared
+- [x] GitHub Release created
+- [x] Marketplace text prepared
+- [x] Hangar updated
+- [x] Modrinth updated
+- [x] SpigotMC updated
 
 ## Development Features Since v0.5.0
 - v0.6: Baseline drift detection
