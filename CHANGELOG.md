@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.9.0-SNAPSHOT
+
+### Changed
+- Started v1.0 readiness and stabilization work.
+- Updated project version to `0.9.0-SNAPSHOT`.
+- Audited command help, permissions, configuration, reports, exports, baselines, and documentation.
+- Updated documentation for development and marketplace release strategy.
+
+### Safety
+- Re-verified LaunchGuard's read-only behavior.
+- Re-verified report, export, baseline, and baseline report file boundaries.
+- Re-verified that no network calls are introduced.
+
+### Notes
+- v0.9 is a stabilization milestone, not a marketplace release.
+- Marketplace stable remains v0.5.0 until v1.0.0, unless a critical hotfix is needed.
+
 ## 0.8.0-SNAPSHOT
 
 ### Added
