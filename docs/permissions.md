@@ -12,8 +12,9 @@ All LaunchGuard permissions default to op-only.
 | launchguard.history | op | View saved report history |
 | launchguard.export | op | Export reports as JSON or HTML |
 | launchguard.validate | op | Validate configuration files |
+| launchguard.baseline | op | Save, list, compare, and delete baselines |
 | launchguard.reload | op | Reload configuration files |
-| launchguard.admin | op | Full admin access; includes use, run, plugins, history, export, validate, and reload |
+| launchguard.admin | op | Full admin access; includes use, run, plugins, history, export, validate, baseline, and reload |
 
 ## Granting Permissions
 
@@ -38,9 +39,11 @@ Not applicable. Use a permission plugin.
 - `launchguard.history` is required for `/launchguard history` and `/launchguard history latest`.
 - `launchguard.export` is required for `/launchguard export json` and `/launchguard export html`.
 - `launchguard.validate` is required for `/launchguard validate`.
+- `launchguard.baseline` is required for all `/launchguard baseline` commands.
 - `launchguard.reload` is required for `/launchguard reload`.
 - `launchguard.history` includes `launchguard.use` as a child permission so staff can be granted history access directly.
 - `launchguard.export` includes `launchguard.use` as a child permission so staff can be granted export access directly.
+- `launchguard.baseline` includes `launchguard.use` as a child permission so staff can be granted baseline access directly.
 - `launchguard.plugins` includes `launchguard.use` as a child permission so staff can be granted inventory access directly.
 - `launchguard.admin` is a parent permission that includes `launchguard.use`, `launchguard.run`, `launchguard.plugins`, `launchguard.history`, `launchguard.export`, and `launchguard.reload` as children.
 - Console always has access to all commands regardless of permission settings.
@@ -52,5 +55,6 @@ Not applicable. Use a permission plugin.
 - Do not grant `launchguard.plugins` to untrusted players. The inventory report reveals installed plugin metadata and dependency names.
 - Do not grant `launchguard.history` to untrusted players. Saved reports may contain server configuration details.
 - Do not grant `launchguard.export` to untrusted players. JSON exports contain server version, plugin metadata, and check results.
+- Do not grant `launchguard.baseline` to untrusted players. Baseline snapshots contain server plugin lists, command names, world names, and configured check metadata.
 - Do not grant `launchguard.reload` to untrusted players. Reloading affects server operation.
 - The plugin does not expose any commands that modify server state, so even with full access, users cannot harm the server through LaunchGuard.

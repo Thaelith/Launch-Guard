@@ -16,6 +16,8 @@ public class BaselineDriftReport {
 
     public void add(BaselineDriftIssue issue) { issues.add(issue); }
 
+    public void clear() { issues.clear(); }
+
     public List<BaselineDriftIssue> issues() { return List.copyOf(issues); }
 
     public int infoCount() {

@@ -15,21 +15,26 @@ public class BaselineCompareService {
             return report;
         }
 
-        List<Map<String, Object>> baselinePlugins = getList(baseline, "plugins");
-        List<Map<String, Object>> currentPlugins = getList(current, "plugins");
-        comparePlugins(report, baselinePlugins, currentPlugins);
+        try {
+            List<Map<String, Object>> baselinePlugins = getListEntries(baseline, "plugins");
+            List<Map<String, Object>> currentPlugins = getListEntries(current, "plugins");
+            comparePlugins(report, baselinePlugins, currentPlugins);
 
-        List<Map<String, Object>> baselineCommands = getList(baseline, "commands");
-        List<Map<String, Object>> currentCommands = getList(current, "commands");
-        compareCommands(report, baselineCommands, currentCommands);
+            List<Map<String, Object>> baselineCommands = getListEntries(baseline, "commands");
+            List<Map<String, Object>> currentCommands = getListEntries(current, "commands");
+            compareCommands(report, baselineCommands, currentCommands);
 
-        List<Map<String, Object>> baselineWorlds = getList(baseline, "worlds");
-        List<Map<String, Object>> currentWorlds = getList(current, "worlds");
-        compareWorlds(report, baselineWorlds, currentWorlds);
+            List<Map<String, Object>> baselineWorlds = getListEntries(baseline, "worlds");
+            List<Map<String, Object>> currentWorlds = getListEntries(current, "worlds");
+            compareWorlds(report, baselineWorlds, currentWorlds);
 
-        Map<String, Object> baselineConfig = getMap(baseline, "launchGuardConfig");
-        Map<String, Object> currentConfig = getMap(current, "launchGuardConfig");
-        compareConfig(report, baselineConfig, currentConfig);
+            Map<String, Object> baselineConfig = getMap(baseline, "launchGuardConfig");
+            Map<String, Object> currentConfig = getMap(current, "launchGuardConfig");
+            compareConfig(report, baselineConfig, currentConfig);
+        } catch (ClassCastException | NullPointerException e) {
+            report.clear();
+            report.add(new BaselineDriftIssue(BaselineDriftSeverity.FAIL, "Baseline file is invalid or corrupt: " + name));
+        }
 
         return report;
     }
@@ -110,6 +115,17 @@ public class BaselineCompareService {
             if (!name.isEmpty()) map.put(name, item);
         }
         return map;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static List<Map<String, Object>> getListEntries(Map<String, Object> data, String key) {
+        Object value = data.get(key);
+        if (!(value instanceof List)) return List.of();
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (Object item : (List<?>) value) {
+            if (item instanceof Map) result.add((Map<String, Object>) item);
+        }
+        return result;
     }
 
     @SuppressWarnings("unchecked")
