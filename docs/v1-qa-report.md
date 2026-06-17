@@ -7,8 +7,14 @@ Plugin: LaunchGuard v1.0.0
 LaunchGuard v1.0.0 has been prepared and published. The current stable release is v1.0.0.
 
 ## Build Result
-- Java 17 build: PASS
-- JAR: `build/libs/LaunchGuard-0.9.0-SNAPSHOT.jar`
+
+- Compatibility QA basis: `0.9.0-SNAPSHOT`
+- Published release version: `1.0.0`
+- Release build: PASS
+- Release JAR: `build/libs/LaunchGuard-1.0.0.jar`
+- Release asset: `release/v1.0.0/LaunchGuard-1.0.0.jar`
+
+The expanded compatibility matrix was run against the final `0.9.0-SNAPSHOT` QA build before the `1.0.0` version bump. The v1.0.0 release preparation changed versioning and documentation/release packaging only; no new runtime feature was added after the QA matrix.
 
 ## PaperMC Available Versions
 15 stable Paper builds available at test time across 1.20.x and 1.21.x.

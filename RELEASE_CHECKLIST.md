@@ -14,17 +14,17 @@
 - [x] SpigotMC updated
 
 ## Build Verification
-- [ ] Run `./gradlew clean build`
-- [ ] Confirm JAR in `build/libs/LaunchGuard-1.0.0.jar`
-- [ ] Verify plugin.yml reports version 1.0.0
+- [x] Run `./gradlew clean build`
+- [x] Confirm JAR in `build/libs/LaunchGuard-1.0.0.jar`
+- [x] Verify plugin.yml reports version 1.0.0
 
 ## Safety Verification
-- [ ] No commands are executed by checks
-- [ ] No network calls are made
-- [ ] No server state is modified
-- [ ] No files written outside `plugins/LaunchGuard/`
+- [x] No commands are executed by checks
+- [x] No network calls are made
+- [x] No server state is modified
+- [x] No files written outside `plugins/LaunchGuard/`
 
 ## Documentation
-- [ ] README up to date
-- [ ] CHANGELOG up to date
-- [ ] Compatibility wording accurate
+- [x] README up to date
+- [x] CHANGELOG up to date
+- [x] Compatibility wording accurate
