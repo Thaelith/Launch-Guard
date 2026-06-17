@@ -183,12 +183,64 @@ YYYY-MM-DD_HH-mm-ss-SSS_manual.html
 
 This command is read-only. It does not send network requests or include tokens, webhook URLs, player IPs, full logs, or absolute file paths.
 
+## /launchguard baseline save <name>
+
+Captures current server state into a local YAML baseline file.
+
+Permission: `launchguard.baseline` or `launchguard.admin`
+
+Baseline files are saved to:
+
+```
+plugins/LaunchGuard/baselines/<name>.yml
+```
+
+Name rules: 1-32 characters, letters/numbers/underscore/dash only. No dots, slashes, spaces, or file extensions.
+
+If a baseline with the same name already exists, returns an error. Does not overwrite silently.
+
+This command does not execute commands, modify server state, or send network requests.
+
+## /launchguard baseline list
+
+Lists saved baselines with name, creation timestamp, server version, and plugin count.
+
+Permission: `launchguard.baseline` or `launchguard.admin`
+
+If no baselines exist, displays a clear message.
+
+## /launchguard baseline compare <name>
+
+Compares current server state against a saved baseline and prints a drift report.
+
+Permission: `launchguard.baseline` or `launchguard.admin`
+
+Drift statuses:
+- `MATCHES_BASELINE` — current state matches baseline
+- `DRIFT_DETECTED` — differences found in plugins, commands, worlds, or LaunchGuard configuration
+- `BASELINE_INVALID` — baseline file is corrupt or unsupported schema version
+
+Drift comparison reports:
+- Removed/added plugins, commands, and worlds
+- Plugin enabled state and version changes
+- LaunchGuard check configuration changes (required plugins, commands, worlds, permissions, plugin inventory, location keys)
+
+## /launchguard baseline delete <name>
+
+Deletes a saved baseline file.
+
+Permission: `launchguard.baseline` or `launchguard.admin`
+
+Only deletes validated `.yml` baseline files inside `plugins/LaunchGuard/baselines/`. Does not delete directories or non-baseline files.
+
 ## Tab Completion
 
-Tab completion is supported for all subcommands: help, run, plugins, history, reload, version, export, validate.
+Tab completion is supported for all subcommands: help, run, plugins, history, reload, version, export, validate, baseline.
 
 `/launchguard plugins` also supports tab completion for `verbose` and `dependencies`.
 
 `/launchguard history` also supports tab completion for `latest`.
 
 `/launchguard export` also supports tab completion for `json` and `html`.
+
+`/launchguard baseline` also supports tab completion for `save`, `list`, `compare`, and `delete`.

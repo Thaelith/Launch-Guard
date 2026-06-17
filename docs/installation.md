@@ -18,7 +18,7 @@
 
 4. Verify the plugin loaded by checking the console:
    ```
-   [LaunchGuard] LaunchGuard v0.3.0 enabled.
+   [LaunchGuard] LaunchGuard enabled.
    ```
 
 5. Configuration files are created automatically in `plugins/LaunchGuard/`:

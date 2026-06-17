@@ -27,6 +27,13 @@ LaunchGuard Lite v0.1 was the initial release focusing on essential read-only pr
 - Static HTML report export
 - Configuration validation for config.yml, checks.yml, and messages.yml
 
+## v0.6.0-SNAPSHOT
+
+- `/launchguard baseline save`, `list`, `compare`, `delete`
+- `launchguard.baseline` permission
+- Local YAML baseline snapshots under `plugins/LaunchGuard/baselines/`
+- Baseline drift detection for plugins, commands, worlds, and configuration
+
 ## Future Candidates
 
 - Additional location safety blocks

@@ -13,6 +13,14 @@ import com.serverpulse.launchguard.report.ReportRenderer;
 import com.serverpulse.launchguard.validation.ConfigValidationService;
 import com.serverpulse.launchguard.validation.ValidationReport;
 import com.serverpulse.launchguard.validation.ValidationRenderer;
+import com.serverpulse.launchguard.baseline.BaselineCompareService;
+import com.serverpulse.launchguard.baseline.BaselineDriftIssue;
+import com.serverpulse.launchguard.baseline.BaselineDriftReport;
+import com.serverpulse.launchguard.baseline.BaselineDriftSeverity;
+import com.serverpulse.launchguard.baseline.BaselineNameValidator;
+import com.serverpulse.launchguard.baseline.BaselineRenderer;
+import com.serverpulse.launchguard.baseline.BaselineSnapshotService;
+import com.serverpulse.launchguard.baseline.BaselineStore;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;
@@ -28,6 +36,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
 
@@ -60,6 +69,8 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
                 return handleExport(sender, args);
             case "validate":
                 return handleValidate(sender);
+            case "baseline":
+                return handleBaseline(sender, args);
             case "version":
                 return handleVersion(sender);
             default:
@@ -77,6 +88,7 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage(Component.text("/launchguard reload  - Reload configuration", NamedTextColor.GRAY));
         sender.sendMessage(Component.text("/launchguard export  - Export report as JSON or HTML", NamedTextColor.GRAY));
         sender.sendMessage(Component.text("/launchguard validate - Validate configuration files", NamedTextColor.GRAY));
+        sender.sendMessage(Component.text("/launchguard baseline - Save, list, compare, or delete baselines", NamedTextColor.GRAY));
         sender.sendMessage(Component.text("/launchguard version - Show version", NamedTextColor.GRAY));
         return true;
     }
@@ -328,6 +340,129 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
         return true;
     }
 
+    private boolean handleBaseline(CommandSender sender, String[] args) {
+        if (!sender.hasPermission("launchguard.baseline") && !sender.hasPermission("launchguard.admin")) {
+            sendNoPermission(sender);
+            return true;
+        }
+
+        String sub = args.length > 1 ? args[1].toLowerCase() : "";
+        String name = args.length > 2 ? args[2] : "";
+
+        switch (sub) {
+            case "save":    return handleBaselineSave(sender, name);
+            case "list":    return handleBaselineList(sender);
+            case "compare": return handleBaselineCompare(sender, name);
+            case "delete":  return handleBaselineDelete(sender, name);
+            default:
+                String prefix = plugin.getMessageManager().get("prefix");
+                sender.sendMessage(Component.text(prefix + " Usage: /launchguard baseline <save|list|compare|delete> [name]", NamedTextColor.RED));
+                return true;
+        }
+    }
+
+    private boolean handleBaselineSave(CommandSender sender, String name) {
+        String error = BaselineNameValidator.validate(name);
+        if (error != null) {
+            sender.sendMessage(Component.text(error, NamedTextColor.RED));
+            return true;
+        }
+        BaselineStore store = plugin.getBaselineStore();
+        if (store.exists(name)) {
+            sender.sendMessage(Component.text("Baseline already exists: " + name, NamedTextColor.RED));
+            return true;
+        }
+        BaselineSnapshotService service = new BaselineSnapshotService(plugin);
+        Map<String, Object> snapshot = service.captureSnapshot(name);
+        if (store.save(name, snapshot)) {
+            sender.sendMessage(Component.text("Saved baseline: " + name, NamedTextColor.GREEN));
+        } else {
+            sender.sendMessage(Component.text("Failed to save baseline: " + name, NamedTextColor.RED));
+        }
+        return true;
+    }
+
+    private boolean handleBaselineList(CommandSender sender) {
+        BaselineStore store = plugin.getBaselineStore();
+        List<BaselineStore.BaselineEntry> entries = store.listBaselines();
+
+        String prefix = plugin.getMessageManager().get("prefix");
+        sender.sendMessage(Component.text(prefix + " LaunchGuard Baselines", NamedTextColor.WHITE));
+
+        if (entries.isEmpty()) {
+            sender.sendMessage(Component.text("[INFO] No baselines saved.", NamedTextColor.AQUA));
+            return true;
+        }
+        for (BaselineStore.BaselineEntry entry : entries) {
+            sender.sendMessage(Component.text("  " + entry.name() + "  created=" + entry.createdAt()
+                    + "  server=" + entry.serverVersion() + "  plugins=" + entry.pluginCount(), NamedTextColor.GRAY));
+        }
+        return true;
+    }
+
+    private boolean handleBaselineCompare(CommandSender sender, String name) {
+        String error = BaselineNameValidator.validate(name);
+        if (error != null) {
+            sender.sendMessage(Component.text(error, NamedTextColor.RED));
+            return true;
+        }
+        BaselineStore store = plugin.getBaselineStore();
+        BaselineStore.LoadResult loadResult = store.loadBaseline(name);
+        if (loadResult.status() == BaselineStore.LoadStatus.NOT_FOUND) {
+            sender.sendMessage(Component.text("Baseline not found: " + name, NamedTextColor.RED));
+            return true;
+        }
+        if (loadResult.status() == BaselineStore.LoadStatus.INVALID) {
+            BaselineDriftReport report = new BaselineDriftReport(name);
+            report.add(new BaselineDriftIssue(BaselineDriftSeverity.FAIL,
+                    "Baseline file is invalid or corrupt: " + name));
+            BaselineRenderer renderer = new BaselineRenderer();
+            sender.sendMessage(renderer.renderDrift(report));
+            return true;
+        }
+        Map<String, Object> baseline = loadResult.data();
+
+        Object schemaVersion = baseline.get("schemaVersion");
+        if (!(schemaVersion instanceof Integer) || ((Integer) schemaVersion) != 1) {
+            BaselineDriftReport report = new BaselineDriftReport(name);
+            report.add(new BaselineDriftIssue(BaselineDriftSeverity.FAIL,
+                    "Unsupported baseline schema version"));
+            BaselineRenderer renderer = new BaselineRenderer();
+            sender.sendMessage(renderer.renderDrift(report));
+            return true;
+        }
+
+        BaselineSnapshotService service = new BaselineSnapshotService(plugin);
+        Map<String, Object> current = service.captureSnapshot(name);
+
+        BaselineCompareService compareService = new BaselineCompareService();
+        BaselineDriftReport report = compareService.compare(baseline, current);
+
+        BaselineRenderer renderer = new BaselineRenderer();
+        Component output = renderer.renderDrift(report);
+        sender.sendMessage(output);
+        return true;
+    }
+
+    private boolean handleBaselineDelete(CommandSender sender, String name) {
+        String error = BaselineNameValidator.validate(name);
+        if (error != null) {
+            sender.sendMessage(Component.text(error, NamedTextColor.RED));
+            return true;
+        }
+        BaselineStore store = plugin.getBaselineStore();
+        if (!store.exists(name)) {
+            sender.sendMessage(Component.text("Baseline not found: " + name, NamedTextColor.RED));
+            return true;
+        }
+        if (store.delete(name)) {
+            sender.sendMessage(Component.text("Deleted baseline: " + name, NamedTextColor.GREEN));
+        } else {
+            sender.sendMessage(Component.text("Failed to delete baseline: " + name, NamedTextColor.RED));
+        }
+        return true;
+    }
+
     private boolean handleReload(CommandSender sender) {
         if (!sender.hasPermission("launchguard.reload") && !sender.hasPermission("launchguard.admin")) {
             sendNoPermission(sender);
@@ -367,7 +502,7 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             List<String> completions = new ArrayList<>();
             String partial = args[0].toLowerCase();
-            for (String sub : new String[]{"help", "run", "plugins", "history", "reload", "version", "export", "validate"}) {
+            for (String sub : new String[]{"help", "run", "plugins", "history", "reload", "version", "export", "validate", "baseline"}) {
                 if (sub.startsWith(partial)) {
                     completions.add(sub);
                 }
@@ -403,6 +538,27 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
                 }
             }
             return completions;
+        }
+        if (args.length >= 2 && args[0].equalsIgnoreCase("baseline")) {
+            if (args.length == 2) {
+                List<String> completions = new ArrayList<>();
+                String partial = args[1].toLowerCase();
+                for (String sub : new String[]{"save", "list", "compare", "delete"}) {
+                    if (sub.startsWith(partial)) completions.add(sub);
+                }
+                return completions;
+            }
+            if (args.length == 3 && (args[1].equalsIgnoreCase("compare") || args[1].equalsIgnoreCase("delete"))) {
+                BaselineStore store = plugin.getBaselineStore();
+                List<String> names = store.listBaselines().stream()
+                        .map(BaselineStore.BaselineEntry::name).toList();
+                List<String> completions = new ArrayList<>();
+                String partial = args[2].toLowerCase();
+                for (String name : names) {
+                    if (name.startsWith(partial)) completions.add(name);
+                }
+                return completions;
+            }
         }
         return List.of();
     }

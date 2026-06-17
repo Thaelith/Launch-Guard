@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.6.0-SNAPSHOT
+
+### Added
+- Added `/launchguard baseline save <name>`.
+- Added `/launchguard baseline list`.
+- Added `/launchguard baseline compare <name>`.
+- Added `/launchguard baseline delete <name>`.
+- Added `launchguard.baseline` permission.
+- Added local YAML baseline snapshots under `plugins/LaunchGuard/baselines/`.
+- Added baseline drift detection for plugins, commands, worlds, and selected LaunchGuard check configuration.
+
+### Safety
+- Baseline commands do not execute plugin commands or configured commands.
+- Baseline snapshots are local YAML files only.
+- Baseline save writes only `.yml` files under `plugins/LaunchGuard/baselines/`.
+- Baseline delete removes only validated `.yml` baseline files inside `plugins/LaunchGuard/baselines/`.
+- Baseline comparison does not modify server state.
+- No network calls are introduced.
+
+### Limitations
+- Baselines capture a server-state snapshot, not full plugin behavior.
+- Baseline comparison does not verify plugin runtime correctness.
+- Command ownership may be unavailable for some commands depending on Bukkit/Paper internals.
+- Baselines do not include player data, logs, tokens, webhook URLs, or secrets.
+
 ## 0.5.0
 
 ### Added

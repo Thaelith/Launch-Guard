@@ -15,7 +15,7 @@ settings:
   startupDelayTicks: 100    # Ticks to wait before running startup check (minimum 1)
   saveReports: false        # Save report output to plain text files
   reportsToKeep: 25         # Maximum number of report files to keep in reports/ directory
-  exportsToKeep: 25         # Maximum number of JSON export files to keep in exports/ directory
+  exportsToKeep: 25         # Maximum number of JSON/HTML export files to keep in exports/ directory
 ```
 
 | Key | Type | Default | Description |

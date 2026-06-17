@@ -12,7 +12,7 @@ The JAR is produced at `build/libs/LaunchGuard-0.3.0.jar`.
 
 1. Copy `build/libs/LaunchGuard-0.3.0.jar` to your Paper server's `plugins/` directory.
 2. Start the server or run `/reload confirm`.
-3. Verify the plugin loads: check console for `LaunchGuard v0.3.0 enabled.`
+3. Verify the plugin loads: check console for `LaunchGuard enabled.`
 4. Configuration files are created in `plugins/LaunchGuard/`.
 
 Note: LaunchGuard permissions are op-only by default. Use an operator account or grant `launchguard.use` to test players.
