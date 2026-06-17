@@ -35,6 +35,7 @@ public class LaunchGuardPlugin extends JavaPlugin {
     private ReportFileWriter reportFileWriter;
     private ExportFileWriter exportWriter;
     private BaselineStore baselineStore;
+    private ReportFileWriter baselineReportWriter;
 
     @Override
     public void onEnable() {
@@ -55,6 +56,9 @@ public class LaunchGuardPlugin extends JavaPlugin {
 
         File baselinesDir = new File(getDataFolder(), "baselines");
         this.baselineStore = new BaselineStore(baselinesDir.toPath(), getLogger());
+
+        File baselineReportDir = new File(getDataFolder(), "reports/baseline");
+        this.baselineReportWriter = new ReportFileWriter(baselineReportDir.toPath(), getLogger());
 
         this.commandHandler = new LaunchGuardCommand(this);
         PluginCommand mainCommand = getCommand("launchguard");
@@ -141,6 +145,10 @@ public class LaunchGuardPlugin extends JavaPlugin {
 
     public BaselineStore getBaselineStore() {
         return baselineStore;
+    }
+
+    public ReportFileWriter getBaselineReportWriter() {
+        return baselineReportWriter;
     }
 
     private void runStartupCheck() {

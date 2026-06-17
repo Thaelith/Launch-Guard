@@ -39,13 +39,13 @@ Not applicable. Use a permission plugin.
 - `launchguard.history` is required for `/launchguard history` and `/launchguard history latest`.
 - `launchguard.export` is required for `/launchguard export json` and `/launchguard export html`.
 - `launchguard.validate` is required for `/launchguard validate`.
-- `launchguard.baseline` is required for all `/launchguard baseline` commands.
+- `launchguard.baseline` is required for all `/launchguard baseline` commands: save, list, compare, delete, compare save, export json, export html, history, and history latest.
 - `launchguard.reload` is required for `/launchguard reload`.
 - `launchguard.history` includes `launchguard.use` as a child permission so staff can be granted history access directly.
 - `launchguard.export` includes `launchguard.use` as a child permission so staff can be granted export access directly.
 - `launchguard.baseline` includes `launchguard.use` as a child permission so staff can be granted baseline access directly.
 - `launchguard.plugins` includes `launchguard.use` as a child permission so staff can be granted inventory access directly.
-- `launchguard.admin` is a parent permission that includes `launchguard.use`, `launchguard.run`, `launchguard.plugins`, `launchguard.history`, `launchguard.export`, and `launchguard.reload` as children.
+- `launchguard.admin` is a parent permission that includes `launchguard.use`, `launchguard.run`, `launchguard.plugins`, `launchguard.history`, `launchguard.export`, `launchguard.validate`, `launchguard.baseline`, and `launchguard.reload` as children.
 - Console always has access to all commands regardless of permission settings.
 - Normal players cannot use `/launchguard` by default. This is intentional.
 

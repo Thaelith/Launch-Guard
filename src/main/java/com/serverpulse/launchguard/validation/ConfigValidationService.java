@@ -16,7 +16,7 @@ public class ConfigValidationService {
     private static final List<String> CONFIG_EXPECTED_KEYS = List.of(
             "showPassedChecks", "reportToConsole", "prefix",
             "runOnStartup", "startupDelayTicks", "saveReports",
-            "reportsToKeep", "exportsToKeep"
+            "reportsToKeep", "exportsToKeep", "baselineReportsToKeep"
     );
 
     public ConfigValidationService(Plugin plugin) {
@@ -71,6 +71,7 @@ public class ConfigValidationService {
         validatePositiveInt(settings, "startupDelayTicks", 100, issues);
         validatePositiveInt(settings, "reportsToKeep", 25, issues);
         validatePositiveInt(settings, "exportsToKeep", 25, issues);
+        validatePositiveInt(settings, "baselineReportsToKeep", 25, issues);
 
         for (String key : settings.getKeys(false)) {
             if (!CONFIG_EXPECTED_KEYS.contains(key)) {

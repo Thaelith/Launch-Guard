@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.7.0-SNAPSHOT
+
+### Added
+- Added `/launchguard baseline compare <name> save`.
+- Added `/launchguard baseline export json <name>`.
+- Added `/launchguard baseline export html <name>`.
+- Added `/launchguard baseline history`.
+- Added `/launchguard baseline history latest`.
+- Added local plain-text baseline drift reports under `plugins/LaunchGuard/reports/baseline/`.
+- Added local JSON baseline drift exports under `plugins/LaunchGuard/exports/`.
+- Added local self-contained HTML baseline drift exports under `plugins/LaunchGuard/exports/`.
+
+### Safety
+- Baseline report and export commands do not execute plugin commands or configured commands.
+- Baseline reports and exports are local files only.
+- Baseline HTML exports do not load external resources.
+- Baseline report saving writes only under `plugins/LaunchGuard/reports/baseline/`.
+- Baseline exports write only under `plugins/LaunchGuard/exports/`.
+- No network calls are introduced.
+
+### Limitations
+- Startup baseline comparison is not included in this version.
+- Baseline exports do not verify plugin runtime behavior.
+- Baseline report history is local file based.
+
 ## 0.6.0-SNAPSHOT
 
 ### Added

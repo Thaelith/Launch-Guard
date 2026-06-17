@@ -13,6 +13,9 @@ import com.serverpulse.launchguard.report.ReportRenderer;
 import com.serverpulse.launchguard.validation.ConfigValidationService;
 import com.serverpulse.launchguard.validation.ValidationReport;
 import com.serverpulse.launchguard.validation.ValidationRenderer;
+import com.serverpulse.launchguard.baseline.BaselineHtmlReportRenderer;
+import com.serverpulse.launchguard.baseline.BaselineJsonReportRenderer;
+import com.serverpulse.launchguard.baseline.BaselineTextReportRenderer;
 import com.serverpulse.launchguard.baseline.BaselineCompareService;
 import com.serverpulse.launchguard.baseline.BaselineDriftIssue;
 import com.serverpulse.launchguard.baseline.BaselineDriftReport;
@@ -352,11 +355,19 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
         switch (sub) {
             case "save":    return handleBaselineSave(sender, name);
             case "list":    return handleBaselineList(sender);
-            case "compare": return handleBaselineCompare(sender, name);
+            case "compare":
+                if (args.length > 3 && args[3].equalsIgnoreCase("save")) {
+                    return handleBaselineCompareSave(sender, name);
+                }
+                return handleBaselineCompare(sender, name);
             case "delete":  return handleBaselineDelete(sender, name);
+            case "export":
+                return handleBaselineExport(sender, args);
+            case "history":
+                return handleBaselineHistory(sender, args);
             default:
                 String prefix = plugin.getMessageManager().get("prefix");
-                sender.sendMessage(Component.text(prefix + " Usage: /launchguard baseline <save|list|compare|delete> [name]", NamedTextColor.RED));
+                sender.sendMessage(Component.text(prefix + " Usage: /launchguard baseline <save|list|compare|delete|export|history> [name]", NamedTextColor.RED));
                 return true;
         }
     }
@@ -463,6 +474,155 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
         return true;
     }
 
+    private BaselineDriftReport runDriftCompare(String name) {
+        BaselineStore store = plugin.getBaselineStore();
+        BaselineStore.LoadResult loadResult = store.loadBaseline(name);
+        if (loadResult.status() == BaselineStore.LoadStatus.NOT_FOUND
+                || loadResult.status() == BaselineStore.LoadStatus.INVALID) {
+            return null;
+        }
+        Map<String, Object> baseline = loadResult.data();
+        Object schemaVersion = baseline.get("schemaVersion");
+        if (!(schemaVersion instanceof Integer) || ((Integer) schemaVersion) != 1) {
+            return null;
+        }
+        BaselineSnapshotService service = new BaselineSnapshotService(plugin);
+        Map<String, Object> current = service.captureSnapshot(name);
+        BaselineCompareService compareService = new BaselineCompareService();
+        return compareService.compare(baseline, current);
+    }
+
+    private boolean handleBaselineCompareSave(CommandSender sender, String name) {
+        String error = BaselineNameValidator.validate(name);
+        if (error != null) { sender.sendMessage(Component.text(error, NamedTextColor.RED)); return true; }
+
+        BaselineStore store = plugin.getBaselineStore();
+        if (!store.exists(name)) {
+            sender.sendMessage(Component.text("Baseline not found: " + name, NamedTextColor.RED));
+            return true;
+        }
+
+        BaselineDriftReport report = runDriftCompare(name);
+        if (report == null) {
+            BaselineDriftReport errReport = new BaselineDriftReport(name);
+            errReport.add(new BaselineDriftIssue(BaselineDriftSeverity.FAIL, "Baseline file is invalid or corrupt: " + name));
+            BaselineRenderer renderer = new BaselineRenderer();
+            sender.sendMessage(renderer.renderDrift(errReport));
+            return true;
+        }
+
+        BaselineRenderer renderer = new BaselineRenderer();
+        sender.sendMessage(renderer.renderDrift(report));
+
+        try {
+            BaselineTextReportRenderer textRenderer = new BaselineTextReportRenderer();
+            String text = textRenderer.render(report, plugin.getDescription().getVersion(),
+                    plugin.getServer().getMinecraftVersion());
+            ReportFileWriter writer = plugin.getBaselineReportWriter();
+            java.nio.file.Path savedPath = writer.save(text, "baseline_" + name);
+            writer.prune(plugin.getConfigManager().getBaselineReportsToKeep());
+            if (savedPath != null) {
+                sender.sendMessage(Component.text("Saved baseline report: plugins/LaunchGuard/reports/baseline/" + savedPath.getFileName(), NamedTextColor.GRAY));
+            } else {
+                sender.sendMessage(Component.text("Failed to save baseline report.", NamedTextColor.YELLOW));
+            }
+        } catch (Exception e) {
+            plugin.getLogger().warning("Failed to save baseline report: " + e.getMessage());
+            sender.sendMessage(Component.text("Failed to save baseline report.", NamedTextColor.YELLOW));
+        }
+        return true;
+    }
+
+    private boolean handleBaselineExport(CommandSender sender, String[] args) {
+        String format = args.length > 2 ? args[2].toLowerCase() : "";
+        String name = args.length > 3 ? args[3] : "";
+        if (!format.equals("json") && !format.equals("html")) {
+            String prefix = plugin.getMessageManager().get("prefix");
+            sender.sendMessage(Component.text(prefix + " Usage: /launchguard baseline export <json|html> <name>", NamedTextColor.RED));
+            return true;
+        }
+        String error = BaselineNameValidator.validate(name);
+        if (error != null) { sender.sendMessage(Component.text(error, NamedTextColor.RED)); return true; }
+
+        BaselineStore store = plugin.getBaselineStore();
+        if (!store.exists(name)) {
+            sender.sendMessage(Component.text("Baseline not found: " + name, NamedTextColor.RED));
+            return true;
+        }
+
+        BaselineDriftReport report = runDriftCompare(name);
+        if (report == null) {
+            BaselineDriftReport errReport = new BaselineDriftReport(name);
+            errReport.add(new BaselineDriftIssue(BaselineDriftSeverity.FAIL, "Baseline file is invalid or corrupt: " + name));
+            BaselineRenderer renderer = new BaselineRenderer();
+            sender.sendMessage(renderer.renderDrift(errReport));
+            return true;
+        }
+
+        try {
+            ExportFileWriter writer = plugin.getExportWriter();
+            if (format.equals("json")) {
+                BaselineJsonReportRenderer jsonRenderer = new BaselineJsonReportRenderer();
+                String json = jsonRenderer.render(report, name, plugin.getDescription().getVersion(),
+                        plugin.getServer().getName(), plugin.getServer().getMinecraftVersion(),
+                        plugin.getServer().getBukkitVersion());
+                Path saved = writer.save(json, "baseline_" + name, "json");
+                if (saved != null) sender.sendMessage(Component.text("Saved baseline JSON export: plugins/LaunchGuard/exports/" + saved.getFileName(), NamedTextColor.GRAY));
+                else sender.sendMessage(Component.text("Failed to save baseline JSON export.", NamedTextColor.YELLOW));
+            } else {
+                BaselineHtmlReportRenderer htmlRenderer = new BaselineHtmlReportRenderer();
+                String html = htmlRenderer.render(report, name, plugin.getDescription().getVersion(),
+                        plugin.getServer().getName(), plugin.getServer().getMinecraftVersion(),
+                        plugin.getServer().getBukkitVersion());
+                Path saved = writer.save(html, "baseline_" + name, "html");
+                if (saved != null) sender.sendMessage(Component.text("Saved baseline HTML export: plugins/LaunchGuard/exports/" + saved.getFileName(), NamedTextColor.GRAY));
+                else sender.sendMessage(Component.text("Failed to save baseline HTML export.", NamedTextColor.YELLOW));
+            }
+            writer.prune(plugin.getConfigManager().getExportsToKeep());
+        } catch (Exception e) {
+            plugin.getLogger().warning("Failed to save baseline export: " + e.getMessage());
+            sender.sendMessage(Component.text("Failed to save baseline export file.", NamedTextColor.YELLOW));
+        }
+        return true;
+    }
+
+    private boolean handleBaselineHistory(CommandSender sender, String[] args) {
+        String mode = args.length > 2 ? args[2].toLowerCase() : "";
+        ReportFileWriter writer = plugin.getBaselineReportWriter();
+
+        if (mode.equals("latest")) {
+            Path latest = writer.getLatestReport();
+            if (latest == null) {
+                sender.sendMessage(Component.text("[INFO] No saved baseline reports found.", NamedTextColor.AQUA));
+                return true;
+            }
+            try {
+                String content = java.nio.file.Files.readString(latest);
+                int max = 8000;
+                if (content.length() > max) content = content.substring(0, max) + "\n\n... (report truncated)";
+                sender.sendMessage(Component.text(content, NamedTextColor.GRAY));
+            } catch (Exception e) {
+                sender.sendMessage(Component.text("Failed to read baseline report.", NamedTextColor.RED));
+            }
+            return true;
+        }
+
+        List<ReportFileWriter.ReportFileInfo> files = writer.listRecent(10);
+        sender.sendMessage(Component.text("[LaunchGuard] Baseline Report History", NamedTextColor.WHITE));
+        if (files.isEmpty()) {
+            sender.sendMessage(Component.text("[INFO] No saved baseline reports found.", NamedTextColor.AQUA));
+            return true;
+        }
+        var formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                .withZone(java.time.ZoneId.systemDefault());
+        for (ReportFileWriter.ReportFileInfo info : files) {
+            String modified = formatter.format(java.time.Instant.ofEpochMilli(info.lastModified()));
+            String size = formatFileSize(info.size());
+            sender.sendMessage(Component.text("  " + info.name() + "  " + modified + "  " + size, NamedTextColor.GRAY));
+        }
+        return true;
+    }
+
     private boolean handleReload(CommandSender sender) {
         if (!sender.hasPermission("launchguard.reload") && !sender.hasPermission("launchguard.admin")) {
             sendNoPermission(sender);
@@ -543,21 +703,50 @@ public class LaunchGuardCommand implements CommandExecutor, TabCompleter {
             if (args.length == 2) {
                 List<String> completions = new ArrayList<>();
                 String partial = args[1].toLowerCase();
-                for (String sub : new String[]{"save", "list", "compare", "delete"}) {
+                for (String sub : new String[]{"save", "list", "compare", "delete", "export", "history"}) {
                     if (sub.startsWith(partial)) completions.add(sub);
                 }
                 return completions;
             }
-            if (args.length == 3 && (args[1].equalsIgnoreCase("compare") || args[1].equalsIgnoreCase("delete"))) {
-                BaselineStore store = plugin.getBaselineStore();
-                List<String> names = store.listBaselines().stream()
-                        .map(BaselineStore.BaselineEntry::name).toList();
+            if (args.length == 3 && args[1].equalsIgnoreCase("export")) {
                 List<String> completions = new ArrayList<>();
                 String partial = args[2].toLowerCase();
-                for (String name : names) {
-                    if (name.startsWith(partial)) completions.add(name);
+                for (String sub : new String[]{"json", "html"}) {
+                    if (sub.startsWith(partial)) completions.add(sub);
                 }
                 return completions;
+            }
+            if (args.length == 3 && args[1].equalsIgnoreCase("history")) {
+                List<String> completions = new ArrayList<>();
+                String partial = args[2].toLowerCase();
+                if ("latest".startsWith(partial)) completions.add("latest");
+                return completions;
+            }
+            if (args.length >= 3 && (args[1].equalsIgnoreCase("compare") || args[1].equalsIgnoreCase("delete")
+                    || (args.length == 4 && args[1].equalsIgnoreCase("export")))) {
+                String targetArg = args[1].equalsIgnoreCase("export") ? args[2] : "";
+                if (args[1].equalsIgnoreCase("export")) {
+                    if (args.length == 4) {
+                        BaselineStore store = plugin.getBaselineStore();
+                        List<String> names = store.listBaselines().stream()
+                                .map(BaselineStore.BaselineEntry::name).toList();
+                        List<String> completions = new ArrayList<>();
+                        String partial = args[3].toLowerCase();
+                        for (String n : names) { if (n.startsWith(partial)) completions.add(n); }
+                        return completions;
+                    }
+                } else {
+                    BaselineStore store = plugin.getBaselineStore();
+                    List<String> names = store.listBaselines().stream()
+                            .map(BaselineStore.BaselineEntry::name).toList();
+                    List<String> completions = new ArrayList<>();
+                    String partial = args[2].toLowerCase();
+                    for (String n : names) { if (n.startsWith(partial)) completions.add(n); }
+                    if (args.length == 4 && args[1].equalsIgnoreCase("compare")) {
+                        if ("save".startsWith(args[3].toLowerCase())) completions.add("save");
+                    }
+                    return completions;
+                }
             }
         }
         return List.of();

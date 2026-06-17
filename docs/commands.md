@@ -233,6 +233,46 @@ Permission: `launchguard.baseline` or `launchguard.admin`
 
 Only deletes validated `.yml` baseline files inside `plugins/LaunchGuard/baselines/`. Does not delete directories or non-baseline files.
 
+## /launchguard baseline compare <name> save
+
+Runs a baseline comparison and saves a plain-text drift report under `plugins/LaunchGuard/reports/baseline/`.
+
+Permission: `launchguard.baseline` or `launchguard.admin`
+
+The chat/console report is still displayed. The saved report includes baseline name, timestamp, status, issue details, and a safety footer.
+
+## /launchguard baseline export json <name>
+
+Runs a baseline comparison and saves a versioned JSON drift report under `plugins/LaunchGuard/exports/`.
+
+Permission: `launchguard.baseline` or `launchguard.admin`
+
+JSON format includes `schemaVersion: 1`, `reportType: baseline-drift`, baseline name, server metadata, drift status, summary counts, issues list, and a safety metadata object.
+
+## /launchguard baseline export html <name>
+
+Runs a baseline comparison and saves a self-contained HTML drift report under `plugins/LaunchGuard/exports/`.
+
+Permission: `launchguard.baseline` or `launchguard.admin`
+
+HTML uses embedded CSS only and does not load external resources. All dynamic text is HTML-escaped.
+
+## /launchguard baseline history
+
+Lists recently saved baseline drift reports from `plugins/LaunchGuard/reports/baseline/`.
+
+Permission: `launchguard.baseline` or `launchguard.admin`
+
+If no baseline reports exist, displays a clear message.
+
+## /launchguard baseline history latest
+
+Displays or summarizes the latest saved baseline drift report.
+
+Permission: `launchguard.baseline` or `launchguard.admin`
+
+If the file is large, output is truncated with a notification.
+
 ## Tab Completion
 
 Tab completion is supported for all subcommands: help, run, plugins, history, reload, version, export, validate, baseline.
@@ -243,4 +283,4 @@ Tab completion is supported for all subcommands: help, run, plugins, history, re
 
 `/launchguard export` also supports tab completion for `json` and `html`.
 
-`/launchguard baseline` also supports tab completion for `save`, `list`, `compare`, and `delete`.
+`/launchguard baseline` also supports tab completion for `save`, `list`, `compare`, `delete`, `export`, and `history`. Sub-completions are available for `compare`, `delete`, `export json`, `export html`, `compare save`, and `history latest`.

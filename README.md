@@ -4,7 +4,7 @@ Read-only pre-launch checks for Paper Minecraft servers.
 
 Latest stable marketplace release: v0.5.0. Use the GitHub Releases page, Hangar, Modrinth, or SpigotMC to download it.
 
-Current development branch may include v0.6.0-SNAPSHOT baseline drift detection. v0.6+ development releases may be GitHub-only until v1.0.0.
+Current development branch may include v0.7.0-SNAPSHOT baseline report and export features. v0.6+ development releases may be GitHub-only until v1.0.0.
 
 ## Download
 
@@ -132,6 +132,11 @@ Saved report files are written under `plugins/LaunchGuard/reports/` only. No fil
 | `/launchguard baseline list` | List saved baselines |
 | `/launchguard baseline compare <name>` | Compare server against baseline |
 | `/launchguard baseline delete <name>` | Delete a saved baseline |
+| `/launchguard baseline compare <name> save` | Compare and save drift report |
+| `/launchguard baseline export json <name>` | Export baseline drift as JSON |
+| `/launchguard baseline export html <name>` | Export baseline drift as HTML |
+| `/launchguard baseline history` | List saved baseline reports |
+| `/launchguard baseline history latest` | Show latest baseline report |
 | `/launchguard reload` | Reload configuration files |
 | `/launchguard version` | Show plugin version |
 
@@ -170,7 +175,9 @@ settings:
   startupDelayTicks: 100    # Delay before startup check (ticks)
   saveReports: false        # Save report to plain text file
   reportsToKeep: 25         # Max report files to keep
+  reportsToKeep: 25         # Max report files to keep
   exportsToKeep: 25         # Max JSON/HTML export files to keep
+  baselineReportsToKeep: 25 # Max baseline report files to keep
 ```
 
 ### checks.yml
@@ -366,9 +373,9 @@ Released in v0.5.0:
 - HTML report export
 - Configuration validation
 
-In development (v0.6.0-SNAPSHOT):
+In development (v0.7.0-SNAPSHOT):
 
-- Baseline drift detection
+- Baseline report/export integration
 
 Not planned for LaunchGuard Lite:
 
