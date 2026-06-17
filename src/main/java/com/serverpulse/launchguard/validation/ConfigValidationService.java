@@ -16,7 +16,9 @@ public class ConfigValidationService {
     private static final List<String> CONFIG_EXPECTED_KEYS = List.of(
             "showPassedChecks", "reportToConsole", "prefix",
             "runOnStartup", "startupDelayTicks", "saveReports",
-            "reportsToKeep", "exportsToKeep", "baselineReportsToKeep"
+            "reportsToKeep", "exportsToKeep", "baselineReportsToKeep",
+            "compareBaselineOnStartup", "startupBaselineName",
+            "startupBaselineSaveReport", "startupBaselineDelayTicks"
     );
 
     public ConfigValidationService(Plugin plugin) {
@@ -72,6 +74,16 @@ public class ConfigValidationService {
         validatePositiveInt(settings, "reportsToKeep", 25, issues);
         validatePositiveInt(settings, "exportsToKeep", 25, issues);
         validatePositiveInt(settings, "baselineReportsToKeep", 25, issues);
+        validateBooleanSetting(settings, "compareBaselineOnStartup", issues);
+        validateBooleanSetting(settings, "startupBaselineSaveReport", issues);
+        validatePositiveInt(settings, "startupBaselineDelayTicks", 120, issues);
+
+        if (settings.contains("startupBaselineName")) {
+            String name = settings.getString("startupBaselineName", "");
+            if (!com.serverpulse.launchguard.baseline.BaselineNameValidator.isValid(name)) {
+                issues.add(ValidationIssue.fail("config.yml", "settings.startupBaselineName must be 1-32 characters: letters, numbers, underscore, or dash"));
+            }
+        }
 
         for (String key : settings.getKeys(false)) {
             if (!CONFIG_EXPECTED_KEYS.contains(key)) {

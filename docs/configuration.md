@@ -17,6 +17,10 @@ settings:
   reportsToKeep: 25         # Maximum number of report files to keep in reports/ directory
   exportsToKeep: 25         # Maximum number of JSON/HTML export files to keep in exports/ directory
   baselineReportsToKeep: 25 # Maximum number of baseline report files to keep in reports/baseline/ directory
+  compareBaselineOnStartup: false       # Run baseline compare on server start
+  startupBaselineName: "production"     # Baseline to compare at startup
+  startupBaselineSaveReport: true       # Save startup baseline report
+  startupBaselineDelayTicks: 120        # Delay before startup baseline compare (ticks, minimum 1)
 ```
 
 | Key | Type | Default | Description |
@@ -28,7 +32,12 @@ settings:
 | startupDelayTicks | int | 100 | Ticks to wait after server start before running startup check. Values below 1 are treated as 100 |
 | saveReports | boolean | false | When true, saves preflight report output to plain text files under `plugins/LaunchGuard/reports/` |
 | reportsToKeep | int | 25 | Maximum number of saved report `.txt` files to retain. Oldest files are pruned first. Values below 1 are treated as 25. Pruning only affects the `reports/` directory |
-| exportsToKeep | int | 25 | Maximum number of JSON export `.json` files to retain. Oldest files are pruned first. Values below 1 are treated as 25. Pruning only affects the `exports/` directory |
+| exportsToKeep | int | 25 | Maximum number of JSON/HTML export files to retain under `plugins/LaunchGuard/exports/`. Retention applies to `.json` and `.html` files only. Values below 1 are treated as 25 |
+| baselineReportsToKeep | int | 25 | Maximum number of baseline drift report `.txt` files to retain under `plugins/LaunchGuard/reports/baseline/`. Values below 1 are treated as 25 |
+| compareBaselineOnStartup | boolean | false | When true, schedules a baseline comparison after server startup using `startupBaselineName` |
+| startupBaselineName | string | production | Baseline name to compare during startup. Must use 1-32 characters: letters, numbers, underscore, or dash. Do not include file extensions, dots, spaces, or slashes |
+| startupBaselineSaveReport | boolean | true | When true, saves startup baseline comparison output as a local text report under `plugins/LaunchGuard/reports/baseline/` |
+| startupBaselineDelayTicks | int | 120 | Ticks to wait after plugin enable before running startup baseline comparison. Values below 1 are treated as 120 |
 
 ### Report Files
 
@@ -67,6 +76,30 @@ JSON exports are versioned with `schemaVersion: 1`. They include the preflight r
 HTML exports are self-contained static files with embedded CSS. They include a header, summary, results table, and footer. No external resources are loaded. All text content is HTML-escaped.
 
 Exports do not include tokens, webhook URLs, player IPs, full logs, or absolute file paths. Export retention is controlled by `settings.exportsToKeep` and applies to both `.json` and `.html` files in the exports directory.
+
+### Optional Startup Baseline Compare
+
+Startup baseline comparison is disabled by default.
+
+Enable it with:
+
+```yaml
+settings:
+  compareBaselineOnStartup: true
+  startupBaselineName: "production"
+  startupBaselineSaveReport: true
+  startupBaselineDelayTicks: 120
+```
+
+Startup baseline comparison:
+
+* runs after the configured delay
+* compares the current server state against an existing saved baseline
+* prints the drift report to console
+* optionally saves a local text report under `plugins/LaunchGuard/reports/baseline/`
+* uses `baselineReportsToKeep` for text report retention
+
+It does not stop, restart, or block the server. It does not execute commands, modify server state, modify baseline files, send network calls, or generate startup JSON/HTML exports.
 
 ## checks.yml
 

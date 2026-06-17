@@ -110,6 +110,28 @@ public class ConfigManager {
         return value;
     }
 
+    public boolean isCompareBaselineOnStartup() {
+        if (config == null) return false;
+        return config.getBoolean("settings.compareBaselineOnStartup", false);
+    }
+
+    public String getStartupBaselineName() {
+        if (config == null) return "production";
+        return config.getString("settings.startupBaselineName", "production");
+    }
+
+    public boolean isStartupBaselineSaveReport() {
+        if (config == null) return true;
+        return config.getBoolean("settings.startupBaselineSaveReport", true);
+    }
+
+    public int getStartupBaselineDelayTicks() {
+        if (config == null) return 120;
+        int value = config.getInt("settings.startupBaselineDelayTicks", 120);
+        if (value < 1) return 120;
+        return value;
+    }
+
     private FileConfiguration loadYamlSafe(File file, String resourceName) {
         try {
             YamlConfiguration yaml = new YamlConfiguration();

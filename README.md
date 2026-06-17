@@ -4,7 +4,7 @@ Read-only pre-launch checks for Paper Minecraft servers.
 
 Latest stable marketplace release: v0.5.0. Use the GitHub Releases page, Hangar, Modrinth, or SpigotMC to download it.
 
-Current development branch may include v0.7.0-SNAPSHOT baseline report and export features. v0.6+ development releases may be GitHub-only until v1.0.0.
+Current development branch may include v0.8.0-SNAPSHOT optional startup baseline compare. v0.6+ development releases may be GitHub-only until v1.0.0.
 
 ## Download
 
@@ -175,9 +175,12 @@ settings:
   startupDelayTicks: 100    # Delay before startup check (ticks)
   saveReports: false        # Save report to plain text file
   reportsToKeep: 25         # Max report files to keep
-  reportsToKeep: 25         # Max report files to keep
   exportsToKeep: 25         # Max JSON/HTML export files to keep
   baselineReportsToKeep: 25 # Max baseline report files to keep
+  compareBaselineOnStartup: false  # Run baseline compare on server start
+  startupBaselineName: "production" # Baseline to compare at startup
+  startupBaselineSaveReport: true   # Save startup baseline report
+  startupBaselineDelayTicks: 120    # Delay before startup baseline compare (ticks)
 ```
 
 ### checks.yml

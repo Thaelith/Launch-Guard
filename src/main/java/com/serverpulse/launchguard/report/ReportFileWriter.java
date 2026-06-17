@@ -32,8 +32,10 @@ public class ReportFileWriter {
             return null;
         }
 
+        String safeSource = source.replaceAll("[^A-Za-z0-9_-]", "_");
+        if (safeSource.isEmpty()) safeSource = "report";
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss-SSS"));
-        String filename = timestamp + "_" + source + ".txt";
+        String filename = timestamp + "_" + safeSource + ".txt";
         Path filePath = reportsDir.resolve(filename);
 
         try {

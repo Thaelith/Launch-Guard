@@ -8,3 +8,7 @@ settings:
   reportsToKeep: 25
   exportsToKeep: 25
   baselineReportsToKeep: 25
+  compareBaselineOnStartup: false
+  startupBaselineName: "production"
+  startupBaselineSaveReport: true
+  startupBaselineDelayTicks: 120
