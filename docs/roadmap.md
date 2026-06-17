@@ -27,12 +27,35 @@ LaunchGuard Lite v0.1 was the initial release focusing on essential read-only pr
 - Static HTML report export
 - Configuration validation for config.yml, checks.yml, and messages.yml
 
-## v0.6.0-SNAPSHOT
+## v0.6.0-SNAPSHOT (Merged to main, not released publicly)
 
 - `/launchguard baseline save`, `list`, `compare`, `delete`
 - `launchguard.baseline` permission
 - Local YAML baseline snapshots under `plugins/LaunchGuard/baselines/`
 - Baseline drift detection for plugins, commands, worlds, and configuration
+
+## v0.7.0-SNAPSHOT (Merged to main, not released publicly)
+
+- `/launchguard baseline compare save`
+- `/launchguard baseline export json` and `export html`
+- `/launchguard baseline history` and `history latest`
+- Plain-text baseline drift reports
+- JSON/HTML baseline drift exports
+
+## v0.8.0-SNAPSHOT (Merged to main, not released publicly)
+
+- Optional startup baseline comparison
+- `compareBaselineOnStartup`, `startupBaselineName`, `startupBaselineSaveReport`, `startupBaselineDelayTicks`
+- Startup baseline text report saving
+
+## v0.9.0-SNAPSHOT
+
+- Stabilization, QA, documentation, compatibility, and v1.0 readiness preparation
+
+## v1.0.0 (Planned)
+
+- First public marketplace release after v0.5.0
+- Publication to Hangar, Modrinth, and Spigot
 
 ## Future Candidates
 

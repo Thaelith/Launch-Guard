@@ -4,7 +4,7 @@ Read-only pre-launch checks for Paper Minecraft servers.
 
 Latest stable marketplace release: v0.5.0. Use the GitHub Releases page, Hangar, Modrinth, or SpigotMC to download it.
 
-Current development branch may include v0.8.0-SNAPSHOT optional startup baseline compare. v0.6+ development releases may be GitHub-only until v1.0.0.
+Current development branch may include v0.9.0-SNAPSHOT v1 readiness and stabilization work. v0.6+ development releases may be GitHub-only until v1.0.0.
 
 ## Download
 
