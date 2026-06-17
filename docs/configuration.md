@@ -16,6 +16,7 @@ settings:
   saveReports: false        # Save report output to plain text files
   reportsToKeep: 25         # Maximum number of report files to keep in reports/ directory
   exportsToKeep: 25         # Maximum number of JSON/HTML export files to keep in exports/ directory
+  baselineReportsToKeep: 25 # Maximum number of baseline report files to keep in reports/baseline/ directory
 ```
 
 | Key | Type | Default | Description |
