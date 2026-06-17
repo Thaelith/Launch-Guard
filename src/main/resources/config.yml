@@ -7,3 +7,4 @@ settings:
   saveReports: false
   reportsToKeep: 25
   exportsToKeep: 25
+  baselineReportsToKeep: 25
