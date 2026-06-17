@@ -12,6 +12,9 @@
 - [x] Release folder prepared
 - [x] GitHub Release created
 - [x] Marketplace text prepared
+- [x] Hangar updated
+- [x] Modrinth updated
+- [x] SpigotMC updated
 
 ## Development Features Since v0.5.0
 - v0.6: Baseline drift detection

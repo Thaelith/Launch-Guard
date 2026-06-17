@@ -66,6 +66,8 @@ Read-only. No commands, network calls, state modification, or secrets captured.
 - Tag v1.0.0: completed
 
 ## Marketplace Status
-- Hangar: pending
-- Modrinth: pending
-- SpigotMC: pending
+- Hangar: completed
+- Modrinth: completed
+- SpigotMC: completed
+
+LaunchGuard v1.0.0 is published on GitHub, Hangar, Modrinth, and SpigotMC.

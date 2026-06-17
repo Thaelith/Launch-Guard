@@ -9,9 +9,9 @@
 - [x] GitHub Release published
 - [x] Marketplace overview prepared
 - [x] Marketplace changelog prepared
-- [ ] Hangar updated
-- [ ] Modrinth updated
-- [ ] SpigotMC updated
+- [x] Hangar updated
+- [x] Modrinth updated
+- [x] SpigotMC updated
 
 ## Build Verification
 - [ ] Run `./gradlew clean build`

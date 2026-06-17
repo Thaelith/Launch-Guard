@@ -19,6 +19,6 @@
 - [x] No generated server files committed
 
 ## Marketplace Publication
-- [ ] Hangar updated
-- [ ] Modrinth updated
-- [ ] SpigotMC updated
+- [x] Hangar updated
+- [x] Modrinth updated
+- [x] SpigotMC updated
