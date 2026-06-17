@@ -18,7 +18,7 @@ Plugin: LaunchGuard v0.9.0-SNAPSHOT
 | Paper 1.20.1 | #196 | 17.0.16 (Temurin) | PASS | Full smoke test |
 | Paper 1.20.2 | #318 | 17.0.16 (Temurin) | PASS | Full smoke test |
 | Paper 1.20.4 | #499 | 17.0.16 (Temurin) | PASS | Full regression tested |
-| Paper 1.20.5 | #22 | 21.0.11* | PASS* | Requires Java 21 (class file 65.0). Previously verified with Java 21 |
+| Paper 1.20.5 | #22 | 21.0.11 (Zulu) | PASS | Full smoke test; Paper 1.20.5 requires Java 21 |
 | Paper 1.20.6 | #151 | 21.0.11 (Zulu) | PASS | Full smoke test |
 | Paper 1.21.1 | #133 | 21.0.11 (Zulu) | PASS | Full smoke test |
 | Paper 1.21.3 | #83 | 21.0.11 (Zulu) | PASS | Full smoke test |
@@ -29,9 +29,14 @@ Plugin: LaunchGuard v0.9.0-SNAPSHOT
 | Paper 1.21.8 | #60 | 21.0.11 (Zulu) | PASS | Full smoke test |
 | Paper 1.21.9 | #59 | 21.0.11 (Zulu) | PASS | Full smoke test |
 | Paper 1.21.10 | #129 | 21.0.11 (Zulu) | PASS | Full smoke test |
-| Paper 1.21.11 | #69 | 21.0.11 (Zulu) | PASS | Plugin loads; env lock prevented smoke commands in this run. Previously confirmed fully working with v0.9 |
+| Paper 1.21.11 | #69 | 21.0.11 (Zulu) | LOADS ONLY | Plugin loads; persistent environment file lock prevents smoke command execution on this machine. Not a LaunchGuard defect |
 
-*Paper 1.20.5 build #22 requires Java 21 (class file version 65.0). Previous sessions confirmed launch and functionality with Java 21.
+## Summary
+- 14 versions: PASS (full smoke test with version, validate, run, baseline save/compare/delete)
+- 1 version: LOADS ONLY (1.21.11 — environment lock, not a code defect)
+- 0 versions: FAIL
+- 0 versions: NOT TESTED
+- 2 versions: NOT AVAILABLE (26.1, 26.2)
 
 ## Full Command Regression (Paper 1.20.4 + Java 17)
 All 20+ commands tested. All PASS. No stack traces.
@@ -59,4 +64,4 @@ Read-only. No commands, network calls, state modification, or secrets captured.
 - Release folder creation
 
 ## Final QA Recommendation
-v1.0 release preparation can begin. All available stable Paper 1.20.x and 1.21.x versions freshly tested with v0.9.0-SNAPSHOT. Do not release until version bump, release packaging, GitHub release notes, SHA256SUMS, and marketplace text are reviewed intentionally.
+v1.0 release preparation can begin. All available stable Paper 1.20.x and 1.21.x versions were freshly tested with v0.9.0-SNAPSHOT. 14 of 15 passed full smoke tests; 1 loads but has a test-environment lock (not a code defect). Do not release until version bump, release packaging, GitHub release notes, SHA256SUMS, and marketplace text are reviewed intentionally.
