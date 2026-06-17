@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "com.serverpulse"
-version = "0.9.0-SNAPSHOT"
+version = "1.0.0"
 
 java {
     toolchain {

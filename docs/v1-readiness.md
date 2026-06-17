@@ -1,7 +1,11 @@
 # v1.0 Readiness
 
 ## Current Stable Marketplace Version
-- v0.5.0 remains the stable marketplace version.
+- v0.5.0 remains the stable marketplace version until v1.0.0 is published.
+
+## Status
+- v1.0.0 release preparation is in progress on branch `release/v1.0.0-prep`
+- v1.0.0 has NOT been tagged, released, or published to marketplaces yet
 
 ## Development Features Since v0.5.0
 - v0.6: Baseline drift detection
