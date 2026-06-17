@@ -19,9 +19,10 @@
 - [x] QA report created
 
 ## Compatibility
-- [x] 15 Paper versions smoke-tested
+- [x] 14 Paper versions fully smoke-tested
+- [x] Paper 1.21.11 load-tested only and documented as such
 - [x] Compatibility wording reviewed
-- [x] No untested versions claimed as tested
+- [x] No untested versions claimed as fully smoke-tested
 
 ## Safety
 - [x] Safety wording reviewed
