@@ -48,14 +48,15 @@ LaunchGuard Lite v0.1 was the initial release focusing on essential read-only pr
 - `compareBaselineOnStartup`, `startupBaselineName`, `startupBaselineSaveReport`, `startupBaselineDelayTicks`
 - Startup baseline text report saving
 
-## v0.9.0-SNAPSHOT
+## v0.9.0-SNAPSHOT (Merged to main, not released publicly)
 
 - Stabilization, QA, documentation, compatibility, and v1.0 readiness preparation
 
-## v1.0.0 (Planned)
+## v1.0.0
 
-- First public marketplace release after v0.5.0
-- Publication to Hangar, Modrinth, and Spigot
+- First public marketplace release since v0.5.0
+- Includes all v0.6 through v0.9 development
+- Release packaging and final documentation
 
 ## Future Candidates
 
