@@ -2,7 +2,7 @@
 
 ## Plugin does not load
 
-**Symptom:** No `LaunchGuard v0.3.0 enabled.` message in console.
+**Symptom:** No `LaunchGuard enabled.` message in console.
 
 **Causes:**
 - Server is not a tested Paper version (LaunchGuard uses Paper API)

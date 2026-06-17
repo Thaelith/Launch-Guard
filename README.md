@@ -2,7 +2,9 @@
 
 Read-only pre-launch checks for Paper Minecraft servers.
 
-Latest release: v0.5.0. Use the GitHub Releases page, Hangar, Modrinth, or SpigotMC to download the latest stable release.
+Latest stable marketplace release: v0.5.0. Use the GitHub Releases page, Hangar, Modrinth, or SpigotMC to download it.
+
+Current development branch may include v0.6.0-SNAPSHOT baseline drift detection. v0.6+ development releases may be GitHub-only until v1.0.0.
 
 ## Download
 
@@ -126,6 +128,10 @@ Saved report files are written under `plugins/LaunchGuard/reports/` only. No fil
 | `/launchguard export json` | Export report as JSON |
 | `/launchguard export html` | Export report as HTML |
 | `/launchguard validate` | Validate configuration files |
+| `/launchguard baseline save <name>` | Save a server-state baseline |
+| `/launchguard baseline list` | List saved baselines |
+| `/launchguard baseline compare <name>` | Compare server against baseline |
+| `/launchguard baseline delete <name>` | Delete a saved baseline |
 | `/launchguard reload` | Reload configuration files |
 | `/launchguard version` | Show plugin version |
 
@@ -144,9 +150,10 @@ All permissions default to op-only.
 | launchguard.history | op | Required for /launchguard history |
 | launchguard.export | op | Required for /launchguard export json and /launchguard export html |
 | launchguard.validate | op | Required for /launchguard validate |
-| launchguard.admin | op | Full access; includes use, run, reload, plugins, history, export, and validate as child permissions |
+| launchguard.baseline | op | Required for /launchguard baseline save/list/compare/delete |
+| launchguard.admin | op | Full access; includes use, run, reload, plugins, history, export, validate, and baseline as child permissions |
 
-Note: `launchguard.use` alone does not permit `/launchguard run`, `/launchguard reload`, `/launchguard plugins`, `/launchguard history`, `/launchguard export`, or `/launchguard validate`. Those subcommands each require their own permission. `launchguard.admin` grants `use`, `run`, `reload`, `plugins`, `history`, `export`, and `validate` as child permissions.
+Note: `launchguard.use` alone does not permit `/launchguard run`, `/launchguard reload`, `/launchguard plugins`, `/launchguard history`, `/launchguard export`, `/launchguard validate`, or `/launchguard baseline`. Those subcommands each require their own permission. `launchguard.admin` grants `use`, `run`, `reload`, `plugins`, `history`, `export`, `validate`, and `baseline` as child permissions.
 
 ## Configuration
 
@@ -163,7 +170,7 @@ settings:
   startupDelayTicks: 100    # Delay before startup check (ticks)
   saveReports: false        # Save report to plain text file
   reportsToKeep: 25         # Max report files to keep
-  exportsToKeep: 25         # Max JSON export files to keep
+  exportsToKeep: 25         # Max JSON/HTML export files to keep
 ```
 
 ### checks.yml
@@ -213,6 +220,44 @@ checks:
 
 Customize all user-facing messages. See the generated file in `plugins/LaunchGuard/messages.yml`.
 
+## Baseline Drift Detection
+
+Baseline commands let you save a known-good server snapshot and compare the current server state against it later.
+
+```
+/launchguard baseline save production
+/launchguard baseline list
+/launchguard baseline compare production
+/launchguard baseline delete production
+```
+
+Baseline files are stored as local YAML files under:
+
+```
+plugins/LaunchGuard/baselines/<name>.yml
+```
+
+Baseline names must use 1-32 characters: letters, numbers, underscore, or dash. Do not include dots, slashes, spaces, or file extensions.
+
+Baseline comparison can report:
+
+* Added or removed plugins
+* Plugin enabled-state changes
+* Plugin version changes
+* Added or removed commands
+* Added or removed loaded worlds
+* Selected LaunchGuard `checks.yml` configuration changes
+
+Statuses:
+
+* `MATCHES_BASELINE`
+* `DRIFT_DETECTED`
+* `BASELINE_INVALID`
+
+Baseline snapshots do not include player data, logs, tokens, webhook URLs, secrets, absolute private paths, environment variables, or database connection strings.
+
+Baseline comparison does not verify full plugin runtime behavior and does not replace `/launchguard run`.
+
 ## Example Report
 
 ```
@@ -246,7 +291,7 @@ LaunchGuard Plugin Inventory
 
 Plugins: 12 total, 12 enabled, 0 disabled
 
-[PASS] LaunchGuard 0.3.0 enabled
+[PASS] LaunchGuard enabled
 [PASS] LuckPerms 5.x enabled
 [PASS] Vault 1.x enabled
 [PASS] PlaceholderAPI 2.x enabled
@@ -321,6 +366,10 @@ Released in v0.5.0:
 - HTML report export
 - Configuration validation
 
+In development (v0.6.0-SNAPSHOT):
+
+- Baseline drift detection
+
 Not planned for LaunchGuard Lite:
 
 - Executing arbitrary commands configured by server owners
@@ -334,7 +383,7 @@ Requirements: JDK 17+
 ./gradlew build
 ```
 
-The plugin JAR will be in `build/libs/LaunchGuard-0.5.0.jar`.
+The plugin JAR will be in `build/libs/LaunchGuard-<version>.jar`.
 
 ## Support
 
